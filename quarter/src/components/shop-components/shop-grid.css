@@ -1,0 +1,52 @@
+/* styles.css ou App.module.css */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;  /* Appliquer box-sizing à tous les éléments */
+}
+
+/* styles.css ou App.module.css */
+.input-style,
+.select-style,
+.button-style {
+  padding: 10px 18px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: #fff;
+  box-sizing: border-box;
+  display: flex;  /* Utilisation de flexbox */
+  justify-content: center;  /* Centrer horizontalement */
+  align-items: center;  /* Centrer verticalement */
+}
+
+.input-style {
+  border-radius: 20px;  /* Arrondi spécifique pour input */
+}
+
+.select-style {
+  border-radius: 40px;  /* Arrondi plus large pour le select */
+}
+
+.button-style {
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+/* Ciblage plus spécifique */
+input.input-style {
+    padding: 10px 10px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: #fff;
+    box-sizing: border-box;
+    appearance: none;  /* Réinitialiser les styles par défaut des navigateurs */
+    outline: none;  /* Retirer les bordures d'accentuation */
+    margin-top: 30px;
+  }
+  
+
+.select-style {
+  border-radius: 40px;  /* Border radius spécifique pour select */
+}

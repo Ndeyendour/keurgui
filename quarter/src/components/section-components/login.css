@@ -1,0 +1,134 @@
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  font-family: Arial, sans-serif;
+}
+
+.login-box {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.login-tabbs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .tabb {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s;
+  }
+  
+  .tabb:hover {
+    border-bottom: 2px solid #ccc;
+  }
+  
+  .tabb.active {
+    border-bottom: 2px solid #000; /* Trait noir pour l'onglet actif */
+    color: #000;
+  }
+  
+
+.social-buttons .social-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.social-btn.facebook {
+  background: #3b5998;
+  color: white;
+}
+
+.social-btn.google {
+  background: #fffdfd;
+  color: rgb(12, 11, 11);
+}
+
+.social-btn.apple {
+  background: #fffdfd;
+  color: rgb(12, 11, 11);
+}
+
+.divider {
+  margin: 20px 0;
+  position: relative;
+  text-align: center;
+}
+
+.divider span {
+  background: #fff;
+  padding: 0 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.divider:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: #ddd;
+  z-index: 0;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  padding-right: 30px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.input-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  background: #000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.extra-links {
+  margin-top: 15px;
+}
+
+.extra-links a {
+  display: block;
+  color: #007bff;
+  margin-top: 5px;
+  text-decoration: none;
+}
