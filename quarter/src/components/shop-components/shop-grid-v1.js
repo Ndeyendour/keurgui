@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed, faBath } from '@fortawesome/free-solid-svg-icons'; // Importation des icônes
+import { faBed, faBath, faCamera, faImages, faMapMarkedAlt, faListAlt} from '@fortawesome/free-solid-svg-icons'; // Importation des icônes
 
 import axios from 'axios';
 import './shop-grid.css';
@@ -15,7 +15,36 @@ import { useHistory } from 'react-router-dom';
 const ShopGridV1 = () => {
 	const [products, setProducts] = useState([]);
 	const history = useHistory(); // Hook pour naviguer
+	const propertiesPerPage = 250;
+	const [currentPage, setCurrentPage] = useState(1);
+	const [totalProperties, setTotalProperties] = useState(60992);
+	const [activeTab, setActiveTab] = useState('galerie');
+	const [query, setQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
 
+  useEffect(() => {
+    if (query.length < 2) {
+      setSuggestions([]); // Ne pas faire de requêtes si l'entrée est trop courte
+      return;
+    }
+
+    const fetchSuggestions = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/search-predictive', {
+          params: { query },
+        });
+        setSuggestions(response.data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des suggestions', error);
+      }
+    };
+
+    fetchSuggestions();
+  }, [query]);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
 
 	// Effet pour récupérer les produits depuis le backend
 	useEffect(() => {
@@ -32,7 +61,6 @@ const ShopGridV1 = () => {
 	  fetchProducts();  // Appel de la fonction pour récupérer les produits
 	}, []);  // Le tableau vide [] indique que l'effet s'exécute une seule fois lors du montage du composant
   
-	const [query, setQuery] = useState("");
 	const [category, setCategory] = useState("Résidentiel");
 	const [transactionType, setTransactionType] = useState("À vendre");
 	const [price, setPrice] = useState("");
@@ -43,8 +71,20 @@ const ShopGridV1 = () => {
 	const filteredProducts = products.filter(
 		(product) => product.transactionType === 'sale'
 	);
-
+	const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
         let publicUrl = process.env.PUBLIC_URL+'/'
+
+		const handleCardClick = async (item) => {
+			try {
+			//   history.push(`/results/${encodeURIComponent(item)}`); 
+			  history.push(`/results?location=${encodeURIComponent(item)}`);
+			} catch (error) {
+			  console.error("Erreur lors de la redirection :", error);
+			}
+		  };
+		  
  	return(
 		
 		 <div>
@@ -61,13 +101,17 @@ const ShopGridV1 = () => {
 									{/* Search Widget */}
 									<div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
 										{/* Barre de recherche */}
+										
 										<input
 										type="text"
 										placeholder="Chercher par ville, quartier, région, adresse ou N° Centris"
 										value={query}
 										onChange={(e) => setQuery(e.target.value)}
 										className="input-style"
+										
 										/>
+										 {/* Résultats de la recherche prédictive sous forme de cartes */}
+ 				
 
 										{/* Catégorie */}
 										<select
@@ -118,6 +162,95 @@ const ShopGridV1 = () => {
 										</button> */}
 									</div>
 									</div>
+									
+									{query.length >= 3 && (
+  <>
+    {suggestions.length > 0 ? (
+      <div className="search-results-container">
+        {suggestions.map((item, index) => (
+          <div
+            key={index}
+            className="result-card"
+            onClick={() => handleCardClick(item)} // Action sur clic
+          >
+            <div className="result-card-content">
+              <h5>{item}</h5>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div className="search-results-container">
+        <div className="result-card">
+          <div className="result-card-content">
+            <h5 style={{ color: "red" }}>Aucun Résultat</h5>
+          </div>
+        </div>
+      </div>
+    )}
+  </>
+)}
+
+									 {/* Barre des onglets */}
+									 <div className="tabs-container">
+										<div className="tabs">
+				<Link to="/galerie" className={`tab-button ${activeTab === 'galerie' ? 'active' : ''}`} onClick={() => handleTabClick('galerie')}>
+					<FontAwesomeIcon icon={faImages} /> Galerie
+				</Link>
+				<Link to="/carte" className={`tab-button ${activeTab === 'carte' ? 'active' : ''}`} onClick={() => handleTabClick('carte')}>
+					<FontAwesomeIcon icon={faMapMarkedAlt} /> Carte
+				</Link>
+				<Link to="/sommaire" className={`tab-button ${activeTab === 'sommaire' ? 'active' : ''}`} onClick={() => handleTabClick('sommaire')}>
+					<FontAwesomeIcon icon={faListAlt} /> Sommaire
+				</Link>
+				<div className="tab-indicator" style={{ left: `${getIndicatorPosition(activeTab)}%` }}></div>
+				</div>
+
+                {/* Nombre de propriétés trouvées */}
+                <span className="properties-found">{totalProperties.toLocaleString()} propriétés trouvées</span>
+
+                {/* Trier par */}
+                <select className="sort-dropdown">
+                    <option value="relevance">Trier par pertinence</option>
+                    <option value="price_asc">Prix croissant</option>
+                    <option value="price_desc">Prix décroissant</option>
+                </select>
+            </div>
+
+            {/* Pagination */}
+            <div className="pagination-container">
+                <button
+                    className="pagination-button"
+                    onClick={() => handlePageChange(1)}
+                    disabled={currentPage === 1}
+                >
+                    «
+                </button>
+                <button
+                    className="pagination-button"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                >
+                    ‹
+                </button>
+                <span className="pagination-info">
+                    {currentPage} / {Math.ceil(totalProperties / propertiesPerPage)}
+                </span>
+                <button
+                    className="pagination-button"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === Math.ceil(totalProperties / propertiesPerPage)}
+                >
+                    ›
+                </button>
+                <button
+                    className="pagination-button"
+                    onClick={() => handlePageChange(Math.ceil(totalProperties / propertiesPerPage))}
+                    disabled={currentPage === Math.ceil(totalProperties / propertiesPerPage)}
+                >
+                    »
+                </button>
+            </div>
 
 									{/* ltn__product-item */}
 									<div className="row">
@@ -130,11 +263,25 @@ const ShopGridV1 = () => {
 														{filteredProducts.map((product) => (
 															<div key={product._id} className="col-lg-3 col-sm-6 col-12">
 																<img
-																	src={product.image || '/path/to/default-image.jpg'}
-																	alt={product.title}
-																	className="property-image"
-																	onClick={() => history.push(`/product-details/`)} // Redirection
+																src={product.images[0] || '/path/to/default-image.jpg'}
+																alt={product.title}
+																className="property-image"
+																onClick={() => history.push(`/product-details/`)} // Redirection
+															/>
+
+															{/* Icône avec le nombre de photos */}
+															<div
+																className="icon-wrapper"
+																onClick={() => history.push(`/property-images/${product._id}`)} // Redirection vers les images
+															>
+																<FontAwesomeIcon
+																icon={faCamera}
+																className="photo-icon"
 																/>
+																<span className="photo-count">{product.images ? product.images.length : 0}</span>
+
+															</div>
+																
 																<div className="property-details">
 																	<h6>{product.price?.toLocaleString()} $</h6>
 																	<h6>{product.title}</h6>
@@ -174,7 +321,18 @@ const ShopGridV1 = () => {
 
 			</div>
 			)
-
+			function getIndicatorPosition(tab) {
+				switch (tab) {
+				  case 'galerie':
+					return 0;
+				  case 'carte':
+					return 33.33;
+				  case 'sommaire':
+					return 66.66;
+				  default:
+					return 0;
+				}
+			  }
         
 }
 

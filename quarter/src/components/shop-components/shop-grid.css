@@ -50,3 +50,155 @@ input.input-style {
 .select-style {
   border-radius: 40px;  /* Border radius spécifique pour select */
 }
+/* Conteneur principal */
+.tabs-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabs {
+  display: flex;
+  position: relative;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.3s ease;
+  outline: none;
+}
+
+.tab-button:hover {
+  color: #555;
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  height: 3px;
+  background-color: #007bff;
+  width: 33.33%;
+  transition: left 0.3s ease;
+}
+
+
+/* Nombre de propriétés trouvées */
+.properties-found {
+  font-size: 14px;
+  color: #4b0082;
+  font-weight: bold;
+}
+
+/* Menu déroulant de tri */
+.sort-dropdown {
+  border: none;
+  background: none;
+  color: #007bff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+}
+
+.sort-dropdown::after {
+  content: "▼";
+  font-size: 10px;
+  margin-left: 5px;
+}
+
+/* Pagination */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.pagination-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.pagination-button:hover {
+  color: #4b0082;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #555;
+  font-weight: bold;
+}
+/* -------------------------------------------------------------------------- */
+
+.image-container {
+  position: relative; /* Permet le positionnement absolu de l'icône par rapport à ce conteneur */
+  display: inline-block;
+}
+
+.property-image {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+
+.icon-wrapper {
+  position: absolute; /* Permet de positionner l'icône par-dessus l'image */
+  top: 158px; /* Ajuste la distance depuis le haut de l'image */
+  right: 28px; /* Ajuste la distance depuis la droite de l'image */
+  background-color: rgba(95, 49, 168, 0.6); /* Fond semi-transparent pour une meilleure visibilité */
+  color: white;
+  padding: 4px 6px;
+  border-radius: 20%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-icon {
+  font-size: 0.9em; /* Ajuste la taille de l'icône */
+}
+
+.photo-count {
+  margin-left: 4px;
+  font-size: 0.8em; 
+}
+.search-results-container {
+  margin-top: -20px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  /* padding: 2px; */
+  margin-left: 15px;
+  background-color: #f4f4f4;
+  width: 65%;
+}
+
+.result-card {
+  padding: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.result-card:hover {
+  background-color: #ddd;
+}
+
+.result-card-content h5 {
+  margin: 0;
+  font-size: 12px;
+  color: #333;
+}
+

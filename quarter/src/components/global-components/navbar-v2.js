@@ -1,12 +1,56 @@
-import React, { Component } from 'react';
+import React, { Component,useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Social from '../section-components/social';
+import './navbar.css'
 
-class NavbarV2 extends Component {
+const NavbarV2 = (props) => {
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInitial, setUserInitial] = useState("");
+//   const [isMenuOpen, setMenuOpen] = useState(false);
+  // Remplacez par vos données utilisateur
+ 
+  const firstName = 'Ndeye';
+  const lastName = 'Ndour';
 
-    render() {
+  
+//   const toggleMenu = () => {
+// 	console.log("Cercle cliqué !"); // Ajout temporaire pour déboguer
+// 	setMenuOpen(!isMenuOpen);
+//   };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userFirstName = localStorage.getItem("firstname");
+
+    if (token && userFirstName) {
+      setIsLoggedIn(true);
+      setUserInitial(userFirstName.charAt(0).toUpperCase());
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".user-menu-container")) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
+
+
         let publicUrl = process.env.PUBLIC_URL+'/'
-		let CustomClass = this.props.CustomClass ? this.props.CustomClass : ''
+		const CustomClass = props.CustomClass ? props.CustomClass : '';
+		// let CustomClass = this.props.CustomClass ? this.props.CustomClass : ''
         return (
 			<div>
 				<header className={"ltn__header-area ltn__header-5 ltn__header-logo-and-mobile-menu-in-mobile ltn__header-logo-and-mobile-menu ltn__header-transparent--- gradient-color-4--- "+ CustomClass} >
@@ -71,12 +115,12 @@ class NavbarV2 extends Component {
 							<nav>
 							<div className="ltn__main-menu">
 								<ul>
-								<li className="#"><Link to="/shop-grid">Rechercher</Link>
+								<li className="#"><Link to="/vendre">Rechercher</Link>
 									
 								</li>
 								<li className=""><Link to="#">Acheter</Link>
 									<ul>
-										<li><Link to="/shop">Trouver une propriete a vendre</Link></li>
+										<li><Link to="/louer">Trouver une propriete a vendre</Link></li>
 										<li><Link to="/service">Guide de l'acheteur</Link></li>
 										<li><Link to="/service-details">Acheter avec un courtier</Link></li>
 										
@@ -84,8 +128,8 @@ class NavbarV2 extends Component {
 								</li>
 								<li className=""><Link to="#">Louer</Link>
 									<ul>
-									<li><Link to="/shop-right-sidebar">Trouver une propriete a louer</Link></li>
-										<li><Link to="/service">Guide de du locataire</Link></li>
+									<li><Link to="/louer-right-sidebar">Trouver une propriete a louer</Link></li>
+										<li><Link to="/agent">Guide de du locataire</Link></li>
 										<li><Link to="/service-details">Enquete de prelocation</Link></li>
 									</ul>
 								</li>
@@ -99,21 +143,63 @@ class NavbarV2 extends Component {
 								<li className=""><a href="#">Trouver un courtier</a>
 								<ul>
 									
-										<li><Link to="/service">Trouver un courtier</Link></li>
+										<li><Link to="/agent">Trouver un courtier</Link></li>
 										<li><Link to="/service-details">Acheteer avec un courtier</Link></li>
 										<li><Link to="/service">Vendeur avec un courtier</Link></li>
 										<li><Link to="/service-details">Devenir courtier</Link></li>
 									</ul>
 								
 							</li>
-								<li><Link to="/contact">Outils</Link></li>
-								<li className="special-link" style={{ borderRadius: '8px' }}>
+								<li><Link to="/contact">Out</Link></li>
+								{/* <li className="special-link" style={{ borderRadius: '8px' }}>
 								<Link to="/login">
 									Connexion
 									<i className="far fa-user" style={{ marginLeft: '8px' }} />
 								</Link>
-								</li>
-
+								</li> */}
+								 <li className="special-link">
+          {isLoggedIn ? (
+            <div className="user-menu-container">
+              <div className="user-circle" onClick={toggleMenu}>
+                {userInitial}
+              </div>
+              {isMenuOpen && (
+                <ul className="menu-list">
+                  <li>
+                    <Link to="/mes-recherches">🔔 Mes recherches (0)</Link>
+                  </li>
+                  <li>
+                    <Link to="/mes-favoris">💖 Mes favoris</Link>
+                  </li>
+                  <li>
+                    <Link to="/proprietes-cachees">
+                      👁️ Propriétés cachées (1)
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/mon-courtier">👥 Mon courtier</Link>
+                  </li>
+                  <li>
+                    <Link to="/profil-locataire">🏠 Mon profil locataire</Link>
+                  </li>
+                  <li>
+                    <Link to="/parametres">⚙️ Mes paramètres</Link>
+                  </li>
+                  <li className="logout-link">
+                    <Link to="/logout">Déconnexion</Link>
+                  </li>
+                  <li>
+                    <Link to="/acces-courtier">Accès courtier</Link>
+                  </li>
+                </ul>
+              )}
+            </div>
+          ) : (
+            <Link to="/login">
+              Connexion <i className="far fa-user" />
+            </Link>
+          )}
+        </li>
 
 								
 
@@ -185,12 +271,12 @@ class NavbarV2 extends Component {
 							<li><Link to="/location">Google Map Locations</Link></li>
 						</ul>
 						</li>
-						<li><Link to="/shop">Shop</Link>
+						<li><Link to="/louer">Shop</Link>
 						<ul className="sub-menu">
-							<li><Link to="/shop">Shop</Link></li>
+							<li><Link to="/louer">Shop</Link></li>
 							<li><Link to="/">Shop Grid</Link></li>
-							<li><Link to="/shop-left-sidebar">Shop Left sidebar</Link></li>
-							<li><Link to="/shop-right-sidebar">Shop Right sidebar</Link></li>
+							<li><Link to="/louer-left-sidebar">Shop Left sidebar</Link></li>
+							<li><Link to="/louer-right-sidebar">Shop Right sidebar</Link></li>
 							<li><Link to="/product-details">Shop Details</Link></li>
 							<li><Link to="/cart">Cart</Link></li>
 							<li><Link to="/checkout">Checkout</Link></li>
@@ -273,7 +359,91 @@ class NavbarV2 extends Component {
 			</div>
 		)
     }
-}
 
+	const styles = {
+		specialLink: {
+		  listStyle: 'none',
+		  margin: 0,
+		  padding: 0,
+		},
+		userContainer: {
+		  position: 'relative',
+		},
+		userCircle: {
+		  width: '40px',
+		  height: '40px',
+		  backgroundColor: '#007bff',
+		  color: 'white',
+		  borderRadius: '50%',
+		  display: 'flex',
+		  justifyContent: 'center',
+		  alignItems: 'center',
+		  fontSize: '18px',
+		  cursor: 'pointer',
+		  transition: 'background-color 0.3s ease',
+		},
+		userCircleHover: {
+		  backgroundColor: '#0056b3',
+		},
+		userMenuCard: {
+		  display: 'none',
+		  position: 'absolute',
+		  top: '100%',
+		  left: 0,
+		  backgroundColor: 'white',
+		  border: '1px solid #ccc',
+		  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+		  zIndex: 10,
+		  width: '200px',
+		  padding: '10px 0',
+		},
+		userMenuCardVisible: {
+		  display: 'block', // Affiche le menu
+		  position: 'absolute',
+		  top: '100%',
+		  left: 0,
+		  backgroundColor: 'white',
+		  border: '1px solid #ccc',
+		  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+		  zIndex: 10,
+		  width: '200px',
+		  padding: '10px 0',
+		},
+		userInfo: {
+		  padding: '10px',
+		  fontWeight: 'bold',
+		  borderBottom: '1px solid #ccc',
+		  backgroundColor: '#f9f9f9',
+		},
+		menuList: {
+		  margin: 0,
+		  padding: 0,
+		  listStyle: 'none',
+		},
+		menuListItem: {
+		  borderBottom: '1px solid #ccc',
+		},
+		menuLink: {
+		  display: 'block',
+		  padding: '10px',
+		  textDecoration: 'none',
+		  color: '#333',
+		  fontSize: '14px',
+		},
+		menuLinkHover: {
+		  backgroundColor: '#f0f0f0',
+		},
+		logoutLink: {
+		  color: 'red',
+		  fontWeight: 'bold',
+		},
+		loginLink: {
+		  textDecoration: 'none',
+		  color: '#007bff',
+		  display: 'flex',
+		  alignItems: 'center',
+		},
+	  };
+	  
 
 export default NavbarV2

@@ -1,0 +1,42 @@
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px; /* Hors de l'écran par défaut */
+    height: 100%;
+    width: 300px;
+    background: #333;
+    color: white;
+    transition: left 0.3s ease;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .sidebar.open {
+    left: 0; /* Afficher le menu */
+  }
+  
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+  }
+  
+  .content-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+  }
+  

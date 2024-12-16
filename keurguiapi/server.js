@@ -206,7 +206,71 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
+app.get('/api/search-predictive', async (req, res) => {
+  try {
+    const { query } = req.query;
 
+    if (!query || query.trim().length < 2) {
+      return res.status(400).json({ error: 'Requête trop courte ou vide.' });
+    }
+
+    const results = await Product.find({
+      $or: [
+        { city: { $regex: query, $options: 'i' } },
+        { address: { $regex: query, $options: 'i' } },
+      ],
+    })
+      .limit(10) // Limiter le nombre de résultats
+      .select('city address');
+
+    // Préparation des suggestions
+    const suggestions = Array.from(
+      new Set(
+        results.map((item) => item.city).concat(results.map((item) => item.address))
+      )
+    );
+
+    res.json(suggestions);
+  } catch (error) {
+    console.error('Erreur dans la recherche prédictive : ', error);
+    res.status(500).json({ error: 'Erreur du serveur.' });
+  }
+});
+app.get('/search', async (req, res) => {
+  try {
+    const { query, transactionType, price } = req.query;
+
+    console.log('Requête reçue:', req.query); // Log des paramètres reçus
+
+    // Construire l'objet de recherche dynamiquement
+    const searchCriteria = {};
+
+    if (query) {
+      // Recherche par ville, quartier, région ou adresse
+      searchCriteria.$or = [
+        { city: new RegExp(query, 'i') },
+        { address: new RegExp(query, 'i') },
+      ];
+    }
+
+    if (transactionType) {
+      searchCriteria.transactionType = transactionType;
+    }
+
+    if (price) {
+      searchCriteria.price = { $lte: Number(price) };
+    }
+
+    // Exécuter la requête
+    const results = await Product.find(searchCriteria).limit(10);
+
+    console.log('Résultats trouvés:', results); // Log des résultats trouvés
+    res.status(200).json(results);
+  } catch (error) {
+    console.error('Erreur lors de la recherche:', error);
+    res.status(500).json({ error: 'Erreur lors de la recherche.' });
+  }
+});
 
 
 // Endpoint pour la connexion des utilisateurs
@@ -246,17 +310,48 @@ app.post('/api/login', async (req, res) => {
 
 
 
+app.get('/api/product', async (req, res) => {
+  const { search } = req.query;
+  try {
+    const results = await Product.find({
+      $or: [
+        { city: { $regex: search, $options: 'i' } },
+        { address: { $regex: search, $options: 'i' } },
+        { title: { $regex: search, $options: 'i' } },
+      ],
+    }).limit(50); // Limite le nombre de résultats pour éviter les réponses trop volumineuses.
+
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 
 // Routes pour les produits
 app.get('/api/products', async (req, res) => {
   try {
-    const products = await Product.find();
+    const { search } = req.query; // Récupération du paramètre `search` de la requête
+
+    let query = {};
+    if (search) {
+      // Si une recherche est spécifiée, chercher dans plusieurs champs avec une correspondance partielle
+      query = {
+        $or: [
+          { city: { $regex: search, $options: 'i' } },
+          { address: { $regex: search, $options: 'i' } },
+          { title: { $regex: search, $options: 'i' } }
+        ]
+      };
+    }
+
+    const products = await Product.find(query).limit(50); // Limite à 50 résultats pour éviter une surcharge
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 app.post('/api/products', async (req, res) => {
   try {
@@ -268,7 +363,7 @@ app.post('/api/products', async (req, res) => {
       address, 
       city, 
       features, 
-      image, // Une seule image
+      images, // Une seule image
       buildingDetails, 
       isVirtualTourAvailable, 
       isOpenHouse, 
@@ -280,7 +375,7 @@ app.post('/api/products', async (req, res) => {
     } = req.body;
 
     // Validation des champs requis
-    if (!title || !price || !transactionType || !productType || !address || !city || !agentName || !image) {
+    if (!title || !price || !transactionType || !productType || !address || !city || !agentName || !images) {
       return res.status(400).json({
         message: 'Certains champs requis sont manquants.',
       });
@@ -308,7 +403,7 @@ app.post('/api/products', async (req, res) => {
         allowsPets: features?.allowsPets || false,
         allowsSmoking: features?.allowsSmoking || false,
       },
-      image, // Ajout de l'image (une seule URL)
+      images, // Ajout de l'image (une seule URL)
       buildingDetails: {
         yearBuilt: buildingDetails?.yearBuilt || null,
         isNewConstruction: buildingDetails?.isNewConstruction || false,

@@ -1,31 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Social from '../section-components/social';
-import './connexion.css';
-
 
 class NavbarV2 extends Component {
-	constructor() {
-		super();
-		this.state = {
-		  firstName: null, // Stockera le prénom de l'utilisateur
-		};
-	  }
-	
-	  componentDidMount() {
-		const storedFirstName = localStorage.getItem("firstName");
-		if (storedFirstName) {
-		  this.setState({ firstName: storedFirstName });
-		}
-	  }
-	
-	  handleLogout = () => {
-		localStorage.clear(); // Supprimer les données utilisateur
-		window.location.href = "/"; // Rediriger vers la page d'accueil
-	  };
 
     render() {
-		const { firstName } = this.state;
         let publicUrl = process.env.PUBLIC_URL+'/'
 		let CustomClass = this.props.CustomClass ? this.props.CustomClass : ''
         return (
@@ -92,12 +71,12 @@ class NavbarV2 extends Component {
 							<nav>
 							<div className="ltn__main-menu">
 								<ul>
-								<li className="#"><Link to="/shop-grid">Rechercher</Link>
+								<li className="#"><Link to="/vendre">Rechercher</Link>
 									
 								</li>
 								<li className=""><Link to="#">Acheter</Link>
 									<ul>
-										<li><Link to="/shop">Trouver une propriete a vendre</Link></li>
+										<li><Link to="/louer">Trouver une propriete a vendre</Link></li>
 										<li><Link to="/service">Guide de l'acheteur</Link></li>
 										<li><Link to="/service-details">Acheter avec un courtier</Link></li>
 										
@@ -105,8 +84,8 @@ class NavbarV2 extends Component {
 								</li>
 								<li className=""><Link to="#">Louer</Link>
 									<ul>
-									<li><Link to="/shop-right-sidebar">Trouver une propriete a louer</Link></li>
-										<li><Link to="/service">Guide de du locataire</Link></li>
+									<li><Link to="/louer-right-sidebar">Trouver une propriete a louer</Link></li>
+										<li><Link to="/agent">Guide de du locataire</Link></li>
 										<li><Link to="/service-details">Enquete de prelocation</Link></li>
 									</ul>
 								</li>
@@ -120,7 +99,7 @@ class NavbarV2 extends Component {
 								<li className=""><a href="#">Trouver un courtier</a>
 								<ul>
 									
-										<li><Link to="/service">Trouver un courtier</Link></li>
+										<li><Link to="/agent">Trouver un courtier</Link></li>
 										<li><Link to="/service-details">Acheteer avec un courtier</Link></li>
 										<li><Link to="/service">Vendeur avec un courtier</Link></li>
 										<li><Link to="/service-details">Devenir courtier</Link></li>
@@ -128,36 +107,14 @@ class NavbarV2 extends Component {
 								
 							</li>
 								<li><Link to="/contact">Outils</Link></li>
-								<div className="header-options">
-            {firstName ? (
-              <div className="user-menu">
-                <div className="user-circle">
-                  {firstName.charAt(0).toUpperCase()} {/* Première lettre du prénom */}
-                </div>
-                <div className="user-dropdown">
-                  <ul>
-                    <li>Mes recherches</li>
-                    <li>Mes favoris</li>
-                    <li>Propriétés cachées</li>
-                    <li>Mon courtier</li>
-                    <li>Mon profil locataire</li>
-                    <li>Mes paramètres</li>
-                    <li onClick={this.handleLogout}>Déconnexion</li>
-                  </ul>
-                </div>
-              </div>
-            ) : (
-              <Link to="/login" className="login-btn">
-                Connexion <i className="far fa-user" />
-              </Link>
-            )}
-          </div>
 								<li className="special-link" style={{ borderRadius: '8px' }}>
 								<Link to="/login">
 									Connexion
 									<i className="far fa-user" style={{ marginLeft: '8px' }} />
 								</Link>
 								</li>
+
+
 								
 
 								</ul>
@@ -228,12 +185,12 @@ class NavbarV2 extends Component {
 							<li><Link to="/location">Google Map Locations</Link></li>
 						</ul>
 						</li>
-						<li><Link to="/shop">Shop</Link>
+						<li><Link to="/louer">Shop</Link>
 						<ul className="sub-menu">
-							<li><Link to="/shop">Shop</Link></li>
+							<li><Link to="/louer">Shop</Link></li>
 							<li><Link to="/">Shop Grid</Link></li>
-							<li><Link to="/shop-left-sidebar">Shop Left sidebar</Link></li>
-							<li><Link to="/shop-right-sidebar">Shop Right sidebar</Link></li>
+							<li><Link to="/louer-left-sidebar">Shop Left sidebar</Link></li>
+							<li><Link to="/louer-right-sidebar">Shop Right sidebar</Link></li>
 							<li><Link to="/product-details">Shop Details</Link></li>
 							<li><Link to="/cart">Cart</Link></li>
 							<li><Link to="/checkout">Checkout</Link></li>

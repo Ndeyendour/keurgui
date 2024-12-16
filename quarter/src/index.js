@@ -51,6 +51,12 @@ import OrderTracking from './components/order-tracking';
 import History from './components/history';
 import Admin from './components/admin';
 import Adminprop from './components/section-components/adminprop';
+import AdminPropDetail from './components/section-components/adminpropdetails';
+import GaleriePage from './components/shop-components/GaleriePage'
+import CartePage from './components/shop-components/CartePage'
+import SommairePage from './components/shop-components/SommairePage'
+import ResultsPage from './components/shop-components/ResultsPage';
+
 
 
 class Root extends Component {
@@ -59,6 +65,7 @@ class Root extends Component {
                 <HashRouter basename="/">
 	                <div>
 	                <Switch>
+                        <Route path="/results/:searchTerm" component={ResultsPage} />
 	                    <Route exact path="/" component={HomeV4} />
                         <Route path="/home-v2" component={HomeV2} />
                         <Route path="/home-v3" component={HomeV3} />
@@ -69,9 +76,9 @@ class Root extends Component {
                         <Route path="/home-v8" component={HomeV8} />
                         <Route path="/home-v9" component={HomeV9} />
                         <Route path="/home-v10" component={HomeV10} />
-
+                        <Route path="/adpropdet" component={AdminPropDetail} />
                         <Route path="/about" component={About} />
-                        <Route path="/service" component={Service} />
+                        <Route path="/agent" component={Service} />
                         <Route path="/service-details" component={ ServiceDetails } />
                         <Route path="/portfolio" component={ Portfolio } />
                         <Route path="/portfolio-v2" component={ PortfolioV2 } />
@@ -82,10 +89,10 @@ class Root extends Component {
                         <Route path="/coming-soon" component={ ComingSoon } />
                         <Route path="/404" component={ Error } />
                         <Route path="/location" component={ Location } />
-                        <Route path="/shop" component={ Shop } />
-                        <Route path="/shop-grid" component={ ShopGrid } />
+                        <Route path="/louer" component={ Shop } />
+                        <Route path="/vendre" component={ ShopGrid } />
                         <Route path="/shop-left-sidebar" component={ ShopLeftSidebar } />
-                        <Route path="/shop-right-sidebar" component={ ShopRightSidebar } />
+                        <Route path="/louer" component={ ShopRightSidebar } />
 
                         <Route path="/product-details" component={ ProdductDetails } />
                         {/* blog */}
@@ -93,6 +100,9 @@ class Root extends Component {
                         <Route path="/blog-left-sidebar" component={ BlogLeftSidebar } />
                         <Route path="/blog-right-sidebar" component={ BlogRightSidebar } />
                         <Route path="/blog" component={ Blog } />
+                        <Route path="/galerie" component={<GaleriePage />} />
+                        <Route path="/carte" component={<CartePage />} />
+                        <Route path="/sommaire" component={<SommairePage />} />
 
 
                         <Route path="/blog-details" component={ BlogDetails } />

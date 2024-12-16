@@ -32,6 +32,7 @@ const LoginUser = () => {
       const data = await response.json();
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", "user");
+      localStorage.setItem("firstname", data.firstname); // Ajoutez cette ligne
 
       // Redirection vers la page d'accueil
       history.push("/");

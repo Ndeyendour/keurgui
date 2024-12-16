@@ -26,8 +26,8 @@ const productSchema = new mongoose.Schema(
       allowsPets: { type: Boolean, default: false },
       allowsSmoking: { type: Boolean, default: false },
     },
-    image: { 
-      type: String, 
+    images: { 
+      type: [String],
       required: true 
     },
     buildingDetails: {

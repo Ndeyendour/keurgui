@@ -1,7 +1,8 @@
 import React,{ useState , useEffect} from "react";
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed, faBath } from '@fortawesome/free-solid-svg-icons'; 
+import { faBed, faBath,faCar,faClock ,faEdit,faTrash} from '@fortawesome/free-solid-svg-icons'; 
+import "./adminprop.css";
 
 import {
   Box,
@@ -53,6 +54,8 @@ const Adminprop = () => {
     console.log("Afficher les notifications");
   };
 
+  const [setFilteredProducts] = useState([]);
+
   const history = useHistory(); // Pour la navigation avec React Router v5
   const [openSublist, setOpenSublist] = useState(null);
 
@@ -69,6 +72,8 @@ const Adminprop = () => {
 
   // Données du graphique
   const [products, setProducts] = useState([]);
+  // Modification
+
 
 
   // Effet pour récupérer les produits depuis le backend
@@ -85,6 +90,19 @@ const Adminprop = () => {
 
     fetchProducts();  // Appel de la fonction pour récupérer les produits
   }, []);  // Le tableau vide [] indique que l'effet s'exécute une seule fois lors du montage du composant
+
+  const handleEdit = (id) => {
+    console.log(`Modifier la propriété avec ID: ${id}`);
+    history.push(`/edit-property/${id}`);
+};
+
+const handleDelete = (id) => {
+    if (window.confirm("Voulez-vous vraiment supprimer cette propriété ?")) {
+        setFilteredProducts((prevProducts) =>
+            prevProducts.filter((product) => product._id !== id)
+        );
+    }
+};
 
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Résidentiel");
@@ -312,42 +330,75 @@ const Adminprop = () => {
 									</div>
 
 									{/* ltn__product-item */}
-									<div className="row">
-									<div className="col-lg-12">
-										<div className="tab-content ">
-											<div className="tab-pane fade active show" id="liton_product_grid">
-												<div className="ltn__product-tab-content-inner ltn__product-grid-view">
-													<div className="row">
-														{/* Liste des propriétés */}
-														{filteredProducts.map((product) => (
-															<div key={product._id} className="col-lg-3 col-sm-6 col-12">
-																<img
-																	src={product.image || '/path/to/default-image.jpg'}
-																	alt={product.title}
-																	className="property-image"
-																	onClick={() => history.push(`/product-details/`)} // Redirection
-																/>
-																<div className="property-details">
-																	<h6>{product.price?.toLocaleString()} $</h6>
-																	<h6>{product.title}</h6>
-																	<p>{product.address}, {product.city}</p>
-																	<div className="property-features">
-																		<span>
-																			<FontAwesomeIcon icon={faBed} /> {product.features?.bedrooms || 0}
-																		</span>
-																		<span>
-																			<FontAwesomeIcon icon={faBath} /> {product.features?.bathrooms || 0}
-																		</span>
-																	</div> 
-																</div>
-															</div>
-														))}
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									</div>
+                  <div className="row">
+    {filteredProducts.map((product) => (
+        <div key={product._id} className="col-lg-12 d-flex mb-3">
+            {/* Image */}
+            <div style={{ width: "30%" }}>
+                <img
+                    src={product.image || '/path/to/default-image.jpg'}
+                    alt={product.title}
+                    className="property-image"
+                    style={{
+                        width: "100%",
+                        height: "auto",
+                        borderRadius: "8px",
+                        objectFit: "cover",
+                    }}
+                />
+            </div>
+
+            {/* Details */}
+            <div style={{ width: "70%", paddingLeft: "20px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                {/* Title and Info */}
+                <div>
+                    <h6>{product.price?.toLocaleString()} $</h6>
+                    <h6>{product.title}</h6>
+                    <p>{product.address}, {product.city}</p>
+                    <div className="property-features">
+                        <span style={{ marginRight: "10px" }}>
+                            <FontAwesomeIcon icon={faBed} /> {product.features?.bedrooms || 0} chambres
+                        </span>
+                        <span style={{ marginRight: "10px" }}>
+                            <FontAwesomeIcon icon={faBath} /> {product.features?.bathrooms || 0} salles de bain
+                        </span>
+                        
+                        <div style={{ marginTop: "10px", display: "flex", marginLeft: "200px" }}>
+    <FontAwesomeIcon
+        icon={faEdit}
+        style={{
+            color: "orange",
+            cursor: "pointer",
+            fontSize: "1.5rem",
+            marginRight: "70px", // Espace ajouté après l'icône "Modifier"
+        }}
+        title="Modifier"
+        onClick={() => handleEdit(product._id)}
+    />
+    <FontAwesomeIcon
+        icon={faTrash}
+        style={{
+            color: "red",
+            cursor: "pointer",
+            fontSize: "1.5rem",
+        }}
+        title="Supprimer"
+        onClick={() => handleDelete(product._id)}
+    />
+</div>
+
+                    </div>
+                </div>
+
+               
+            </div>
+        </div>
+    ))}
+</div>
+
+
+
+
 
 								
 									</div>

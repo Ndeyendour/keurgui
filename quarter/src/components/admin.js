@@ -63,6 +63,7 @@ const Dashboard = () => {
 
   const fullName = localStorage.getItem("fullName") || "Utilisateur non connecté";
   const role = localStorage.getItem("role") || "Non défini";
+  
 
   // Données du graphique
   const data = [
