@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema(
     city: { type: String, required: true },
     features: {
       bedrooms: { type: Number, default: 0 },
-      bathrooms: { type: Number, default: 0 },
+      bathrooms: { type: Number, default: 0 }, 
       parkingSpaces: { type: Number, default: 0 },
       garages: { type: Number, default: 0 },
       area: { type: Number },

@@ -4,7 +4,6 @@ import { faHome, faBuilding } from '@fortawesome/free-solid-svg-icons';
 import  { useState,useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import './heroSection.css';
 
 const HeroSection = () => {
 	let publicUrl = process.env.PUBLIC_URL+'/'

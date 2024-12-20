@@ -1,0 +1,69 @@
+.property-images-page {
+    text-align: center;
+    padding: 20px;
+    position: relative;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+  }
+  
+  h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .close-icon {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #ff0000;
+  }
+  
+  .close-icon:hover {
+    color: #cc0000;
+  }
+  
+  .main-image-container {
+    margin: 20px auto;
+    width: 90%; /* Largeur maximale */
+    max-width: 1200px; /* Limite de largeur */
+    border: 2px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .main-image {
+    width: 100%; /* L'image occupe tout l'espace du conteneur */
+    height: auto; /* Hauteur ajustée automatiquement */
+    border-radius: 5px;
+  }
+  
+  .thumbnail-gallery {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .thumbnail-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .thumbnail-image.selected {
+    border: 2px solid #007bff;
+  }
+  
+  .thumbnail-image:hover {
+    transform: scale(1.1);
+    transition: 0.2s;
+  }
+  

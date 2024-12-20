@@ -12,7 +12,7 @@ import { useHistory } from 'react-router-dom';
 
 
 
-const ShopGridV1 = () => {
+const  ShopGridV1= () => {
 	const [products, setProducts] = useState([]);
 	const history = useHistory(); // Hook pour naviguer
 	const propertiesPerPage = 250;
@@ -84,7 +84,31 @@ const ShopGridV1 = () => {
 			  console.error("Erreur lors de la redirection :", error);
 			}
 		  };
-		  
+
+		//   ---------------------------nouv--------------
+		const handleNavigation = (type) => {
+			console.log('Navigation vers :', type);
+		
+			if (type === 'À vendre') {
+			  history.push('/vendre');
+			} else if (type === 'À louer') {
+			  history.push('/louer');
+			}
+		  };
+		  const handleTransactionChange = (e) => {
+			const selectedType = e.target.value;
+			setTransactionType(selectedType);
+		
+			console.log("Option sélectionnée :", selectedType); // Debug
+		
+			if (selectedType === "À vendre") {
+			  console.log("Redirection vers /proprietes-a-vendre");
+			  history.push("/vendre");
+			} else if (selectedType === "À louer") {
+			  console.log("Redirection vers /louer");
+			  history.push("/louer");
+			}
+		  }
  	return(
 		
 		 <div>
@@ -121,19 +145,14 @@ const ShopGridV1 = () => {
 										>
 										<option value="Résidentiel">Résidentiel</option>
 										<option value="Commercial">Commercial</option>
-										<option value="Terrain">Terrain</option>
+										
 										</select>
 
 										{/* Type de transaction */}
-										<select
-										value={transactionType}
-										onChange={(e) => setTransactionType(e.target.value)}
-										className="select-style"
-										>
-										<option value="À vendre">À vendre</option>
-										<option value="À louer">À louer</option>
-										</select>
-
+										<select value={transactionType} onChange={handleTransactionChange} className="select-style">
+        <option value="À vendre">À vendre</option>
+        <option value="À louer">À louer</option>
+      </select>
 										{/* Prix */}
 										{/* Prix */}
 										<button
@@ -266,7 +285,7 @@ const ShopGridV1 = () => {
 																src={product.images[0] || '/path/to/default-image.jpg'}
 																alt={product.title}
 																className="property-image"
-																onClick={() => history.push(`/product-details/`)} // Redirection
+																onClick={() => history.push(`/product/${product._id}`)}
 															/>
 
 															{/* Icône avec le nombre de photos */}

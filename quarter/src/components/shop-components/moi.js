@@ -24,31 +24,65 @@ const ResultsPage = () => {
   }, [searchTerm]);
 
   return (
-    <div className="results-container">
-      <h2>Résultats pour : {searchTerm}</h2>
-      {products.length === 0 ? (
-        <p>Aucun résultat trouvé.</p>
-      ) : (
-        <div className="results-list">
-          {products.map((product) => (
-            <div key={product._id} className="result-card">
-              
-              <h5>{product.title}</h5>
-              <p>{product.address}, {product.city}</p>
-              <p>Prix : {product.price?.toLocaleString()} $</p>
-              <div className="features">
-                <span>
-                  <FontAwesomeIcon icon={faBed} /> {product.features?.bedrooms || 0} chambres
-                </span>
-                <span>
-                  <FontAwesomeIcon icon={faBath} /> {product.features?.bathrooms || 0} salles de bain
-                </span>
+    <div className="row">
+          <div className="col-lg-12">
+            <div className="tab-content">
+              <div className="tab-pane fade active show" id="liton_product_grid">
+                <div className="ltn__product-tab-content-inner ltn__product-grid-view">
+                  <div className="row">
+                    {/* Liste des propriétés */}
+                    {products.length > 0 ? (
+                      products.map((product) => (
+                        <div key={product._id} className="col-lg-3 col-sm-6 col-12">
+                          <div className="property-card">
+                            {/* Image principale */}
+                            <img
+                              src={product.images?.[0] || '/path/to/default-image.jpg'}
+                              alt={product.title}
+                              className="property-image"
+                              onClick={() => handleProductClick(product._id)}
+                            />
+                            
+                            {/* Icône avec le nombre de photos */}
+                            <div
+                              className="icon-wrapper"
+                              onClick={() => handleImageClick(product._id)}
+                            >
+                              <FontAwesomeIcon
+                                icon={faCamera}
+                                className="photo-icon"
+                              />
+                              <span className="photo-count">
+                                {product.images?.length || 0}
+                              </span>
+                            </div>
+                            
+                            {/* Détails de la propriété */}
+                            <div className="property-details">
+                              <h6>{product.price?.toLocaleString()} $</h6>
+                              <h6>{product.title}</h6>
+                              <p>{product.address}, {product.city}</p>
+                              <div className="property-features">
+                                <span>
+                                  <FontAwesomeIcon icon={faBed} /> {product.features?.bedrooms || 0}
+                                </span>
+                                <span>
+                                  <FontAwesomeIcon icon={faBath} /> {product.features?.bathrooms || 0}
+                                </span>
+                              </div> 
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p>Aucun résultat trouvé.</p>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-          ))}
+          </div>
         </div>
-      )}
-    </div>
   );
 };
 

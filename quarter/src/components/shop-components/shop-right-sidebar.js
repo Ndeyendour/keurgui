@@ -87,6 +87,20 @@ const handleCardClick = async (item) => {
 	  console.error("Erreur lors de la redirection :", error);
 	}
   };
+  const handleTransactionChange = (e) => {
+    const selectedType = e.target.value;
+    setTransactionType(selectedType);
+
+    console.log("Option sélectionnée :", selectedType); // Debug
+
+    if (selectedType === "À vendre") {
+      console.log("Redirection vers /proprietes-a-vendre");
+      history.push("/vendre");
+    } else if (selectedType === "À louer") {
+      console.log("Redirection vers /louer");
+      history.push("/louer");
+    }
+  };
   
  	return(
 		
@@ -124,14 +138,11 @@ const handleCardClick = async (item) => {
 										</select>
 
 										{/* Type de transaction */}
-										<select
-										value={transactionType}
-										onChange={(e) => setTransactionType(e.target.value)}
-										className="select-style"
-										>
-										<option value="À vendre">À vendre</option>
-										<option value="À louer">À louer</option>
-										</select>
+										<select value={transactionType} onChange={handleTransactionChange} className="select-style">
+        <option value="À vendre">À vendre</option>
+        <option value="À louer">À louer</option>
+      </select>
+
 
 										{/* Prix */}
 										{/* Prix */}

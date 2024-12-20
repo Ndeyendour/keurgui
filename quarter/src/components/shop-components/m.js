@@ -1,144 +1,114 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import parse from 'html-react-parser';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed, faBath } from '@fortawesome/free-solid-svg-icons'; // Importation des icônes
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './shop-grid.css';
-import './PropertyList.css';
+import { useHistory } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarkerAlt, faCamera } from '@fortawesome/free-solid-svg-icons';
+import './productsliderV1.css';
 
-const ShopGridV1 = () => {
-    const [products, setProducts] = useState([]);
-    const history = useHistory(); // Hook pour naviguer
-    const [query, setQuery] = useState("");
-    const [category, setCategory] = useState("Résidentiel");
-    const [transactionType, setTransactionType] = useState("À vendre");
-    const [price, setPrice] = useState("");
-    const [lifestyleFilters, setLifestyleFilters] = useState(1);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalProperties, setTotalProperties] = useState(60992); // Nombre total de propriétés trouvées
-    const propertiesPerPage = 250;
+const LastPropertyDetails = () => {
+  const [property, setProperty] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const history = useHistory();
 
-    // Effet pour récupérer les produits depuis le backend
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/api/products'); // URL de votre backend
-                setProducts(response.data); // Met à jour l'état avec les produits récupérés
-            } catch (error) {
-                console.error('Erreur lors de la récupération des produits:', error);
-            }
-        };
+  useEffect(() => {
+    axios
+      .get('/api/products?sort=-createdAt&limit=1') // Assurez-vous que cette URL est correcte pour récupérer la dernière propriété
+      .then((response) => {
+        setProperty(response.data[0]);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      });
+  }, []);
 
-        fetchProducts();
-    }, []);
+  if (loading) {
+    return <p>Chargement...</p>;
+  }
 
-    // Filtrer les produits pour afficher uniquement ceux à vendre
-    const filteredProducts = products.filter(
-        (product) => product.transactionType === 'sale'
-    );
+  if (error) {
+    return <p>Erreur: {error}</p>;
+  }
 
-    // Gestion de la pagination
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-    };
+  if (!property) {
+    return <p>Aucune propriété trouvée.</p>;
+  }
 
-    return (
-        <div>
-            {/* Barre des onglets */}
-            <div className="tabs-container">
-                <button className="tab-button active">Galerie</button>
-                <button className="tab-button">Carte</button>
-                <button className="tab-button">Sommaire</button>
+  const displayImages = property.images.slice(0, 5); // Affiche jusqu'à 5 images
+  const lastImageIndex = Math.min(property.images.length, 5) - 1;
 
-                {/* Nombre de propriétés trouvées */}
-                <span className="properties-found">{totalProperties.toLocaleString()} propriétés trouvées</span>
-
-                {/* Trier par */}
-                <select className="sort-dropdown">
-                    <option value="relevance">Trier par pertinence</option>
-                    <option value="price_asc">Prix croissant</option>
-                    <option value="price_desc">Prix décroissant</option>
-                </select>
-            </div>
-
-            {/* Pagination */}
-            <div className="pagination-container">
-                <button
-                    className="pagination-button"
-                    onClick={() => handlePageChange(1)}
-                    disabled={currentPage === 1}
-                >
-                    «
-                </button>
-                <button
-                    className="pagination-button"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                >
-                    ‹
-                </button>
-                <span className="pagination-info">
-                    {currentPage} / {Math.ceil(totalProperties / propertiesPerPage)}
-                </span>
-                <button
-                    className="pagination-button"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === Math.ceil(totalProperties / propertiesPerPage)}
-                >
-                    ›
-                </button>
-                <button
-                    className="pagination-button"
-                    onClick={() => handlePageChange(Math.ceil(totalProperties / propertiesPerPage))}
-                    disabled={currentPage === Math.ceil(totalProperties / propertiesPerPage)}
-                >
-                    »
-                </button>
-            </div>
-
-            <div className="ltn__product-area ltn__product-gutter mb-100">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="tab-content">
-                                <div className="tab-pane fade active show" id="liton_product_grid">
-                                    <div className="ltn__product-tab-content-inner ltn__product-grid-view">
-                                        <div className="row">
-                                            {/* Liste des propriétés */}
-                                            {filteredProducts.map((product) => (
-                                                <div key={product._id} className="col-lg-3 col-sm-6 col-12">
-                                                    <img
-                                                        src={product.image || '/path/to/default-image.jpg'}
-                                                        alt={product.title}
-                                                        className="property-image"
-                                                        onClick={() => history.push(`/product-details/`)} // Redirection
-                                                    />
-                                                    <div className="property-details">
-                                                        <h6>{product.price?.toLocaleString()} $</h6>
-                                                        <h6>{product.title}</h6>
-                                                        <p>{product.address}, {product.city}</p>
-                                                        <div className="property-features">
-                                                            <span>
-                                                                <FontAwesomeIcon icon={faBed} /> {product.features?.bedrooms || 0}
-                                                            </span>
-                                                            <span>
-                                                                <FontAwesomeIcon icon={faBath} /> {product.features?.bathrooms || 0}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="product-details-page">
+      {/* En-tête avec titre et détails */}
+      <div className="product-header">
+        <div className="product-header-content">
+          <div className="product-info-left">
+            <h1>{property.title}</h1>
+            <p className="address">
+              <FontAwesomeIcon icon={faMapMarkerAlt} /> {property.address}
+            </p>
+          </div>
+          <div className="product-info-center">
+            <span className="price">{property.price.toLocaleString()} $</span>
+          </div>
+          <div className="product-info-right">
+            <button className="contact-agent-btn">Contacter le courtier immobilier</button>
+          </div>
         </div>
-    );
+      </div>
+
+      {/* Galerie d'images */}
+      <div className="product-gallery">
+        {/* Grande image à gauche */}
+        {property.images.length > 0 && (
+          <a href={property.images[0]} data-rel="lightcase:myCollection" className="large-image">
+            <img src={property.images[0]} alt="Large Product" />
+          </a>
+        )}
+
+        {/* Petites images à droite */}
+        <div className="small-images">
+          {displayImages.slice(1).map((image, index) => {
+            const isLastImage = index === lastImageIndex - 1;
+            return (
+              <a href={image} data-rel="lightcase:myCollection" key={index} className="small-image">
+                <img src={image} alt={`Small Product ${index + 1}`} />
+                {isLastImage && (
+                  <div
+                    className="icon-wrapper"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      history.push(`/property-images/${property._id}`);
+                    }} // Redirection vers les images
+                  >
+                    <FontAwesomeIcon icon={faCamera} className="photo-icon" />
+                    <span className="photo-count">{property.images.length}</span>
+                  </div>
+                )}
+              </a>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Détails supplémentaires */}
+      <div className="product-info">
+        <h2>Informations sur le produit</h2>
+        <ul>
+          <li>Type de produit : {property.productType}</li>
+          <li>Ville : {property.city}</li>
+          <li>Courtier : {property.agentName}</li>
+          <li>Description : {property.description}</li>
+          <li>Taille du lot : {property.lotSize} m²</li>
+          <li>Visite virtuelle disponible : {property.isVirtualTourAvailable ? 'Oui' : 'Non'}</li>
+          <li>Journée portes ouvertes : {property.isOpenHouse ? 'Oui' : 'Non'}</li>
+          <li>Date d'emménagement : {new Date(property.moveInDate).toLocaleDateString()}</li>
+        </ul>
+      </div>
+    </div>
+  );
 };
 
-export default ShopGridV1;
+export default LastPropertyDetails;

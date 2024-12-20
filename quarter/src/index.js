@@ -56,7 +56,7 @@ import GaleriePage from './components/shop-components/GaleriePage'
 import CartePage from './components/shop-components/CartePage'
 import SommairePage from './components/shop-components/SommairePage'
 import ResultsPage from './components/shop-components/ResultsPage';
-
+import PropertyImagesPage from './components/shop-components/PropertyImagesPage';
 
 
 class Root extends Component {
@@ -94,7 +94,7 @@ class Root extends Component {
                         <Route path="/shop-left-sidebar" component={ ShopLeftSidebar } />
                         <Route path="/louer" component={ ShopRightSidebar } />
 
-                        <Route path="/product-details" component={ ProdductDetails } />
+                        <Route path="/product/:id" component={ ProdductDetails } />
                         {/* blog */}
                         <Route path="/blog-grid" component={ BlogGrid } />
                         <Route path="/blog-left-sidebar" component={ BlogLeftSidebar } />
@@ -103,7 +103,7 @@ class Root extends Component {
                         <Route path="/galerie" component={<GaleriePage />} />
                         <Route path="/carte" component={<CartePage />} />
                         <Route path="/sommaire" component={<SommairePage />} />
-
+                        <Route exact path="/property-images/:id" component={PropertyImagesPage} />
 
                         <Route path="/blog-details" component={ BlogDetails } />
                         <Route path="/contact" component={ Contact } />

@@ -9,10 +9,10 @@ import Footer from './global-components/footer';
 const Product_Details = () => {
     return <div>
         <Navbar />
-        <PageHeader headertitle="Property Details" customclass="mb-0" />
+        {/* <PageHeader headertitle="Property Details" customclass="mb-0" /> */}
         <ProductSlider />
-        <ProductDetails />
-        <CallToActionV1 />
+        {/* <ProductDetails /> */}
+        {/* <CallToActionV1 /> */}
         <Footer />
     </div>
 }

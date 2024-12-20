@@ -1,5 +1,4 @@
 import React from "react";
-import "./heroSection.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faBuilding } from '@fortawesome/free-solid-svg-icons';
 

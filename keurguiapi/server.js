@@ -18,7 +18,7 @@ app.use(cors());  // Permet de gérer les problèmes de CORS (Cross-Origin Resou
 app.use('/assets', express.static('assets'));
 
 // Connexion à la base de données MongoDB
-mongoose.connect('mongodb://localhost:27017/keurgui', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost:27017/keurgui', { })
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.log('Failed to connect to MongoDB', err));
 
@@ -327,7 +327,28 @@ app.get('/api/product', async (req, res) => {
   }
 });
 
+app.get('/api/products/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).send('Produit non trouvé');
+    }
+    res.json(product);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+app.get('/api/products/:id/images', async (req, res) => {
+  try {
+      const product = await Product.findById(req.params.id);
+      if (!product) return res.status(404).json({ message: 'Product not found' });
 
+      // Assuming product.images is an array of image URLs or paths
+      res.json(product.images);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
 // Routes pour les produits
 app.get('/api/products', async (req, res) => {
   try {
