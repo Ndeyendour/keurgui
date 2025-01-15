@@ -5,7 +5,11 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
-});
+},
+{
+  timestamps: true, // Cela ajoute automatiquement createdAt et updatedAt
+}
+);
 
 const User = mongoose.model('User', userSchema);
 

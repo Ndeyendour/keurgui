@@ -8,8 +8,22 @@ const productSchema = new mongoose.Schema(
     transactionType: { type: String, enum: ['sale', 'rent', 'buy'], required: true },
     productType: { 
       type: String, 
-      enum: ['Maison unifamiliale', 'Condo', 'Plex', 'Loft / Studio', 'Maison mobile', 'Intergénération', 'Fermette', 'Terrain', 'Chalet', 'Villa'], 
+      enum: ['Maison unifamiliale', 'Condo', 'Plex', 'Loft / Studio', 'Maison mobile', 'Intergénération', 'Fermette', 'Terrain', 'Chalet', 'Villa','appartement'], 
       required: true 
+    },
+    propertyCategory: {
+      type: String,
+      enum: ['residential', 'commercial'],
+      required: true,
+    },
+    coordinates: {
+      latitude: { type: Number, required: true },
+      longitude: { type: Number, required: true },
+    },
+    status: {
+      type: String,
+      enum: ['available', 'sold', 'rented'], // Statut du produit
+      default: 'available', // Par défaut, le produit est disponible
     },
     address: { type: String, required: true },
     city: { type: String, required: true },
@@ -48,6 +62,8 @@ const productSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+productSchema.index({ coordinates: "2dsphere" });
+
 
 // Ajout d'un index pour les recherches fréquentes
 productSchema.index({ city: 1, price: 1, transactionType: 1 });

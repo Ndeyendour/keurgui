@@ -42,10 +42,10 @@ app.use(cors());
 // Middleware pour vérifier si l'utilisateur est admin
 app.post('/agents', async (req, res) => {
   try {
-    const { email, password, agentName, nonAgence, territoire, langue, photoProfil } = req.body;
+    const { email, password, agentName, nonAgence, territoire, langue, photoProfil, phoneNumber } = req.body;
 
     // Vérification que tous les champs sont fournis
-    if (!email || !password || !agentName || !nonAgence || !territoire || !langue || !photoProfil) {
+    if (!email || !password || !agentName || !nonAgence || !territoire || !langue || !photoProfil || !phoneNumber) {
       return res.status(400).json({ message: 'Tous les champs sont obligatoires.' });
     }
 
@@ -57,7 +57,8 @@ app.post('/agents', async (req, res) => {
       nonAgence,
       territoire,
       langue,
-      photoProfil
+      photoProfil,
+      phoneNumber, // Nouveau champ ajouté
     });
 
     // Sauvegarde de l'agent dans la base de données
@@ -67,6 +68,47 @@ app.post('/agents', async (req, res) => {
     res.status(201).json({ message: 'Agent créé avec succès', agent: newAgent });
   } catch (err) {
     console.error('Erreur lors de la création de l\'agent:', err);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
+  }
+});
+app.delete('/agents/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Vérification de l'existence de l'agent
+    const agent = await Agent.findById(id);
+    if (!agent) {
+      return res.status(404).json({ message: 'Agent non trouvé' });
+    }
+
+    // Suppression de l'agent
+    await Agent.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Agent supprimé avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression de l\'agent:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+app.put('/agents/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+
+    // Vérifier si l'agent existe
+    const agent = await Agent.findById(id);
+    if (!agent) {
+      return res.status(404).json({ message: 'Agent non trouvé' });
+    }
+
+    // Mise à jour des données de l'agent
+    const updatedAgent = await Agent.findByIdAndUpdate(id, updates, {
+      new: true, // Retourne les données mises à jour
+      runValidators: true, // Valide les données mises à jour
+    });
+
+    res.status(200).json({ message: 'Agent mis à jour avec succès', agent: updatedAgent });
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour de l\'agent :', error);
     res.status(500).json({ message: 'Erreur interne du serveur' });
   }
 });
@@ -85,6 +127,18 @@ app.get('/agents', async (req, res) => {
   } catch (err) {
     console.error('Erreur lors de la récupération des agents:', err);
     res.status(500).json({ message: 'Erreur interne du serveur.' });
+  }
+});
+app.get('/agents/:id', async (req, res) => {
+  try {
+    const agent = await Agent.findById(req.params.id);
+    if (!agent) {
+      return res.status(404).json({ message: 'Agent non trouvé' });
+    }
+    res.status(200).json(agent);
+  } catch (error) {
+    console.error('Erreur lors de la récupération de l\'agent :', error);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
   }
 });
 
@@ -308,6 +362,36 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+app.get('/api/products/count', async (req, res) => {
+  try {
+    const total = await Product.countDocuments(); // Compte tous les documents
+    res.json({ total });
+  } catch (error) {
+    console.error('Erreur lors de la récupération du total des produits:', error);
+    res.status(500).json({ error: 'Erreur lors de la récupération du total des produits' });
+  }
+});
+app.get("/api/products", async (req, res) => {
+  const { sort } = req.query;
+  let sortCriteria = {};
+
+  switch (sort) {
+    case "recent":
+      sortCriteria = { createdAt: -1 };
+      break;
+    case "price_asc":
+      sortCriteria = { price: 1 };
+      break;
+    case "price_desc":
+      sortCriteria = { price: -1 };
+      break;
+    default:
+      break;
+  }
+
+  const products = await Product.find().sort(sortCriteria);
+  res.json(products);
+});
 
 
 app.get('/api/product', async (req, res) => {
@@ -326,7 +410,33 @@ app.get('/api/product', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+app.get('/api/prix', async (req, res) => {
+  try {
+    const { minPrice, maxPrice, transactionType } = req.query;
 
+    // Construire le filtre
+    const filter = {};
+
+    if (transactionType) {
+      filter.transactionType = transactionType;
+    }
+
+    if (minPrice) {
+      filter.price = { ...filter.price, $gte: Number(minPrice) };
+    }
+
+    if (maxPrice) {
+      filter.price = { ...filter.price, $lte: Number(maxPrice) };
+    }
+
+    // Rechercher les produits
+    const products = await Product.find(filter);
+
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors de la récupération des produits', error });
+  }
+});
 app.get('/api/products/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -381,8 +491,11 @@ app.post('/api/products', async (req, res) => {
       price, 
       transactionType, 
       productType, 
+      propertyCategory, // Nouveau champ
+      status,           // Nouveau champ
       address, 
       city, 
+      
       features, 
       images, // Une seule image
       buildingDetails, 
@@ -392,7 +505,8 @@ app.post('/api/products', async (req, res) => {
       description, 
       agentName, 
       moveInDate, 
-      isForeclosure 
+      isForeclosure, 
+      coordinates // Ajout des coordonnées
     } = req.body;
 
     // Validation des champs requis
@@ -402,14 +516,27 @@ app.post('/api/products', async (req, res) => {
       });
     }
 
+    // Validation des coordonnées
+    if (!coordinates || !coordinates.latitude || !coordinates.longitude) {
+      return res.status(400).json({
+        message: 'Les coordonnées sont requises (latitude et longitude).',
+      });
+    }
     // Création d'une nouvelle propriété
     const newProduct = new Product({
       title,
       price,
       transactionType,
       productType,
+      propertyCategory, // Ajout du champ
+      status: status || 'available', // Défaut à "available" si non spécifié
+     
       address,
       city,
+      coordinates: {
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+      },
       features: {
         bedrooms: features?.bedrooms || 0,
         bathrooms: features?.bathrooms || 0,
@@ -455,7 +582,171 @@ app.post('/api/products', async (req, res) => {
   }
 });
 
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
 
+    // Vérifiez si le produit existe
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: 'Propriété non trouvée' });
+    }
+
+    // Supprimez le produit
+    await Product.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Propriété supprimée avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression de la propriété :', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+
+app.put('/api/products/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Vérifiez si l'ID est valide
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'ID non valide' });
+    }
+
+    // Recherchez et mettez à jour le produit
+    const updatedProduct = await Product.findByIdAndUpdate(id, req.body, {
+      new: true, // Retourne le document mis à jour
+      runValidators: true, // Valide les données selon le schéma
+    });
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: 'Produit non trouvé' });
+    }
+
+    res.status(200).json({
+      message: 'Produit mis à jour avec succès',
+      product: updatedProduct,
+    });
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du produit :', error);
+    res.status(500).json({ message: 'Erreur serveur', error });
+  }
+});
+
+app.post('/api/products', async (req, res) => {
+  try {
+    const newProduct = new Product(req.body); // Crée un nouveau produit avec les données du client
+    await newProduct.save(); // Enregistre dans la base de données
+    res.status(201).json({ message: 'Produit ajouté avec succès', product: newProduct });
+  } catch (error) {
+    console.error('Erreur lors de l’ajout du produit :', error);
+    res.status(500).json({ message: 'Erreur serveur lors de l’ajout du produit', error });
+  }
+});
+
+app.get('/users', async (req, res) => {
+  try {
+    const users = await User.find(); // Récupère tous les utilisateurs
+    res.status(200).json(users); // Envoie la liste au client
+  } catch (err) {
+    console.error('Erreur lors de la récupération des utilisateurs :', err);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
+  }
+});
+app.post('/new-users', async (req, res) => {
+  try {
+    const { email, password, firstname, lastname } = req.body;
+
+    // Vérifiez que tous les champs requis sont fournis
+    if (!email || !password || !firstname || !lastname) {
+      return res.status(400).json({ message: 'Tous les champs sont obligatoires.' });
+    }
+
+    // Vérifiez si l'utilisateur existe déjà
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Cet utilisateur existe déjà.' });
+    }
+
+    // Créez un nouvel utilisateur
+    const newUser = new User({ email, password, firstname, lastname });
+    await newUser.save();
+
+    res.status(201).json({ message: 'Utilisateur créé avec succès.', user: newUser });
+  } catch (error) {
+    console.error('Erreur lors de la création de l\'utilisateur :', error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
+  }
+});
+app.get('/new-users', async (req, res) => {
+  try {
+    const last24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const newUsers = await User.find({ createdAt: { $gte: last24Hours } });
+    res.status(200).json(newUsers);
+  } catch (error) {
+    console.error('Erreur lors de la récupération des nouveaux utilisateurs :', error);
+    res.status(500).json({ message: 'Erreur interne du serveur.' });
+  }
+});
+
+app.get('/api/products', async (req, res) => {
+  const { minPrice, maxPrice } = req.query;
+
+  const query = {};
+
+  if (minPrice) query.price = { ...query.price, $gte: parseInt(minPrice) };
+  if (maxPrice) query.price = { ...query.price, $lte: parseInt(maxPrice) };
+
+  try {
+    const products = await Product.find(query);
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: 'Erreur lors de la récupération des produits.' });
+  }
+});
+
+app.get('/api/products', async (req, res) => {
+  const { page = 1, limit = 10, city, minPrice, maxPrice } = req.query;
+  const skip = (page - 1) * limit;
+
+  const filters = { status: 'available' };
+  if (city) filters.city = city;
+  if (minPrice) filters.price = { ...filters.price, $gte: minPrice };
+  if (maxPrice) filters.price = { ...filters.price, $lte: maxPrice };
+
+  try {
+    const properties = await Product.find(filters)
+      .select('title price coordinates images')
+      .skip(skip)
+      .limit(parseInt(limit, 10));
+    const total = await Product.countDocuments(filters);
+
+    res.json({ properties, total, page, totalPages: Math.ceil(total / limit) });
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de la récupération des propriétés' });
+  }
+});
+
+app.patch('/api/products/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    // Mettre à jour le produit dans la base de données
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Produit non trouvé" });
+    }
+
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du produit :", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+});
 
 // Démarrer le serveur
 const port = 5000;
