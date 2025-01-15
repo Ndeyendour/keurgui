@@ -2570,7 +2570,7 @@
           documentStyle: 'Document Style',
           extraKeys: 'Extra keys'
         },
-        history: {
+        navigate: {
           undo: 'Undo',
           redo: 'Redo'
         }
@@ -2708,12 +2708,12 @@
   })();
 
   /**
-   * @class editing.History
+   * @class editing.navigate
    *
-   * Editor History
+   * Editor navigate
    *
    */
-  var History = function ($editable) {
+  var navigate = function ($editable) {
     var stack = [], stackOffset = -1;
     var editable = $editable[0];
 
@@ -3393,7 +3393,7 @@
      */
     this.undo = function ($editable) {
       triggerOnBeforeChange($editable);
-      $editable.data('NoteHistory').undo();
+      $editable.data('Notenavigate').undo();
       triggerOnChange($editable);
     };
 
@@ -3404,7 +3404,7 @@
      */
     this.redo = function ($editable) {
       triggerOnBeforeChange($editable);
-      $editable.data('NoteHistory').redo();
+      $editable.data('Notenavigate').redo();
       triggerOnChange($editable);
     };
 
@@ -3424,7 +3424,7 @@
      * @param {Boolean} isPreventTrigger
      */
     var afterCommand = this.afterCommand = function ($editable, isPreventTrigger) {
-      $editable.data('NoteHistory').recordUndo();
+      $editable.data('Notenavigate').recordUndo();
       if (!isPreventTrigger) {
         triggerOnChange($editable);
       }
@@ -5494,9 +5494,9 @@
         }, 0);
       }
 
-      // History
-      var history = new History(layoutInfo.editable());
-      layoutInfo.editable().data('NoteHistory', history);
+      // navigate
+      var navigate = new navigate(layoutInfo.editable());
+      layoutInfo.editable().data('Notenavigate', navigate);
 
       // All editor status will be saved on editable with jquery's data
       // for support multiple editor with singleton object.
@@ -5956,13 +5956,13 @@
       undo: function (lang, options) {
         return tplIconButton(options.iconPrefix + 'undo', {
           event: 'undo',
-          title: lang.history.undo
+          title: lang.navigate.undo
         });
       },
       redo: function (lang, options) {
         return tplIconButton(options.iconPrefix + 'repeat', {
           event: 'redo',
-          title: lang.history.redo
+          title: lang.navigate.redo
         });
       },
       hr: function (lang, options) {
@@ -6137,8 +6137,8 @@
 
     var tplShortcutAction = function (lang) {
       var keys = [
-        { kbd: '⌘ + Z', text: lang.history.undo },
-        { kbd: '⌘ + ⇧ + Z', text: lang.history.redo },
+        { kbd: '⌘ + Z', text: lang.navigate.undo },
+        { kbd: '⌘ + ⇧ + Z', text: lang.navigate.redo },
         { kbd: '⌘ + ]', text: lang.paragraph.indent },
         { kbd: '⌘ + [', text: lang.paragraph.outdent },
         { kbd: '⌘ + ENTER', text: lang.hr.insert }

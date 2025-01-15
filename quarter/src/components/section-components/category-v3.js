@@ -13,7 +13,7 @@ class CategoryV3 extends Component {
 				<div className="container">
 				
 				<div className="row">
-				<h6 className="section-title">Proprietes a vendre</h6>
+				<h6 className="section-title">Proprietes a louer</h6>
 
 				<div className="col-lg-3 col-md-6">
 				<div
@@ -159,7 +159,7 @@ class CategoryV3 extends Component {
       }}
     >
       <Link to="/shop" style={{ color: "white", textDecoration: "none" }}>
-        Voir toutes les propriétés a vendre
+        Voir toutes les propriétés a louer
       </Link>
     </div>
 			</div>

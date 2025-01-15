@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './PropertyImagesPage.css'; // Assurez-vous d'avoir un fichier CSS pour le style
 
 const PropertyImagesPage = () => {
   const { id } = useParams(); // Récupère l'ID de la propriété depuis l'URL
-  const history = useHistory();
+  const navigate = useNavigate();
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null); // Image sélectionnée
   const [loading, setLoading] = useState(true);
@@ -34,9 +34,10 @@ const PropertyImagesPage = () => {
     <div className="property-images-page">
       <div className="header">
         <h1></h1>
-        <span className="close-icon" onClick={() => history.goBack()}>
-          ✖
-        </span>
+        <span className="close-icon" onClick={() => navigate(-1)}>
+  ✖
+</span>
+
       </div>
       <div className="main-image-container">
         <img src={selectedImage} alt="Selected Property" className="main-image" />

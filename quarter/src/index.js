@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, HashRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, HashRouter, Route, Routes } from 'react-router-dom';
 import HomeV1 from './components/home-v1';
 import HomeV2 from './components/home-v2';
 import HomeV3 from './components/home-v3';
@@ -11,7 +11,7 @@ import HomeV7 from './components/home-v7';
 import HomeV8 from './components/home-v8';
 import HomeV9 from './components/home-v9';
 import HomeV10 from './components/home-v11';
-
+import { FavoritesProvider } from './components/global-components/FavoritesContext';
 import About from './components/about';
 import Service from './components/service';
 import ServiceDetails from './components/service-details';
@@ -22,8 +22,8 @@ import Team from './components/team';
 import TeamDetails from './components/team-details';
 import Faq from './components/faq';
 import ComingSoon from './components/coming-soon';
-import Error  from './components/404';
-import Location  from './components/location';
+import Error from './components/404';
+import Location from './components/location';
 
 import Shop from './components/shop';
 import ShopGrid from './components/shop-grid';
@@ -48,83 +48,98 @@ import Register from './components/register';
 import AddListing from './components/add-listing';
 import Wishlist from './components/wishlist';
 import OrderTracking from './components/order-tracking';
-import History from './components/history';
 import Admin from './components/admin';
 import Adminprop from './components/section-components/adminprop';
 import AdminPropDetail from './components/section-components/adminpropdetails';
-import GaleriePage from './components/shop-components/GaleriePage'
-import CartePage from './components/shop-components/CartePage'
-import SommairePage from './components/shop-components/SommairePage'
+import GaleriePage from './components/shop-components/GaleriePage';
+import CartePage from './components/shop-components/CartePage';
+import SommairePage from './components/shop-components/SommairePage';
 import ResultsPage from './components/shop-components/ResultsPage';
 import PropertyImagesPage from './components/shop-components/PropertyImagesPage';
-
+import RealEstateForm from './components/RealEstateForm';
+import FavoritesPage from './components/FavoritesPage';
+import Adminpropalouer from './components/section-components/adminpropalouer';
+import EditProperty from './components/section-components/EditProperty';
+import AddProperty from './components/section-components/AddProperty';
+import Chalets from './components/section-components/chalets';
+import AgentsList from './components/section-components/AgentsList';
+import EditAgent from './components/section-components/EditAgent';
+import AddAgent from './components/section-components/AddAgent';
+import UserList from './components/section-components/UserList';
 
 class Root extends Component {
-    render() {
-        return(
-                <HashRouter basename="/">
-	                <div>
-	                <Switch>
-                        <Route path="/results/:searchTerm" component={ResultsPage} />
-	                    <Route exact path="/" component={HomeV4} />
-                        <Route path="/home-v2" component={HomeV2} />
-                        <Route path="/home-v3" component={HomeV3} />
-                        <Route path="/home-v4" component={HomeV4} />
-                        <Route path="/home-v5" component={HomeV5} />
-                        <Route path="/home-v6" component={HomeV6} />
-                        <Route path="/home-v7" component={HomeV7} />
-                        <Route path="/home-v8" component={HomeV8} />
-                        <Route path="/home-v9" component={HomeV9} />
-                        <Route path="/home-v10" component={HomeV10} />
-                        <Route path="/adpropdet" component={AdminPropDetail} />
-                        <Route path="/about" component={About} />
-                        <Route path="/agent" component={Service} />
-                        <Route path="/service-details" component={ ServiceDetails } />
-                        <Route path="/portfolio" component={ Portfolio } />
-                        <Route path="/portfolio-v2" component={ PortfolioV2 } />
-                        <Route path="/portfolio-details" component={ PortfolioDetails } />
-                        <Route path="/team" component={ Team } />
-                        <Route path="/team-details" component={ TeamDetails } />
-                        <Route path="/faq" component={ Faq } />
-                        <Route path="/coming-soon" component={ ComingSoon } />
-                        <Route path="/404" component={ Error } />
-                        <Route path="/location" component={ Location } />
-                        <Route path="/louer" component={ Shop } />
-                        <Route path="/vendre" component={ ShopGrid } />
-                        <Route path="/shop-left-sidebar" component={ ShopLeftSidebar } />
-                        <Route path="/louer" component={ ShopRightSidebar } />
-
-                        <Route path="/product/:id" component={ ProdductDetails } />
-                        {/* blog */}
-                        <Route path="/blog-grid" component={ BlogGrid } />
-                        <Route path="/blog-left-sidebar" component={ BlogLeftSidebar } />
-                        <Route path="/blog-right-sidebar" component={ BlogRightSidebar } />
-                        <Route path="/blog" component={ Blog } />
-                        <Route path="/galerie" component={<GaleriePage />} />
-                        <Route path="/carte" component={<CartePage />} />
-                        <Route path="/sommaire" component={<SommairePage />} />
-                        <Route exact path="/property-images/:id" component={PropertyImagesPage} />
-
-                        <Route path="/blog-details" component={ BlogDetails } />
-                        <Route path="/contact" component={ Contact } />
-                        <Route path="/cart" component={ Cart } />
-                        <Route path="/checkout" component={ Checkout } />
-                        <Route path="/my-account" component={ MyAccount } />
-                        <Route path="/admin" component={ Admin } />
-                        <Route path="/adminpv" component={ Adminprop } />
-                        <Route path="/login" component={ Login } />
-                        <Route path="/loginadmin" component={ LoginAdmin } />
-                        <Route path="/loginagent" component={ LoginAgent } />
-                        <Route path="/register" component={ Register } />
-                        <Route path="/add-listing" component={ AddListing } />
-                        <Route path="/wishlist" component={ Wishlist } />
-                        <Route path="/order-tracking" component={ OrderTracking } />
-                        <Route path="/history" component={ History } />
-	                </Switch>
-	                </div>
-                </HashRouter>
-        )
-    }
+  render() {
+    return (
+      <FavoritesProvider>
+        <HashRouter basename="/">
+          <div>
+            <Routes>
+              <Route path="/results/:searchTerm" element={<ResultsPage />} />
+              <Route path="/" element={<HomeV4 />} />
+              <Route path="/home-v2" element={<HomeV2 />} />
+              <Route path="/home-v3" element={<HomeV3 />} />
+              <Route path="/home-v4" element={<HomeV4 />} />
+              <Route path="/home-v5" element={<HomeV5 />} />
+              <Route path="/home-v6" element={<HomeV6 />} />
+              <Route path="/home-v7" element={<HomeV7 />} />
+              <Route path="/home-v8" element={<HomeV8 />} />
+              <Route path="/home-v9" element={<HomeV9 />} />
+              <Route path="/home-v10" element={<HomeV10 />} />
+              <Route path="/adpropdet" element={<AdminPropDetail />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/agent" element={<Service />} />
+              <Route path="/service-details" element={<ServiceDetails />} />
+              <Route path="/portfolio" element={<Portfolio />} />
+              <Route path="/portfolio-v2" element={<PortfolioV2 />} />
+              <Route path="/portfolio-details" element={<PortfolioDetails />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/team-details" element={<TeamDetails />} />
+              <Route path="/faq" element={<Faq />} />
+              <Route path="/coming-soon" element={<ComingSoon />} />
+              <Route path="/404" element={<Error />} />
+              <Route path="/location" element={<Location />} />
+              <Route path="/louer" element={<Shop />} />
+              <Route path="/vendre" element={<ShopGrid />} />
+              <Route path="/shop-left-sidebar" element={<ShopLeftSidebar />} />
+              <Route path="/product/:id" element={<ProdductDetails />} />
+              <Route path="/blog-grid" element={<BlogGrid />} />
+              <Route path="/blog-left-sidebar" element={<BlogLeftSidebar />} />
+              <Route path="/blog-right-sidebar" element={<BlogRightSidebar />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/galerie" element={<GaleriePage />} />
+              <Route path="/carte" element={<CartePage />} />
+              <Route path="/sommaire" element={<SommairePage />} />
+              <Route path="/property-images/:id" element={<PropertyImagesPage />} />
+              <Route path="/blog-details" element={<BlogDetails />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/my-account" element={<MyAccount />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/adminpv" element={<Adminprop />} />
+              <Route path="/adminpa" element={<Adminpropalouer />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/loginadmin" element={<LoginAdmin />} />
+              <Route path="/loginagent" element={<LoginAgent />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/add-listing" element={<AddListing />} />
+              <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/order-tracking" element={<OrderTracking />} />
+              <Route path="/form" element={<RealEstateForm />} />
+              <Route path="/mes-favoris" element={<FavoritesPage />} />
+              <Route path="/edit-property/:id" element={<EditProperty />} />
+              <Route path="/ajoutp" element={<AddProperty />} />
+              <Route path="/chalet" element={<Chalets />} />
+              <Route path="/agnts" element={<AgentsList />} />
+              <Route path="/edit-agent/:id" element={<EditAgent />} />
+              <Route path="/add-agent" element={<AddAgent />} />
+              <Route path="/users" element={<UserList />} />
+            </Routes>
+          </div>
+        </HashRouter>
+      </FavoritesProvider>
+    );
+  }
 }
 
 export default Root;

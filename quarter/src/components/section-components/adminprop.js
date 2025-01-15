@@ -25,7 +25,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   AreaChart,
   Area,
@@ -55,8 +55,8 @@ const Adminprop = () => {
   };
 
   const [setFilteredProducts] = useState([]);
-
-  const history = useHistory(); // Pour la navigation avec React Router v5
+  
+  const navigate = useNavigate(); // Pour la navigation avec React Router v5
   const [openSublist, setOpenSublist] = useState(null);
 
   const handleSublistToggle = (index) => {
@@ -64,7 +64,7 @@ const Adminprop = () => {
   };
 
   const handleNavigation = (path) => {
-    history.push(path); // Redirection vers une autre page
+    navigate(path); // Redirection vers une autre page
   };
 
   const fullName = localStorage.getItem("fullName") || "Utilisateur non connecté";
@@ -73,7 +73,6 @@ const Adminprop = () => {
   // Données du graphique
   const [products, setProducts] = useState([]);
   // Modification
-
 
 
   // Effet pour récupérer les produits depuis le backend
@@ -93,16 +92,26 @@ const Adminprop = () => {
 
   const handleEdit = (id) => {
     console.log(`Modifier la propriété avec ID: ${id}`);
-    history.push(`/edit-property/${id}`);
+    navigate(`/edit-property/${id}`);
 };
 
-const handleDelete = (id) => {
-    if (window.confirm("Voulez-vous vraiment supprimer cette propriété ?")) {
-        setFilteredProducts((prevProducts) =>
-            prevProducts.filter((product) => product._id !== id)
-        );
+const handleDelete = async (id) => {
+  if (window.confirm("Voulez-vous vraiment supprimer cette propriété ?")) {
+    try {
+      // Envoi de la requête DELETE à l'API
+      const response = await axios.delete(`http://localhost:5000/api/products/${id}`);
+      if (response.status === 200) {
+        // Mise à jour de l'état des produits après suppression
+        setProducts((prevProducts) => prevProducts.filter((product) => product._id !== id));
+        alert('Propriété supprimée avec succès');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression de la propriété:', error);
+      alert('Échec de la suppression de la propriété');
     }
+  }
 };
+
 
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Résidentiel");
@@ -116,7 +125,31 @@ const handleDelete = (id) => {
       (product) => product.transactionType === 'sale'
   );
 
-
+  const toggleSoldStatus = async (productId) => {
+    try {
+      // Trouver le produit actuel
+      const product = products.find((product) => product._id === productId);
+  
+      // Calculer le nouveau statut
+      const newStatus = product.status === "sold" ? "available" : "sold";
+  
+      // Mettre à jour le backend
+      await axios.patch(`http://localhost:5000/api/products/${productId}`, {
+        status: newStatus,
+      });
+  
+      // Mettre à jour l'état local après le succès de la requête
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product._id === productId ? { ...product, status: newStatus } : product
+        )
+      );
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du statut :", error);
+      alert("Impossible de modifier le statut. Veuillez réessayer.");
+    }
+  };
+  
   return (
     <Box sx={{ display: "flex" }}>
       {/* Sidebar fixe */}
@@ -158,7 +191,7 @@ const handleDelete = (id) => {
               label: "Propriété",
               subItems: [
                 { label: "Propriétés a vendre", path: "/adminpv" },
-                { label: "Propriétés a louer", path: "/adminpv" },
+                { label: "Propriétés a louer", path: "/adminpa" },
                 { label: "Ajouter une proprite", path: "/ajoutp" },
 
               ],
@@ -167,10 +200,11 @@ const handleDelete = (id) => {
             {
               label: "Types",
               subItems: [
-                { label: "Chalets", path: "/types/liste" },
+                { label: "Chalets", path: "/chalet" },
                 { label: "Maison", path: "/types/ajouter" },
                 { label: "Condos", path: "/types/liste" },
                 { label: "Plex", path: "/types/ajouter" },
+                { label: "appartment", path: "/types/apt" },
               ],
               icon: <CategoryIcon />,
             },
@@ -273,7 +307,7 @@ const handleDelete = (id) => {
 										{/* Barre de recherche */}
 										<input
 										type="text"
-										placeholder="Chercher par ville, quartier, région, adresse ou N° Centris"
+										placeholder="Chercher par ville, quartier, région, adresse ou N° Keurgui"
 										value={query}
 										onChange={(e) => setQuery(e.target.value)}
 										className="input-style"
@@ -307,7 +341,6 @@ const handleDelete = (id) => {
 										onClick={() => alert("Ouvrir les filtres de prix")}
 										>
 										<span className="prix-text">Prix</span>
-										<span className="prix-symbol"> $</span>
 										</button>
 
 
@@ -336,7 +369,7 @@ const handleDelete = (id) => {
             {/* Image */}
             <div style={{ width: "30%" }}>
                 <img
-                    src={product.image || '/path/to/default-image.jpg'}
+                    src={product.images[0] || '/path/to/default-image.jpg'}
                     alt={product.title}
                     className="property-image"
                     style={{
@@ -363,29 +396,29 @@ const handleDelete = (id) => {
                             <FontAwesomeIcon icon={faBath} /> {product.features?.bathrooms || 0} salles de bain
                         </span>
                         
-                        <div style={{ marginTop: "10px", display: "flex", marginLeft: "200px" }}>
-    <FontAwesomeIcon
-        icon={faEdit}
-        style={{
-            color: "orange",
-            cursor: "pointer",
-            fontSize: "1.5rem",
-            marginRight: "70px", // Espace ajouté après l'icône "Modifier"
-        }}
-        title="Modifier"
-        onClick={() => handleEdit(product._id)}
-    />
-    <FontAwesomeIcon
-        icon={faTrash}
-        style={{
-            color: "red",
-            cursor: "pointer",
-            fontSize: "1.5rem",
-        }}
-        title="Supprimer"
-        onClick={() => handleDelete(product._id)}
-    />
-</div>
+
+                        <div style={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
+                <input
+                  type="checkbox"
+                  id={`sold-${product._id}`}
+                  checked={product.status === "sold"}
+                  onChange={() => toggleSoldStatus(product._id)}
+                  style={{ marginRight: "10px", cursor: "pointer" }}
+                />
+                <label htmlFor={`sold-${product._id}`} style={{ marginRight: "20px" }}>
+                  Marquer comme vendu
+                </label>
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  style={{ color: "orange", cursor: "pointer", marginRight: "80px" }}
+                  onClick={() => handleEdit(product._id)}
+                />
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  style={{ color: "red", cursor: "pointer" }}
+                  onClick={() => handleDelete(product._id)}
+                />
+              </div>
 
                     </div>
                 </div>

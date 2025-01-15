@@ -219,7 +219,7 @@ class NavbarV2 extends Component {
 								<li><Link to="/team">Team</Link></li>
 								<li><Link to="/team-details">Team Details</Link></li>
 								<li><Link to="/faq">FAQ</Link></li>
-								<li><Link to="/history">History</Link></li>
+								<li><Link to="/navigate">navigate</Link></li>
 								<li><Link to="/add-listing">Add Listing</Link></li>
 								<li><Link to="/locations">Google Map Locations</Link></li>
 								<li><Link to="/404">404</Link></li>

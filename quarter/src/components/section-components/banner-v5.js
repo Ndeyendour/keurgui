@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faBuilding } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
-const HeroSection = () => {
-	let publicUrl = process.env.PUBLIC_URL+'/'
-	let imagealt = 'image'
+const HeroSection2 = () => {
+	let publicUrl = process.env.PUBLIC_URL+'/';
+	let imagealt = 'image';
   const tabStyle = {
     display: 'flex',
     alignItems: 'center',
@@ -16,11 +17,41 @@ const HeroSection = () => {
     fontSize: '16px',
     transition: 'background-color 0.2s ease',
   };
-
+  const navigate = useNavigate(); // Hook pour naviguer
   const tabsContainerStyle = {
     display: 'flex',
     gap: '16px',
   };
+  const [transactionType, setTransactionType] = useState(() => {
+    return localStorage.getItem("transactionType") || "sale"; // Valeur par défaut : "sale"
+  });
+
+  const handleTransactionChange = (e) => {
+    const newValue = e.target.value;
+    setTransactionType(newValue);
+    localStorage.setItem("transactionType", newValue); // Sauvegarde dans localStorage
+  };
+
+  const handleSearchClick = () => {
+    console.log("Transaction Type sélectionné :", transactionType);
+
+    if (transactionType === "sale") {
+      navigate("/vendre");
+    } else if (transactionType === "rent") {
+      navigate("/louer");
+    } else {
+      console.error("Type de transaction inconnu :", transactionType);
+      alert("Veuillez sélectionner un type de transaction valide.");
+    }
+  };
+
+  // Effet pour restaurer la valeur de transactionType depuis localStorage au montage
+  useEffect(() => {
+    const savedType = localStorage.getItem("transactionType");
+    if (savedType) {
+      setTransactionType(savedType);
+    }
+  }, []);
   return (
 	<div
 	className="hero-section"
@@ -51,16 +82,20 @@ const HeroSection = () => {
               className="search-input"
               placeholder="Chercher par ville, quartier, région, adresse ou N° keurgui"
             />
-            <select className="filter">
-              <option>À vendre</option>
-              <option>À louer</option>
+           <select
+              className="filter"
+              value={transactionType}
+              onChange={handleTransactionChange}
+            >
+              <option value="sale" style={{ color: 'black' }}>À vendre</option>
+              <option value="rent" style={{ color: 'black' }}>À louer</option>
             </select>
             <select className="filter">
               <option>Prix</option>
               <option>Moins de 100 000 $</option>
             </select>
             <button className="filter-button">Filtres</button>
-            <button className="search-button">🔍</button>
+            <button className="search-button" onClick={handleSearchClick}>🔍</button>
           </div>
         </div>
       </div>
@@ -68,4 +103,4 @@ const HeroSection = () => {
   );
 };
 
-export default HeroSection;
+export default HeroSection2;

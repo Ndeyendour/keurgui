@@ -12,7 +12,7 @@ class CategoryV3 extends Component {
 				<div className="container">
 				
 				<div className="row">
-				<h6 className="section-title">Proprietes a louer</h6>
+				<h6 className="section-title">Proprietes a vendre</h6>
 
 				<div className="col-lg-3 col-md-6">
 				<div
@@ -22,7 +22,7 @@ class CategoryV3 extends Component {
 					height: "200px", // Hauteur ajustée
 					backgroundSize: "cover", // Image ajustée
 					backgroundPosition: "center", // Image centrée
-					border: "2px solid black", // Bordure noire
+					 
 					borderRadius: "15px", // Coins arrondis à 15px
 					position: "relative", // Nécessaire pour positionner les éléments à l'intérieur
 					overflow: "hidden", // Pour éviter que le texte dépasse
@@ -54,7 +54,6 @@ class CategoryV3 extends Component {
 					height: "200px", // Hauteur ajustée
 					backgroundSize: "cover", // Image ajustée
 					backgroundPosition: "center", // Image centrée
-					border: "2px solid black", // Bordure noire
 					borderRadius: "15px", // Coins arrondis à 15px
 					position: "relative", // Nécessaire pour positionner les éléments à l'intérieur
 					overflow: "hidden", // Pour éviter que le texte dépasse
@@ -86,7 +85,6 @@ class CategoryV3 extends Component {
 					height: "200px", // Hauteur ajustée
 					backgroundSize: "cover", // Image ajustée
 					backgroundPosition: "center", // Image centrée
-					border: "2px solid black", // Bordure noire
 					borderRadius: "15px", // Coins arrondis à 15px
 					position: "relative", // Nécessaire pour positionner les éléments à l'intérieur
 					overflow: "hidden", // Pour éviter que le texte dépasse
@@ -118,7 +116,6 @@ class CategoryV3 extends Component {
 					height: "200px", // Hauteur ajustée
 					backgroundSize: "cover", // Image ajustée
 					backgroundPosition: "center", // Image centrée
-					border: "2px solid black", // Bordure noire
 					borderRadius: "15px", // Coins arrondis à 15px
 					position: "relative", // Nécessaire pour positionner les éléments à l'intérieur
 					overflow: "hidden", // Pour éviter que le texte dépasse

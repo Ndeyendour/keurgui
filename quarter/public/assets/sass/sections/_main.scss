@@ -42,7 +42,7 @@
 # Our Journey Area
 # Google Map Locations Area
 # Team Details
-# Our History Area
+# Our navigate Area
 # Appointment Form Area
 # Checkout Page
 # Myaccount Page
@@ -5452,19 +5452,19 @@ input.cart-plus-minus-box {
         padding: 0;
     }
 }
-.ltn__journey-history-item-info {
+.ltn__journey-navigate-item-info {
     background-color: var(--white);
     padding: 20px;
     display: block;
     width: 550px;
     box-shadow: var(--ltn__box-shadow-2);
     position: relative;
-    .ltn__journey-history-img {
+    .ltn__journey-navigate-img {
         float: left;
         margin-right: 20px;
         max-width: 150px;
     }
-    .ltn__journey-history-info {
+    .ltn__journey-navigate-info {
         overflow: hidden;
     }
     h3 {
@@ -5473,7 +5473,7 @@ input.cart-plus-minus-box {
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
-    .ltn__journey-history-item-info {
+    .ltn__journey-navigate-item-info {
         width: 500px;
     }
 }
@@ -5484,9 +5484,9 @@ input.cart-plus-minus-box {
     }
 }
 @media (max-width: 991px) {
-    .ltn__journey-history-item-info {
+    .ltn__journey-navigate-item-info {
         width: 350px;
-        .ltn__journey-history-img {
+        .ltn__journey-navigate-img {
             float: none;
             margin-bottom: 20px;
             max-width: 100px;
@@ -5507,9 +5507,9 @@ input.cart-plus-minus-box {
     }
 }
 @media (max-width: 575px) {
-    .ltn__journey-history-item-info {
+    .ltn__journey-navigate-item-info {
         width: 250px;
-        .ltn__journey-history-img {
+        .ltn__journey-navigate-img {
             float: none;
             margin-bottom: 20px;
         }
@@ -5664,9 +5664,9 @@ input.cart-plus-minus-box {
 }
 
 /* ----------------------------------------------------
-    Our History Area
+    Our navigate Area
 ---------------------------------------------------- */
-.ltn__our-history-inner {
+.ltn__our-navigate-inner {
     .ltn__tab-menu {
         .nav {
             display: flex;
@@ -5695,7 +5695,7 @@ input.cart-plus-minus-box {
     }
 }
 
-.ltn__history-icon {
+.ltn__navigate-icon {
     position: absolute;
     bottom: 40px;
     right: 0;
@@ -5706,7 +5706,7 @@ input.cart-plus-minus-box {
         margin: 0;
     }
 }
-.ltn__our-history-inner {
+.ltn__our-navigate-inner {
     .about-img-left {
         padding-right: 70px;
     }
@@ -5715,7 +5715,7 @@ input.cart-plus-minus-box {
     }
 }
 
-.ltn__our-history-inner-2 {
+.ltn__our-navigate-inner-2 {
     .ltn__tab-menu {
         margin-bottom: 20px;
         .nav {
@@ -5741,12 +5741,12 @@ input.cart-plus-minus-box {
 }
 
 @media (max-width: 767px) {
-    .ltn__history-icon {
+    .ltn__navigate-icon {
         bottom: 10px;
         right: 10px;
         font-size: 80px;
     }
-    .ltn__our-history-inner {
+    .ltn__our-navigate-inner {
         .about-img-left {
             padding-right: 0px;
         }

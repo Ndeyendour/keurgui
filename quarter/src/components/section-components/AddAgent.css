@@ -1,0 +1,56 @@
+.add-agent-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .add-agent-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .add-agent-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .add-agent-container form div {
+    margin-bottom: 15px;
+  }
+  
+  .add-agent-container label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .add-agent-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .add-agent-container button {
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .add-agent-container button:hover {
+    background-color: #45a049;
+  }
+  
+  .error-message {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  

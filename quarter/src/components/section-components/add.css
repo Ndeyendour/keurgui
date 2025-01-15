@@ -1,0 +1,119 @@
+/* Conteneur principal */
+.add-property-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+  }
+  
+  .add-property-container h2 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Formulaire */
+  .add-property-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .add-property-container form > div {
+    margin-bottom: 15px;
+  }
+  
+  .add-property-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #555;
+  }
+  
+  .add-property-container input,
+  .add-property-container select,
+  .add-property-container textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    outline: none;
+  }
+  
+  .add-property-container input:focus,
+  .add-property-container select:focus,
+  .add-property-container textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Images */
+  .add-property-container .image-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .add-property-container .image-input input[type="text"] {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .add-property-container button[type="button"] {
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+  }
+  
+  .add-property-container button[type="button"]:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* Bouton Ajouter une image */
+  .add-property-container .add-image-button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .add-property-container .add-image-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Bouton Soumettre */
+  .add-property-container button[type="submit"] {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .add-property-container button[type="submit"]:hover {
+    background-color: #218838;
+  }
+  
+  /* Textearea */
+  .add-property-container textarea {
+    height: 100px;
+    resize: vertical;
+  }
+  

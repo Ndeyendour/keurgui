@@ -1,0 +1,148 @@
+/* Conteneur principal */
+.form-container {
+    max-width: 600px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 80px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* En-tête du formulaire */
+  .real-estate-form h2 {
+    margin-bottom: 16px;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  /* Ligne de champs */
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  
+  /* Groupes de champs */
+  .form-group {
+    flex: 1; /* Chaque champ occupe une largeur égale */
+    display: flex;
+    flex-direction: column; /* Les labels et inputs sont empilés verticalement */
+  }
+  
+  /* Labels */
+  /* Labels */
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Champs d'entrée */
+.form-group input {
+  height: 40px;
+  width: 100%; /* Remplit l'espace disponible dans le conteneur */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box; /* Inclut les bordures et le padding dans la largeur */
+}
+  
+  /* Champ de texte */
+  .real-estate-form textarea {
+    resize: none;
+    margin-bottom: 16px;
+  }
+  
+  /* Message de confidentialité */
+  .form-disclaimer {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 16px;
+  }
+  
+  .privacy-link {
+    color: #001f73;
+    text-decoration: none;
+  }
+  
+  /* Boutons */
+  .form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  .cancel-btn {
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #001f73;
+    border: 1px solid #001f73;
+    width: 47%;
+
+    border-radius: 50px;    
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #f5f5f5;
+    border-radius: 50px;
+
+  }
+  
+  .submit-btn {
+    padding: 10px 20px;
+    background-color: #001f73;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    width: 50%;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .submit-btn:hover {
+    background-color: #0041c4;
+  }
+  
+  /* Section des informations sur l'agent */
+  .agent-info {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .agent-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 16px;
+  }
+  
+  .agent-details h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .agent-title {
+    margin: 4px 0;
+    color: #555;
+    font-size: 14px;
+  }
+  
+  .agency-name {
+    font-weight: bold;
+    font-size: 14px;
+  }
+  

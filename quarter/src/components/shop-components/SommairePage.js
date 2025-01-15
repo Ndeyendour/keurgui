@@ -1,6 +1,6 @@
 // SommairePage.js
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faCamera } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
@@ -9,7 +9,7 @@ import './productsliderV1.css';
 
 const SommairePage = () => {
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -81,7 +81,7 @@ const SommairePage = () => {
                     className="icon-wrapper"
                     onClick={(e) => {
                       e.preventDefault();
-                      history.push(`/product-images/${product._id}`);
+                      navigate(`/product-images/${product._id}`);
                     }}
                   >
                     <FontAwesomeIcon icon={faCamera} className="photo-icon" />

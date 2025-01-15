@@ -1,0 +1,135 @@
+/* Carte de filtre pour le prix */
+.price-filter-card {
+  position: absolute;
+  top: 80px;
+  right: 10%; /* Placement flexible */
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  z-index: 1000;
+  width: 300px;
+  min-height: 200px; /* Assure une hauteur minimum */
+  transition: transform 0.3s ease, opacity 0.3s ease; /* Pour des animations fluides */
+  transform: scale(1);
+  opacity: 1;
+}
+
+.price-filter-card h4 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: left;
+  font-weight: bold;
+}
+
+/* Conteneur pour les inputs de prix */
+.price-inputs {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.price-input {
+  background: #f9f5f5;
+  height: 45px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  flex: 1;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.price-input:not(:last-child) {
+  margin-right: 10px;
+}
+
+/* Boutons de la carte */
+.filter-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.close-button,
+.apply-button {
+  padding: 10px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 40px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  border: 2px solid #0033cc;
+}
+
+.close-button {
+  background-color: #fff;
+  color: #0033cc;
+}
+
+.close-button:hover {
+  background-color: #e6e6e6;
+}
+
+.apply-button {
+  background-color: #0033cc;
+  color: #fff;
+}
+
+.apply-button:hover:not(:disabled) {
+  background-color: #002299;
+}
+
+/* Styles pour le slider */
+.rc-slider {
+  position: relative;
+  margin-top: 10px;
+  height: 8px; /* Augmente le poids de la barre */
+  background: #eaeaea;
+  border-radius: 4px;
+}
+
+.rc-slider-track {
+  background-color: #0033cc !important;
+  height: 15px; /* Augmente la hauteur du track */
+  border-radius: 4px;
+}
+
+.rc-slider-handle {
+  position: absolute;
+  top: 0%; /* Centre verticalement sur la barre */
+  transform: translate(-0%, -0%); /* Centre horizontalement et verticalement */
+  border-color: #0033cc !important;
+  background-color: #fff;
+  width: 16px; /* Taille du handle */
+  height: 16px;
+  border: 2px solid #0033cc;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.rc-slider-handle:hover,
+.rc-slider-handle:focus {
+  box-shadow: 0 0 5px #0033cc;
+}
+
+.rc-slider-handle:active {
+  transform: scale(1.2); /* Agrandit légèrement le handle lors du drag */
+  box-shadow: 0 0 10px #0033cc;
+}
+
+/* Résolution des conflits potentiels */
+.rc-slider-handle:focus {
+  outline: none;
+}
+
+.rc-slider-step {
+  display: none; /* Cache les ticks intermédiaires pour un rendu plus propre */
+}

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Link, useLocation, useHistory } from "react-router-dom"; // React Router v5
+import { Link, useLocation, useNavigate } from "react-router-dom"; // React Router v5
 import "./register.css"; // Ajoutez les styles spécifiques
 
 const Register = () => {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -42,7 +42,7 @@ const Register = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Inscription réussie :", data);
-        history.push("/login"); // Redirection vers la page de connexion
+        navigate("/login"); // Redirection vers la page de connexion
       } else {
         const errorData = await response.text();
         setErrorMessage(errorData || "Échec de l'inscription");
@@ -158,7 +158,7 @@ const Register = () => {
 
         {/* Lien pour rediriger vers la connexion */}
         <div className="go-to-btn">
-          <button className="btn" onClick={() => history.push("/login")}>
+          <button className="btn" onClick={() => navigate("/login")}>
             Déjà un compte ? Connectez-vous
           </button>
         </div>

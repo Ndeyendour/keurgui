@@ -103,10 +103,10 @@
 /* ----------------------------------------------
     Header Middle Area
 ---------------------------------------------- */
-.ltn__header-middle-area {
-    padding-top: 5px; /* Réduit l'espace en haut */
-    padding-bottom: 5px; /* Réduit l'espace en bas */
-}
+// .ltn__header-middle-area {
+//     padding-top: 5px; 
+//     padding-bottom: 5px; 
+// }
 .ltn__header-middle-area > .container-fluid > .row,
 .ltn__header-middle-area > .container > .row {
     -webkit-box-pack: justify;
@@ -146,12 +146,12 @@
     }
 }
 
-.ltn__header-1 {
-    .ltn__header-middle-area {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-}
+// .ltn__header-1 {
+//     .ltn__header-middle-area {
+//         padding-top: 10px;
+//         padding-bottom: 10px;
+//     }
+// }
 /* ----------------------------------------------
     Header Bottom Area (header-2)
 ---------------------------------------------- */
@@ -247,8 +247,8 @@
     margin-right: 0px;
 }
 .ltn__main-menu > ul > li > a {
-    font-size: 18px;
-    padding: 20px 10px;
+    font-size: 15px;
+    padding: 5px 10px;
     display: inline-block;
     white-space: nowrap;
     color: var(--ltn__heading-color);
@@ -1118,9 +1118,9 @@
   Header 3
 ---------------------------------------- */
 .ltn__header-3 {
-    .ltn__header-middle-area {
-        padding: 30px 0;
-    }
+    // .ltn__header-middle-area {
+    //     padding: 30px 0;
+    // }
 }
 .ltn__header-3 .header-bottom-area.sticky-active {
     padding-top: 0px;
@@ -1147,10 +1147,10 @@
 ---------------------------------------- */
 .ltn__header-4,
 .ltn__header-5 {
-    .ltn__header-middle-area {
-        padding-top: 22px;
-        padding-bottom: 22px;
-    }
+    // .ltn__header-middle-area {
+    //     padding-top: 22px;
+    //     padding-bottom: 22px;
+    // }
 }
 .ltn__header-4 {
     .ltn__header-top-area {
@@ -1644,7 +1644,7 @@
         min-width: 180px;
     }
     .ltn__main-menu > ul > li > a {
-        padding: 20px 15px;
+        padding: 5px 10px;
     }
     .ltn__main-menu > ul > li {
         margin-right: 10px;

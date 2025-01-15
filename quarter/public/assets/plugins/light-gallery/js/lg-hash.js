@@ -57,8 +57,8 @@
         if (this.oldHash && this.oldHash.indexOf('lg=' + this.core.s.galleryId) < 0) {
             window.location.hash = this.oldHash;
         } else {
-            if (history.pushState) {
-                history.pushState('', document.title, window.location.pathname + window.location.search);
+            if (navigateState) {
+                navigateState('', document.title, window.location.pathname + window.location.search);
             } else {
                 window.location.hash = '';
             }

@@ -2,10 +2,12 @@ import React, { Component,useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Social from '../section-components/social';
 import './navbar.css'
-
+import { useFavorites } from '../global-components/FavoritesContext';
+import { useNavigate } from 'react-router-dom';
 const NavbarV2 = (props) => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInitial, setUserInitial] = useState("");
+  const browsernavigate = useNavigate(); 
 //   const [isMenuOpen, setMenuOpen] = useState(false);
   // Remplacez par vos données utilisateur
  
@@ -46,57 +48,31 @@ const NavbarV2 = (props) => {
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
+  const handleLogout = () => {
+    // Supprime le token et les données utilisateur
+    localStorage.removeItem("token");
+    localStorage.removeItem("firstname");
 
+    // Met à jour l'état local
+    setIsLoggedIn(false);
+    setUserInitial("");
+
+    // Redirige vers la page d'accueil
+    browsernavigate("/");
+  };
 
         let publicUrl = process.env.PUBLIC_URL+'/'
 		const CustomClass = props.CustomClass ? props.CustomClass : '';
 		// let CustomClass = this.props.CustomClass ? this.props.CustomClass : ''
-        return (
+// ---------------favoris--------------------
+		const { favorites } = useFavorites();
+
+
+		return (
 			<div>
 				<header className={"ltn__header-area ltn__header-5 ltn__header-logo-and-mobile-menu-in-mobile ltn__header-logo-and-mobile-menu ltn__header-transparent--- gradient-color-4--- "+ CustomClass} >
 				{/* ltn__header-top-area start */}
-				<div className="ltn__header-top-area d-none">
-					<div className="container">
-					<div className="row">
-						<div className="col-md-7">
-						<div className="ltn__top-bar-menu">
-							<ul>
-							<li><a href="mailto:info@webmail.com?Subject=Flower%20greetings%20to%20you"><i className="icon-mail" /> info@webmail.com</a></li>
-							<li><a href="locations.html"><i className="icon-placeholder" /> 15/A, Nest Tower, NYC</a></li>
-							</ul>
-						</div>
-						</div>
-						<div className="col-md-5">
-						<div className="top-bar-right text-end">
-							<div className="ltn__top-bar-menu">
-							<ul>
-								<li>
-								{/* ltn__language-menu */}
-								<div className="ltn__drop-menu ltn__currency-menu ltn__language-menu">
-									<ul>
-									<li><a href="#" className="dropdown-toggle"><span className="active-currency">English</span></a>
-										<ul>
-											<li><Link to="#">Arabic</Link></li>
-											<li><Link to="#">Bengali</Link></li>
-											<li><Link to="#">Chinese</Link></li>
-											<li><Link to="#">English</Link></li>
-											<li><Link to="#">French</Link></li>
-											<li><Link to="#">Hindi</Link></li>
-										</ul>
-									</li>
-									</ul>
-								</div>
-								</li>
-								<li>
-								<Social />
-								</li>
-							</ul>
-							</div>
-						</div>
-						</div>
-					</div>
-					</div>
-				</div>
+				
 				{/* ltn__header-top-area end */}
 				{/* ltn__header-middle-area start */}
 				<div className="ltn__header-middle-area ltn__header-sticky ltn__sticky-bg-white">
@@ -140,7 +116,7 @@ const NavbarV2 = (props) => {
 										<li><Link to="/service-details">Vendre avec un courtier</Link></li>
 									</ul>
 								</li>
-								<li className=""><a href="#">Trouver un courtier</a>
+								<li className=""><a href="#">Qui sommes nous ?</a>
 								<ul>
 									
 										<li><Link to="/agent">Trouver un courtier</Link></li>
@@ -150,56 +126,63 @@ const NavbarV2 = (props) => {
 									</ul>
 								
 							</li>
-								<li><Link to="/contact">Out</Link></li>
 								{/* <li className="special-link" style={{ borderRadius: '8px' }}>
 								<Link to="/login">
 									Connexion
 									<i className="far fa-user" style={{ marginLeft: '8px' }} />
 								</Link>
 								</li> */}
-								 <li className="special-link">
-          {isLoggedIn ? (
-            <div className="user-menu-container">
-              <div className="user-circle" onClick={toggleMenu}>
-                {userInitial}
-              </div>
-              {isMenuOpen && (
-                <ul className="menu-list">
-                  <li>
-                    <Link to="/mes-recherches">🔔 Mes recherches (0)</Link>
-                  </li>
-                  <li>
-                    <Link to="/mes-favoris">💖 Mes favoris</Link>
-                  </li>
-                  <li>
-                    <Link to="/proprietes-cachees">
-                      👁️ Propriétés cachées (1)
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/mon-courtier">👥 Mon courtier</Link>
-                  </li>
-                  <li>
-                    <Link to="/profil-locataire">🏠 Mon profil locataire</Link>
-                  </li>
-                  <li>
-                    <Link to="/parametres">⚙️ Mes paramètres</Link>
-                  </li>
-                  <li className="logout-link">
-                    <Link to="/logout">Déconnexion</Link>
-                  </li>
-                  <li>
-                    <Link to="/acces-courtier">Accès courtier</Link>
-                  </li>
-                </ul>
-              )}
-            </div>
-          ) : (
-            <Link to="/login">
-              Connexion <i className="far fa-user" />
-            </Link>
-          )}
-        </li>
+									<li
+  className={`special-link ${!isLoggedIn ? "not-logged-in" : ""}`}
+  style={{
+    backgroundColor: !isLoggedIn ? "#f8d7da" : "transparent", 
+	borderRadius: "40px", // Rayon de la bordure
+    padding: "0px", // Espacement interne// Couleur si non connecté
+  }}
+>
+  {isLoggedIn ? (
+    <div className="user-menu-container">
+      <div className="user-circle" onClick={toggleMenu}>
+        {userInitial}
+      </div>
+      {isMenuOpen && (
+        <ul className="menu-list">
+          <li>
+            <Link to="/mes-recherches">🔔 Mes recherches (0)</Link>
+          </li>
+          <li>
+            <Link to="/mes-favoris">💖 Mes favoris ({favorites.length})</Link>
+          </li>
+          <li>
+            <Link to="/proprietes-cachees">👁️ Propriétés cachées (1)</Link>
+          </li>
+          <li>
+            <Link to="/mon-courtier">👥 Mon courtier</Link>
+          </li>
+          <li>
+            <Link to="/profil-locataire">🏠 Mon profil locataire</Link>
+          </li>
+          <li>
+            <Link to="/parametres">⚙️ Mes paramètres</Link>
+          </li>
+          <li className="logout-link">
+            <a href="#" onClick={handleLogout}>
+              Déconnexion
+            </a>
+          </li>
+          <li>
+            <Link to="/acces-courtier">Accès courtier</Link>
+          </li>
+        </ul>
+      )}
+    </div>
+  ) : (
+    <Link to="/login">
+      Connexion <i className="far fa-user" />
+    </Link>
+  )}
+</li>
+
 
 								
 
@@ -305,7 +288,7 @@ const NavbarV2 = (props) => {
 								<li><Link to="/team">Team</Link></li>
 								<li><Link to="/team-details">Team Details</Link></li>
 								<li><Link to="/faq">FAQ</Link></li>
-								<li><Link to="/history">History</Link></li>
+								<li><Link to="/navigate">navigate</Link></li>
 								<li><Link to="/add-listing">Add Listing</Link></li>
 								<li><Link to="/locations">Google Map Locations</Link></li>
 								<li><Link to="/404">404</Link></li>

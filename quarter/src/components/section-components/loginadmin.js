@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom'; // Gardez useHistory pour react-router-dom v5
+import { useNavigate } from 'react-router-dom'; // Gardez useNavigate pour react-router-dom v5
 import { Link } from 'react-router-dom';
 
 const LoginAdmin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const history = useHistory();  // Utilisez useHistory pour react-router-dom v5
+  const navigate = useNavigate();  // Utilisez useNavigate pour react-router-dom v5
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ const LoginAdmin = () => {
       const data = await response.json();
       localStorage.setItem('token', data.token);
       localStorage.setItem('role', 'admin');
-      history.push('/admin');  // Rediriger avec history.push() pour react-router-dom v5
+      navigate('/admin');  // Rediriger avec navigate() pour react-router-dom v5
     } catch (error) {
       setError('Une erreur est survenue.');
     }

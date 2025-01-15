@@ -8,7 +8,7 @@ import { faBed, faBath, faCamera, faImages, faMapMarkedAlt,faMapMarkerAlt, faLis
 import axios from 'axios';
 import './shop-grid.css';
 import './PropertyList.css';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import './productsliderV1.css';
 
@@ -16,7 +16,7 @@ import './productsliderV1.css';
 
 const  ProductDetails= () => {
 	const [products, setProducts] = useState([]);
-	const history = useHistory(); // Hook pour naviguer
+	const navigate = useNavigate(); // Hook pour naviguer
 	const propertiesPerPage = 250;
 	const [currentPage, setCurrentPage] = useState(1);
 	const [totalProperties, setTotalProperties] = useState(60992);
@@ -31,7 +31,9 @@ const  ProductDetails= () => {
 	const [transactionType, setTransactionType] = useState("À vendre");
 	const [price, setPrice] = useState("");
 	const [lifestyleFilters, setLifestyleFilters] = useState(1);
- 
+  const handleButtonClick = () => {
+    navigate('/form'); // Redirige vers la route du formulaire
+  };
 
   useEffect(() => {
     if (query.length < 2) {
@@ -86,8 +88,8 @@ const  ProductDetails= () => {
 
 		const handleCardClick = async (item) => {
 			try {
-			//   history.push(`/results/${encodeURIComponent(item)}`); 
-			  history.push(`/results?location=${encodeURIComponent(item)}`);
+			//   navigate(`/results/${encodeURIComponent(item)}`); 
+			  navigate(`/results?location=${encodeURIComponent(item)}`);
 			} catch (error) {
 			  console.error("Erreur lors de la redirection :", error);
 			}
@@ -98,9 +100,9 @@ const  ProductDetails= () => {
 			console.log('Navigation vers :', type);
 		
 			if (type === 'À vendre') {
-			  history.push('/vendre');
+			  navigate('/vendre');
 			} else if (type === 'À louer') {
-			  history.push('/louer');
+			  navigate('/louer');
 			}
 		  };
 
@@ -132,10 +134,10 @@ const  ProductDetails= () => {
     
         if (selectedType === "À vendre") {
           console.log("Redirection vers /proprietes-a-vendre");
-          history.push("/vendre");
+          navigate("/vendre");
         } else if (selectedType === "À louer") {
           console.log("Redirection vers /louer");
-          history.push("/louer");
+          navigate("/louer");
         }
       };
  	return(
@@ -157,7 +159,7 @@ const  ProductDetails= () => {
 										
 										<input
 										type="text"
-										placeholder="Chercher par ville, quartier, région, adresse ou N° Centris"
+										placeholder="Chercher par ville, quartier, région, adresse ou N° Keurgui"
 										value={query}
 										onChange={(e) => setQuery(e.target.value)}
 										className="input-style"
@@ -315,12 +317,15 @@ const  ProductDetails= () => {
           <div className="product-info-center">
             <span className="price">{product.price} $</span>
           </div>
+
           <div className="product-info-right">
-            <button className="contact-agent-btn">Contacter le courtier immobilier</button>
+          <button className="contact-agent-btn" onClick={handleButtonClick}>
+          Contacter le courtier immobilier
+        </button>
           </div>
         </div>
       </div>
-
+  <br/>
       {/* Galerie d'images */}
       
       <div className="product-gallery">
@@ -344,7 +349,7 @@ const  ProductDetails= () => {
           {/* {product.images.length > 0 && (
             <div
               className="icon-wrapper"
-              onClick={() => history.push(`/property-images/${product._id}`)} // Redirection vers les images
+              onClick={() => navigate(`/property-images/${product._id}`)} // Redirection vers les images
             >
               <FontAwesomeIcon icon={faCamera} className="photo-icon" />
               <span className="photo-count">{product.images.length}</span>

@@ -1,4 +1,5 @@
-import React,{ useState } from "react";
+import React,{ useState,useEffect } from "react";
+import axios from 'axios';
 
 import {
   Box,
@@ -13,15 +14,30 @@ import {
   Collapse,
   Grid,
   Card,
+  Checkbox,
+  Avatar,
   CardContent,
   IconButton,
   LinearProgress,
 } from "@mui/material";
+import {
+  BarChart,
+  Bar,
+} from "recharts";
+
+import {
+  Mail as MailIcon,
+  Dashboard as DashboardIcon,
+  Widgets as WidgetsIcon,
+  TableChart as TableChartIcon,
+  Settings as SettingsIcon,
+} from "@mui/icons-material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Badge } from "@mui/material";
 import {
   AreaChart,
   Area,
@@ -46,11 +62,9 @@ const Dashboard = () => {
     console.log("Déconnexion");
   };
 
-  const handleNotifications = () => {
-    console.log("Afficher les notifications");
-  };
+ 
 
-  const history = useHistory(); // Pour la navigation avec React Router v5
+  const navigate = useNavigate(); // Pour la navigation avec React Router v5
   const [openSublist, setOpenSublist] = useState(null);
 
   const handleSublistToggle = (index) => {
@@ -58,7 +72,7 @@ const Dashboard = () => {
   };
 
   const handleNavigation = (path) => {
-    history.push(path); // Redirection vers une autre page
+    navigate(path); // Redirection vers une autre page
   };
 
   const fullName = localStorage.getItem("fullName") || "Utilisateur non connecté";
@@ -67,14 +81,47 @@ const Dashboard = () => {
 
   // Données du graphique
   const data = [
-    { year: 2011, value1: 40, value2: 60 },
-    { year: 2012, value1: 80, value2: 100 },
-    { year: 2013, value1: 50, value2: 80 },
-    { year: 2014, value1: 70, value2: 90 },
-    { year: 2015, value1: 100, value2: 120 },
-    { year: 2016, value1: 60, value2: 110 },
+    { name: "Jan", Dataset1: 40, Dataset2: 24, Dataset3: 20 },
+    { name: "Feb", Dataset1: 30, Dataset2: 13, Dataset3: 22 },
+    { name: "Mar", Dataset1: 20, Dataset2: 98, Dataset3: 30 },
+    { name: "Apr", Dataset1: 27, Dataset2: 39, Dataset3: 50 },
+    { name: "May", Dataset1: 18, Dataset2: 48, Dataset3: 35 },
+    { name: "Jun", Dataset1: 23, Dataset2: 38, Dataset3: 25 },
   ];
+  const [newUsers, setNewUsers] = useState(0);
 
+  useEffect(() => {
+    // Fonction pour récupérer les nouveaux utilisateurs
+    const fetchNewUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/register");
+        setNewUsers(response.data.count); // Met à jour l'état avec le nombre
+      } catch (error) {
+        console.error("Erreur lors de la récupération des nouveaux utilisateurs :", error);
+      }
+    };
+
+    fetchNewUsers();
+  }, []);
+
+  const handleNotifications = () => {
+    alert("Vous avez " + newUsers + " nouvelles connexions !");
+  };
+
+   const [tasks, setTasks] = useState([
+      { id: 1, title: "Review new property listings", completed: false },
+      { id: 2, title: "Call potential clients", completed: false },
+      { id: 3, title: "Prepare monthly report", completed: false },
+      { id: 4, title: "Follow up on agent inquiries", completed: false },
+    ]);
+  
+    const handleTaskToggle = (id) => {
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === id ? { ...task, completed: !task.completed } : task
+        )
+      );
+    };
   return (
 
     <Box sx={{ display: "flex" }}>
@@ -88,11 +135,15 @@ const Dashboard = () => {
             width: 240,
             boxSizing: "border-box",
             position: "fixed", // Fixe le sidebar
+            backgroundColor: "#003366", // Bleu foncé
+            color: "white", // Texte en blanc pour un bon contraste
           },
         }}
       >
         <Box sx={{ padding: 2, textAlign: "center" }}>
-          <Typography variant="h6">KEURGUI</Typography>
+        <Typography variant="h6" sx={{ color: "white" }}>
+      KEURGUI
+    </Typography>
           <img
             src="https://via.placeholder.com/100"
             alt="User Avatar"
@@ -105,13 +156,25 @@ const Dashboard = () => {
             {role}
           </Typography>
         </Box>
+        
         <List>
+        <h6 style={{ marginLeft: "16px" , color: "white"}}>General</h6>
+<div
+  style={{
+    height: "1px", // Hauteur du trait (équivalent à l'épaisseur)
+    backgroundColor: "red", // Couleur rouge
+    marginLeft: "16px", // Alignement avec le texte
+    marginRight: "16px", // Alignement avec le texte
+    borderRadius: "2px", // Facultatif : arrondir les bords
+  }}
+></div>
+
           {/* Liste principale avec icônes */}
           {[
             {
               label: "Tableau de bord",
               path: "/admin",
-              icon: <HomeIcon />,
+              icon: <HomeIcon sx={{ color: "green" }}/>,
             },
             {
               label: "Propriété",
@@ -121,48 +184,48 @@ const Dashboard = () => {
                 { label: "Ajouter une proprite", path: "/ajoutp" },
 
               ],
-              icon: <ApartmentIcon />,
+              icon: <ApartmentIcon sx={{ color: "yellow" }}/>,
             },
             {
               label: "Types",
               subItems: [
-                { label: "Chalets", path: "/types/liste" },
+                { label: "Chalets", path: "/chalet" },
                 { label: "Maison", path: "/types/ajouter" },
                 { label: "Condos", path: "/types/liste" },
                 { label: "Plex", path: "/types/ajouter" },
               ],
-              icon: <CategoryIcon />,
+              icon: <CategoryIcon sx={{ color: "red" }}/>,
             },
             {
               label: "Agents",
               subItems: [
-                { label: "Tous les agents", path: "/types/liste" },
-                { label: "Ajouter un agent", path: "/types/ajouter" },
-                { label: "Profil de l'agent", path: "/types/liste" },
+                { label: "Tous les agents", path: "/agnts" },
+                { label: "Ajouter un agent", path: "/add-agent" },
+                // { label: "Profil de l'agent", path: "/tliste" },
                 { label: "Facture de l'agent", path: "/types/ajouter" },
               ],
-              icon: <PersonIcon />,
+              icon: <PersonIcon sx={{ color: "teal" }}/>,
             },
             {
                 label: "Utilisateurs",
-                path: "/rapports",
-                icon: <PersonIcon />,
+                path: "/users",
+                icon: <PersonIcon sx={{ color: "fuchsia" }}/>,
               },
             
             {
               label: "Carte",
               path: "/carte",
-              icon: <MapIcon />,
+              icon: <MapIcon sx={{ color: "blue" }}/>,
             },
             {
               label: "Rapports",
               path: "/rapports",
-              icon: <AssessmentIcon />,
+              icon: <AssessmentIcon sx={{ color: "orange" }}/>,
             },
             {
               label: "Application",
               path: "/application",
-              icon: <AppsIcon />,
+              icon: <AppsIcon sx={{ color: "salmon" }}/>,
             },
           ].map((item, index) => (
             <React.Fragment key={item.label}>
@@ -197,108 +260,151 @@ const Dashboard = () => {
       </Drawer>
 
       {/* Main Content */}
-      <Box sx={{ flexGrow: 1, bgcolor: "#f5f5f5", padding: 3 }}>
+      <Box sx={{ flexGrow: 1, bgcolor: "#f5f5f5", padding: 3}}>
         {/* Top Bar */}
-        <AppBar
-          position="static"
-          color="primary"
-          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        >
-          <Toolbar>
-            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              Tableau de bord
-            </Typography>
-            <IconButton color="inherit" onClick={handleNotifications}>
-              <NotificationsIcon />
-            </IconButton>
-            <IconButton color="inherit" onClick={handleLogout}>
-              <ExitToAppIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+        <AppBar position="static" sx={{ bgcolor: "#003366" }}> {/* Bleu foncé */}
+  <Toolbar>
+    <Typography variant="h6" sx={{ flexGrow: 1, color: "white" }}> {/* Texte en blanc */}
+      Dashboard
+    </Typography>
+    <IconButton color="inherit">
+      <Badge badgeContent={2} color="error">
+        <NotificationsIcon />
+      </Badge>
+    </IconButton>
+    <IconButton color="inherit">
+      <Badge badgeContent={3} color="error">
+        <MailIcon />
+      </Badge>
+    </IconButton>
+    <Avatar sx={{ bgcolor: "#FFA726", marginLeft: 2 }}>JD</Avatar> {/* Avatar personnalisé */}
+  </Toolbar>
+  
+</AppBar>
 
+
+            <Grid container spacing={3} sx={{ padding: 3 }}>
+                    {[
+                      { icon: "🙋‍♂️", value: 2500, label: "Welcome" },
+                      { icon: "⏱️", value: "123.50", label: "Average Time" },
+                      { icon: "📂", value: 1805, label: "Collections" },
+                      { icon: "💬", value: 54, label: "Comments" },
+                    ].map((item, index) => (
+                      <Grid item xs={12} sm={6} md={3} key={index}>
+                        <Card sx={{ textAlign: "center", padding: 2 }}>
+                          <Typography variant="h4">{item.icon}</Typography>
+                          <Typography variant="h5" sx={{ margin: 1 }}>
+                            {item.value}
+                          </Typography>
+                          <Typography variant="body2" color="textSecondary">
+                            {item.label}
+                          </Typography>
+                        </Card>
+                      </Grid>
+                    ))}
+                  </Grid>
         {/* Dashboard Stats */}
-        <Grid container spacing={3} sx={{ marginTop: 3 }}>
-          {[
-            { label: "Nouveau projet", value: 128, progress: 27 },
-            { label: "Projet total", value: 758, progress: 9 },
-            { label: "Propriétés à louer", value: 2521, progress: 17 },
-            { label: "Bénéfices totaux (années)", value: "24 500 $", progress: 13 },
-          ].map((stat, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6">{stat.value}</Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    {stat.label}
-                  </Typography>
-                  {/* Barre de progression */}
-                  <Box sx={{ marginTop: 2 }}>
-                    <LinearProgress
-                      variant="determinate"
-                      value={stat.progress}
-                      sx={{
-                        height: 8,
-                        borderRadius: 5,
-                        backgroundColor: "#e0e0e0",
-                      }}
-                    />
-                  </Box>
-                  <Typography
-                    variant="caption"
-                    color="textSecondary"
-                    sx={{ display: "block", marginTop: 1 }}
-                  >
-                    Changement de {stat.progress}%
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        <Grid container spacing={1} sx={{ marginTop: 1, marginLeft: 0 }}>
+  {[
+    { label: "Nouveau projet", value: 128, progress: 60, color: "#3f51b5" }, // Bleu
+    { label: "Projet total", value: 758, progress: 70, color: "#f50057" }, // Rose
+    { label: "Propriétés à louer", value: 2521, progress: 80, color: "#4caf50" }, // Vert
+    { label: "Bénéfices totaux (années)", value: "24 500", progress: 90, color: "#ff9800" }, // Orange
+  ].map((stat, index) => (
+    <Grid item xs={12} sm={6} md={3} key={index}>
+      <Card>
+        <CardContent>
+          <Typography variant="h6">{stat.value}</Typography>
+          <Typography variant="body2" color="textSecondary">
+            {stat.label}
+          </Typography>
+          {/* Barre de progression */}
+          <Box sx={{ marginTop: 2 }}>
+            <LinearProgress
+              variant="determinate"
+              value={stat.progress}
+              sx={{
+                height: 8,
+                borderRadius: 5,
+                backgroundColor: "#e0e0e0", // Couleur de fond de la barre
+                "& .MuiLinearProgress-bar": {
+                  backgroundColor: stat.color, // Couleur personnalisée
+                },
+              }}
+            />
+          </Box>
+          <Typography
+            variant="caption"
+            color="textSecondary"
+            sx={{ display: "block", marginTop: 1 }}
+          >
+            Changement de {stat.progress}%
+          </Typography>
+        </CardContent>
+      </Card>
+    </Grid>
+  ))}
+</Grid>
+
 
         {/* Graph Section */}
-        <Card sx={{ marginTop: 3 }}>
-          <CardContent>
-            <Typography variant="h6">Rapport annuel sur la succession</Typography>
-            <Box
-              sx={{
-                height: 300,
-                backgroundColor: "#e3f2fd",
-                marginTop: 2,
-                borderRadius: 2,
-                padding: 2,
-              }}
+            <Card sx={{ margin: 3, padding: 2 }}>
+          <Typography variant="h6" sx={{ marginBottom: 2 }}>
+            Sales Performance
+          </Typography>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              data={data}
+              margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
             >
-              {/* Graphique Recharts */}
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart
-                  data={data}
-                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="year" />
-                  <YAxis />
-                  <Tooltip />
-                  <Area
-                    type="monotone"
-                    dataKey="value1"
-                    stackId="1"
-                    stroke="#00C9FF"
-                    fill="#00C9FF"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="value2"
-                    stackId="1"
-                    stroke="#A390EE"
-                    fill="#A390EE"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </Box>
-          </CardContent>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="Dataset1" fill="#8884d8" radius={[10, 10, 0, 0]} />
+              <Bar dataKey="Dataset2" fill="#82ca9d" radius={[10, 10, 0, 0]} />
+              <Bar dataKey="Dataset3" fill="#ffc658" radius={[10, 10, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </Card>
+        <Card className="task-card">
+          <Typography variant="h6" sx={{ marginBottom: 2 }}>
+            Tasks
+          </Typography>
+          <Grid container spacing={3}>
+            {tasks.map((task) => (
+              <Grid item xs={12} sm={6} md={4} key={task.id}>
+                <Card
+                  className={`task-item ${task.completed ? "completed" : ""}`}
+                  sx={{
+                    padding: 2,
+                    borderLeft: task.completed ? "5px solid #28a745" : "5px solid #007bff",
+                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Checkbox
+                      checked={task.completed}
+                      onChange={() => handleTaskToggle(task.id)}
+                      className="custom-checkbox"
+                      sx={{ color: "#007bff" }}
+                    />
+                    <Typography
+                      className={`task-text ${task.completed ? "completed" : ""}`}
+                      sx={{
+                        marginLeft: 2,
+                        textDecoration: task.completed ? "line-through" : "none",
+                      }}
+                    >
+                      {task.title}
+                    </Typography>
+                  </Box>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Card>
+        
       </Box>
     </Box>
   );

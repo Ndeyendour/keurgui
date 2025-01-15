@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faCamera } from '@fortawesome/free-solid-svg-icons';
 import './productsliderV1.css';
@@ -9,7 +9,7 @@ const LastPropertyDetails = () => {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -80,7 +80,7 @@ const LastPropertyDetails = () => {
                     className="icon-wrapper"
                     onClick={(e) => {
                       e.preventDefault();
-                      history.push(`/property-images/${property._id}`);
+                      navigate(`/property-images/${property._id}`);
                     }} // Redirection vers les images
                   >
                     <FontAwesomeIcon icon={faCamera} className="photo-icon" />

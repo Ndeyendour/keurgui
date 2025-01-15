@@ -93,7 +93,7 @@
             color: 434651;
         }        
     }
-    .chat-history {
+    .chat-navigate {
       padding: 20px;
         border-bottom: 2px solid white;        
         ul {
@@ -245,7 +245,7 @@
         .chat{
             margin: 0;
         }
-        .chat-history{
+        .chat-navigate{
             height: 240px;
             overflow-x: auto;
         }
@@ -261,7 +261,7 @@
             overflow-x: auto;
            
         }
-        .chat-history{
+        .chat-navigate{
             height: 600px;
             overflow-x: auto;
         }
@@ -276,7 +276,7 @@
             height: 450px;
             overflow-x: auto;
         }
-        .chat-history{
+        .chat-navigate{
             height: 380px;
             overflow-x: auto;
         }

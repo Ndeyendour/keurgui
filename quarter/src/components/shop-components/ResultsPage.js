@@ -9,7 +9,7 @@ import { faBed, faBath, faCamera, faImages, faMapMarkedAlt, faListAlt} from '@fo
 import axios from 'axios';
 import './shop-grid.css';
 import './PropertyList.css';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 
@@ -17,9 +17,9 @@ import { useParams } from 'react-router-dom';
 
 const ResultsPage = () => {
 	const [products, setProducts] = useState([]);
-	const history = useHistory(); // Hook pour naviguer
-	const handleProductClick = (productId) => history.push(`/product-details/${productId}`);
-	const handleImageClick = (productId) => history.push(`/property-images/${productId}`);
+	const navigate = useNavigate(); // Hook pour naviguer
+	const handleProductClick = (productId) => navigate(`/product-details/${productId}`);
+	const handleImageClick = (productId) => navigate(`/property-images/${productId}`);
 
 	const propertiesPerPage = 250;
 	const [currentPage, setCurrentPage] = useState(1);
@@ -100,7 +100,7 @@ const ResultsPage = () => {
 
 		const handleCardClick = async (item) => {
 			try {
-			  history.push(`/results/${encodeURIComponent(item)}`); // Redirection avec l'élément sélectionné
+			  navigate(`/results/${encodeURIComponent(item)}`); // Redirection avec l'élément sélectionné
 			} catch (error) {
 			  console.error("Erreur lors de la redirection :", error);
 			}
@@ -126,7 +126,7 @@ const ResultsPage = () => {
 										
 										<input
 										type="text"
-										placeholder="Chercher par ville, quartier, région, adresse ou N° Centris"
+										placeholder="Chercher par ville, quartier, région, adresse ou N° Keurgui"
 										value={query}
 										onChange={(e) => setQuery(e.target.value)}
 										className="input-style"

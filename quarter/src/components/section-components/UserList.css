@@ -1,0 +1,93 @@
+/* Conteneur principal pour la liste des utilisateurs */
+.user-list-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    margin-left: auto; /* Centre horizontalement */
+    margin-right: auto; /* Centre horizontalement */
+    max-width: 800px; /* Limite la largeur maximale */
+    background-color: #ffffff; /* Couleur de fond */
+    border: 1px solid #ddd; /* Bordure autour du conteneur */
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre douce */
+  }
+  
+  /* Titre */
+  h2 {
+    text-align: center;
+    margin-bottom: 20px; /* Espacement sous le titre */
+    color: #333; /* Couleur du texte */
+    font-size: 1.5rem; /* Taille de police */
+  }
+  
+  /* Table pour afficher les utilisateurs */
+  .user-table {
+    width: 100%; /* Table prend toute la largeur du conteneur */
+    border-collapse: collapse; /* Supprime les espaces entre les bordures */
+    margin: 20px 0; /* Espacement au-dessus et en dessous */
+  }
+  
+  /* Cellules du tableau */
+  .user-table th,
+  .user-table td {
+    border: 1px solid #ddd; /* Bordure des cellules */
+    padding: 12px; /* Espacement interne */
+    text-align: left; /* Alignement du texte */
+    font-size: 0.95rem; /* Taille de police */
+  }
+  
+  /* En-tête de la table */
+  .user-table th {
+    background-color: #f2f2f2; /* Couleur de fond */
+    font-weight: bold; /* Texte en gras */
+    color: #555; /* Couleur du texte */
+    text-transform: uppercase; /* Texte en majuscules */
+  }
+  
+  /* Couleur alternée pour les lignes */
+  .user-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Couleur des lignes paires */
+  }
+  
+  /* Couleur au survol */
+  .user-table tr:hover {
+    background-color: #e9ecef; /* Couleur de fond au survol */
+  }
+  
+  /* Boutons d'action */
+  .action-buttons {
+    display: flex;
+    gap: 8px; /* Espacement entre les boutons */
+  }
+  
+  .edit-btn,
+  .delete-btn {
+    padding: 8px 12px; /* Espacement interne */
+    border: none; /* Pas de bordure */
+    border-radius: 4px; /* Coins arrondis */
+    cursor: pointer; /* Curseur pointeur */
+    font-size: 0.9rem; /* Taille de police */
+    text-transform: uppercase; /* Texte en majuscules */
+  }
+  
+  /* Bouton de modification */
+  .edit-btn {
+    background-color: #007bff; /* Couleur bleue */
+    color: #fff; /* Texte blanc */
+    transition: background-color 0.3s ease; /* Animation */
+  }
+  
+  .edit-btn:hover {
+    background-color: #0056b3; /* Couleur bleue foncée au survol */
+  }
+  
+  /* Bouton de suppression */
+  .delete-btn {
+    background-color: #dc3545; /* Couleur rouge */
+    color: #fff; /* Texte blanc */
+    transition: background-color 0.3s ease; /* Animation */
+  }
+  
+  .delete-btn:hover {
+    background-color: #a71d2a; /* Couleur rouge foncée au survol */
+  }
+  

@@ -28,7 +28,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Home as HomeIcon,
   Apartment as ApartmentIcon,
@@ -48,7 +48,7 @@ const Adminprop = () => {
     console.log("Afficher les notifications");
   };
 
-  const history = useHistory(); // Pour la navigation avec React Router v5
+  const navigate = useNavigate(); // Pour la navigation avec React Router v5
   const [openSublist, setOpenSublist] = useState(null);
 
   const handleSublistToggle = (index) => {
@@ -56,7 +56,7 @@ const Adminprop = () => {
   };
 
   const handleNavigation = (path) => {
-    history.push(path); // Redirection vers une autre page
+    navigate(path); // Redirection vers une autre page
   };
 
   const fullName = localStorage.getItem("fullName") || "Utilisateur non connecté";

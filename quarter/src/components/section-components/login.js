@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import './login.css';
 import { useLocation } from "react-router-dom";
 
@@ -7,7 +7,7 @@ const LoginUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const history = useHistory(); // Utilisation de useHistory pour la navigation
+  const navigate = useNavigate(); // Utilisation de useNavigate pour la navigation
   const location = useLocation();
 
   const handleSubmit = async (e) => {
@@ -35,7 +35,7 @@ const LoginUser = () => {
       localStorage.setItem("firstname", data.firstname); // Ajoutez cette ligne
 
       // Redirection vers la page d'accueil
-      history.push("/");
+      navigate("/");
 
     } catch (error) {
       setError("Une erreur est survenue. Veuillez réessayer.");

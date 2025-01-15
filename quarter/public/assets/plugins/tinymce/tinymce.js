@@ -21168,7 +21168,7 @@ define("tinymce/Formatter", [
  */
 
 /**
- * This class handles the undo/redo history levels for the editor. Since the built-in undo/redo has major drawbacks a custom one was needed.
+ * This class handles the undo/redo navigate levels for the editor. Since the built-in undo/redo has major drawbacks a custom one was needed.
  *
  * @class tinymce.UndoManager
  */

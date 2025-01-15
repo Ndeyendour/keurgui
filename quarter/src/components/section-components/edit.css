@@ -1,0 +1,77 @@
+.edit-property-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .edit-property-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .edit-property-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .edit-property-container form div {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .edit-property-container form label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  .edit-property-container form input,
+  .edit-property-container form select,
+  .edit-property-container form textarea {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  .edit-property-container form input:focus,
+  .edit-property-container form select:focus,
+  .edit-property-container form textarea:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  .edit-property-container form textarea {
+    resize: none;
+    height: 100px;
+  }
+  
+  .edit-property-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-end;
+  }
+  
+  .edit-property-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  .edit-property-container p {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+  }
+  
