@@ -1,114 +1,123 @@
 import React, { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvent } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarkerAlt, faCamera } from '@fortawesome/free-solid-svg-icons';
-import './productsliderV1.css';
+import L from 'leaflet';
 
-const LastPropertyDetails = () => {
-  const [property, setProperty] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+// Icône personnalisée pour les marqueurs individuels et les clusters
+const customIcon = new L.Icon({
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+});
+
+// Icône personnalisée pour les clusters
+const createClusterCustomIcon = (cluster) => {
+  const count = cluster.getChildCount();
+
+  return new L.DivIcon({
+    html: `
+      <div style="
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 41px;
+        height: 41px;
+        background: url('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png') no-repeat center center;
+        background-size: contain;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        text-shadow: 1px 1px 2px black;
+      ">
+        ${count}
+      </div>
+    `,
+    className: 'custom-cluster-icon',
+    iconSize: [41, 41],
+  });
+};
+
+// Composant pour fermer tous les popups lorsqu'on clique sur la carte
+const ClosePopupsOnClick = () => {
+  const map = useMapEvent('click', () => {
+    map.closePopup(); // Fermer tous les popups ouverts sur la carte
+  });
+  return null;
+};
+
+const CartePage = () => {
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios
-      .get('/api/products?sort=-createdAt&limit=1') // Assurez-vous que cette URL est correcte pour récupérer la dernière propriété
-      .then((response) => {
-        setProperty(response.data[0]);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setLoading(false);
-      });
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/products');
+        const validProducts = response.data.filter(
+          (product) =>
+            product.coordinates &&
+            typeof product.coordinates.latitude === 'number' &&
+            typeof product.coordinates.longitude === 'number'
+        );
+        setProducts(validProducts);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des produits :', error);
+      }
+    };
+    fetchProducts();
   }, []);
 
-  if (loading) {
-    return <p>Chargement...</p>;
-  }
-
-  if (error) {
-    return <p>Erreur: {error}</p>;
-  }
-
-  if (!property) {
-    return <p>Aucune propriété trouvée.</p>;
-  }
-
-  const displayImages = property.images.slice(0, 5); // Affiche jusqu'à 5 images
-  const lastImageIndex = Math.min(property.images.length, 5) - 1;
-
   return (
-    <div className="product-details-page">
-      {/* En-tête avec titre et détails */}
-      <div className="product-header">
-        <div className="product-header-content">
-          <div className="product-info-left">
-            <h1>{property.title}</h1>
-            <p className="address">
-              <FontAwesomeIcon icon={faMapMarkerAlt} /> {property.address}
-            </p>
-          </div>
-          <div className="product-info-center">
-            <span className="price">{property.price.toLocaleString()} $</span>
-          </div>
-          <div className="product-info-right">
-            <button className="contact-agent-btn">Contacter le courtier immobilier</button>
-          </div>
-        </div>
-      </div>
-
-      {/* Galerie d'images */}
-      <div className="product-gallery">
-        {/* Grande image à gauche */}
-        {property.images.length > 0 && (
-          <a href={property.images[0]} data-rel="lightcase:myCollection" className="large-image">
-            <img src={property.images[0]} alt="Large Product" />
-          </a>
-        )}
-
-        {/* Petites images à droite */}
-        <div className="small-images">
-          {displayImages.slice(1).map((image, index) => {
-            const isLastImage = index === lastImageIndex - 1;
-            return (
-              <a href={image} data-rel="lightcase:myCollection" key={index} className="small-image">
-                <img src={image} alt={`Small Product ${index + 1}`} />
-                {isLastImage && (
-                  <div
-                    className="icon-wrapper"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate(`/property-images/${property._id}`);
-                    }} // Redirection vers les images
-                  >
-                    <FontAwesomeIcon icon={faCamera} className="photo-icon" />
-                    <span className="photo-count">{property.images.length}</span>
-                  </div>
-                )}
-              </a>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Détails supplémentaires */}
-      <div className="product-info">
-        <h2>Informations sur le produit</h2>
-        <ul>
-          <li>Type de produit : {property.productType}</li>
-          <li>Ville : {property.city}</li>
-          <li>Courtier : {property.agentName}</li>
-          <li>Description : {property.description}</li>
-          <li>Taille du lot : {property.lotSize} m²</li>
-          <li>Visite virtuelle disponible : {property.isVirtualTourAvailable ? 'Oui' : 'Non'}</li>
-          <li>Journée portes ouvertes : {property.isOpenHouse ? 'Oui' : 'Non'}</li>
-          <li>Date d'emménagement : {new Date(property.moveInDate).toLocaleDateString()}</li>
-        </ul>
-      </div>
-    </div>
+    <MapContainer
+      center={[14.7167, -17.4677]} // Centre sur Dakar
+      zoom={12}
+      style={{ height: '100vh', width: '100%' }}
+    >
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution="&copy; OpenStreetMap contributors"
+      />
+      <ClosePopupsOnClick />
+      <MarkerClusterGroup
+        chunkedLoading
+        iconCreateFunction={createClusterCustomIcon} // Utiliser l'icône personnalisée pour les clusters
+      >
+        {products.map((product, index) => (
+          <Marker
+            key={index}
+            position={[
+              product.coordinates.latitude,
+              product.coordinates.longitude,
+            ]}
+            icon={customIcon}
+            eventHandlers={{
+              mouseover: (e) => {
+                e.target.openPopup(); // Ouvrir le popup lors du survol
+              },
+            }}
+          >
+            <Popup>
+              <div>
+                <strong>{product.title}</strong>
+                <br />
+                Prix: {product.price?.toLocaleString()} FCFA
+                <br />
+                Commune: {product.commune}
+                <br />
+                Quartier: {product.quartier}
+                <br />
+                <strong>1 propriété disponible</strong>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MarkerClusterGroup>
+    </MapContainer>
   );
 };
 
-export default LastPropertyDetails;
+export default CartePage;

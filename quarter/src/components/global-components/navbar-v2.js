@@ -91,12 +91,12 @@ const NavbarV2 = (props) => {
 							<nav>
 							<div className="ltn__main-menu">
 								<ul>
-								<li className="#"><Link to="/vendre">Rechercher</Link>
+								{/* <li className="#"><Link to="/vendre">Rechercher</Link>
 									
-								</li>
+								</li> */}
 								<li className=""><Link to="#">Acheter</Link>
 									<ul>
-										<li><Link to="/louer">Trouver une propriete a vendre</Link></li>
+										<li><Link to="/vendre">Trouver une propriete a vendre</Link></li>
 										<li><Link to="/service">Guide de l'acheteur</Link></li>
 										<li><Link to="/service-details">Acheter avec un courtier</Link></li>
 										
@@ -104,7 +104,7 @@ const NavbarV2 = (props) => {
 								</li>
 								<li className=""><Link to="#">Louer</Link>
 									<ul>
-									<li><Link to="/louer-right-sidebar">Trouver une propriete a louer</Link></li>
+									<li><Link to="/louer">Trouver une propriete a louer</Link></li>
 										<li><Link to="/agent">Guide de du locataire</Link></li>
 										<li><Link to="/service-details">Enquete de prelocation</Link></li>
 									</ul>
@@ -126,12 +126,11 @@ const NavbarV2 = (props) => {
 									</ul>
 								
 							</li>
-								{/* <li className="special-link" style={{ borderRadius: '8px' }}>
+								<li className="special-link" style={{ borderRadius: '8px' }}>
 								<Link to="/login">
-									Connexion
-									<i className="far fa-user" style={{ marginLeft: '8px' }} />
+									Nous rejoindre
 								</Link>
-								</li> */}
+								</li>
 									<li
   className={`special-link ${!isLoggedIn ? "not-logged-in" : ""}`}
   style={{

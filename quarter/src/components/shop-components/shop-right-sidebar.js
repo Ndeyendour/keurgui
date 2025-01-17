@@ -454,7 +454,24 @@ const handleSortChange = (e) => {
         onClick={() => navigate(`/product/${product._id}`)}
       />
       {/* Superposition "Vendu" si le statut est "sold" */}
-      {product.status === "sold" && <div className="status-overlay">Vendu</div>}
+      {product.status === "rented" && (
+  <div
+    className="status-overlay"
+    style={{
+      backgroundColor: "red",
+      color: "white",
+      padding: "5px 10px",
+      borderRadius: "15px",
+      fontWeight: "bold",
+      position: "absolute",
+      top: "10px",
+      left: "10px",
+      zIndex: "10",
+    }}
+  >
+    Loue
+  </div>
+)}
 
       {/* Icône avec le nombre de photos */}
       <div
@@ -488,7 +505,7 @@ const handleSortChange = (e) => {
 
       {/* Détails de la propriété */}
       <div className="property-details">
-        <h6>{product.price?.toLocaleString()} $</h6>
+        <h6>{product.price?.toLocaleString()}  FCFA</h6>
         <h6>{product.title}</h6>
         <p>
           {product.address}, {product.city}

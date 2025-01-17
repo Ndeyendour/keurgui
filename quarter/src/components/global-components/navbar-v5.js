@@ -71,12 +71,12 @@ class NavbarV2 extends Component {
 							<nav>
 							<div className="ltn__main-menu">
 								<ul>
-								<li className="#"><Link to="/vendre">Rechercher</Link>
+								{/* <li className="#"><Link to="/vendre">Rechercher</Link>
 									
-								</li>
+								</li> */}
 								<li className=""><Link to="#">Acheter</Link>
 									<ul>
-										<li><Link to="/louer">Trouver une propriete a vendre</Link></li>
+										<li><Link to="/vendre">Trouver une propriete a vendre</Link></li>
 										<li><Link to="/service">Guide de l'acheteur</Link></li>
 										<li><Link to="/service-details">Acheter avec un courtier</Link></li>
 										
@@ -84,7 +84,7 @@ class NavbarV2 extends Component {
 								</li>
 								<li className=""><Link to="#">Louer</Link>
 									<ul>
-									<li><Link to="/agent">Trouver une propriete a louer</Link></li>
+									<li><Link to="/louer">Trouver une propriete a louer</Link></li>
 										<li><Link to="/agent">Guide de du locataire</Link></li>
 										<li><Link to="/service-details">Enquete de prelocation</Link></li>
 									</ul>
