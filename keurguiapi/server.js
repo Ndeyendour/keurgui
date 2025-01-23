@@ -725,28 +725,24 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-app.patch('/api/products/:id', async (req, res) => {
+app.get('/api/filtre', async (req, res) => {
+  const { address, transactionType, minPrice, maxPrice } = req.query;
+
+  const filter = {};
+  if (transactionType) filter.transactionType = transactionType;
+  if (address) filter.address = { $regex: address, $options: 'i' };
+  if (minPrice) filter.price = { $gte: parseInt(minPrice) };
+  if (maxPrice) filter.price = { ...filter.price, $lte: parseInt(maxPrice) };
+
   try {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    // Mettre à jour le produit dans la base de données
-    const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      { status },
-      { new: true }
-    );
-
-    if (!updatedProduct) {
-      return res.status(404).json({ message: "Produit non trouvé" });
-    }
-
-    res.json(updatedProduct);
+    const products = await Product.find(filter);
+    res.json(products);
   } catch (error) {
-    console.error("Erreur lors de la mise à jour du produit :", error);
-    res.status(500).json({ message: "Erreur serveur" });
+    console.error(error);
+    res.status(500).send('Erreur serveur');
   }
 });
+
 
 // Démarrer le serveur
 const port = 5000;
