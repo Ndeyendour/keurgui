@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,18 +11,27 @@ import './shop-grid.css';
 import './PropertyList.css';
 import { useNavigate } from 'react-router-dom';
 
+
 import Slider from "rc-slider";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import '../section-components/filterprix.css';
+import { useLocation } from "react-router-dom";
+
+
 
 const  ShopGridV2= () => {
-	const [products, setProducts] = useState([]);
+  
   const [sortMethod, setSortMethod] = useState("relevance"); // Valeur par défaut
-
+  const [selectedPriceRange, setSelectedPriceRange] = useState([0, 10000]); // Valeur par défaut
+  const location = useLocation();
+  const filters = location.state || {}; // Récupérer les filtres
+  const [properties, setProperties] = useState([]);
+    const [products, setProducts] = useState([]);
 	const navigate = useNavigate(); // Hook pour naviguer
 	const propertiesPerPage = 250;
 	const [currentPage, setCurrentPage] = useState(1);
   const [totalProperties, setTotalProperties] = useState(0);
+  const [priceRange, setPriceRange] = useState(location.state?.priceRange || [0, 10000]); // Récupère ou initialise la plage de prix
 
 	// const [totalProperties, setTotalProperties] = useState(60992);
 	const [activeTab, setActiveTab] = useState('galerie');
@@ -33,7 +42,7 @@ const  ShopGridV2= () => {
 	const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false); // État pour ouvrir/fermer la carte
 	const [loading, setLoading] = useState(false);
   const [tempPriceRange, setTempPriceRange] = useState([0, 10000]); // Plage temporaire
-const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
+  
 
 
   useEffect(() => {
@@ -97,34 +106,7 @@ const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
 		  };
 
 		//   ---------------------------nouv--------------
-		const handleNavigation = (type) => {
-			console.log('Navigation vers :', type);
-		
-			if (type === 'À vendre') {
-			  navigate('/vendre');
-			} else if (type === 'À louer') {
-			  navigate('/louer');
-			}
-		  };
-      const handleTransactionChange = (event) => {
-        const selectedType = event.target.value;
-        console.log("Transaction Type sélectionné :", selectedType);
     
-        if (selectedType === "sale") {
-          navigate("/vendre");
-        } else if (selectedType === "rent") {
-          navigate("/louer");
-        } else if (selectedType === "buy") {
-          navigate("/acheter");
-        } else {
-          console.error("Transaction type inconnu :", selectedType);
-        }
-      };
-
-		//   ----------------------------------------
-		const handleSliderChange = (value) => {
-			setPriceRange(value); // Met à jour la plage sélectionnée
-		  };
       const handleApplyFilter = async () => {
         try {
           setPriceRange(tempPriceRange); // Appliquer les valeurs temporaires
@@ -156,6 +138,7 @@ const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
   };
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
 
   const handleFavoriteClick = (product) => {
     if (!isLoggedIn) {
@@ -207,12 +190,39 @@ const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
 
  
 
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/products", {
+          params: {
+            address: filters.address || undefined, // Adresse filtrée
+            minPrice: filters.priceRange ? filters.priceRange[0] : undefined,
+            maxPrice: filters.priceRange ? filters.priceRange[1] : undefined,
+            transactionType: filters.transactionType || undefined,
+          },
+        });
+        setProperties(response.data); // Mettre à jour les propriétés
+      } catch (error) {
+        console.error("Erreur lors de la récupération des propriétés :", error);
+      }
+    };
+  
+    fetchProperties();
+  }, [filters]); // Recharger chaque fois que les filtres changent
+  
+
+
   const filteredProducts = products.filter((product) => {
-    return (
-      product.transactionType === "rent" && // Filtrer par type de transaction
-      product.price >= priceRange[0] && // Minimum de la plage de prix
-      product.price <= priceRange[1] // Maximum de la plage de prix
-    );
+    // Vérifie si le produit est à vendre
+    const isTransactionTypeValid = product.transactionType === "rent";
+  
+    // Si priceRange est défini, appliquez le filtre de prix
+    const isPriceValid =
+      priceRange.length === 2 // Vérifie que priceRange contient deux valeurs
+        ? product.price >= priceRange[0] && product.price <= priceRange[1]
+        : true; // Si priceRange est vide, ne filtre pas par prix
+  
+    return isTransactionTypeValid && isPriceValid;
   });
   
   const filteredAndSortedProducts = [...filteredProducts].sort((a, b) => {
@@ -232,8 +242,105 @@ const handleSortChange = (e) => {
   setSortMethod(e.target.value); // Met à jour la méthode de tri
 };
 
-  
-  
+
+
+  useEffect(() => {
+    const fetchFilteredProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/products/prix", {
+          params: {
+            minPrice: priceRange ? priceRange[0] : 0,
+            maxPrice: priceRange ? priceRange[1] : 10000,
+          },
+        });
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des produits :", error);
+      }
+    };
+
+    if (priceRange) {
+      fetchFilteredProducts();
+    }
+  }, [priceRange]);
+  const handleTransactionChange = (event) => {
+    const selectedValue = event.target.value;
+
+    // Naviguer vers la route correspondante
+    if (selectedValue === "sale") {
+      navigate("/vendre");
+    } else if (selectedValue === "rent") {
+      navigate("/louer");
+    }
+  };
+  const [isOpen, setIsOpen] = useState(false); // État pour ouvrir/fermer le dropdown
+  const dropdownRef = useRef(null); // Référence au menu déroulant
+
+  const handleOptionClick = (route) => {
+    setIsOpen(false); // Ferme le dropdown après le clic
+    navigate(route); // Redirige vers la page correspondante
+  };
+
+  // const handleClickOutside = (event) => {
+  //   // Vérifie si le clic est en dehors du menu déroulant
+  //   if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  //     setIsOpen(false); // Ferme le menu
+  //   }
+  // };
+
+  useEffect(() => {
+    // Ajoute un écouteur d'événements global pour détecter les clics
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Nettoie l'écouteur d'événements lors du démontage
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleOptionClickk = (route) => {
+    setIsOpen(false); // Ferme le dropdown après le clic
+    navigate(route); // Redirige vers la page correspondante
+  };
+
+  const [isResidentialOpen, setIsResidentialOpen] = useState(false); // État pour le dropdown Résidentiel
+const [isRentOpen, setIsRentOpen] = useState(false); // État pour le dropdown Louer
+
+const residentialDropdownRef = useRef(null);
+const rentDropdownRef = useRef(null);
+
+const handleResidentialClick = () => {
+  setIsResidentialOpen(!isResidentialOpen);
+  setIsRentOpen(false); // Fermer le dropdown Louer si ouvert
+};
+
+const handleRentClick = () => {
+  setIsRentOpen(!isRentOpen);
+  setIsResidentialOpen(false); // Fermer le dropdown Résidentiel si ouvert
+};
+
+const handleClickOutside = (event) => {
+  if (
+    residentialDropdownRef.current &&
+    !residentialDropdownRef.current.contains(event.target)
+  ) {
+    setIsResidentialOpen(false);
+  }
+  if (
+    rentDropdownRef.current &&
+    !rentDropdownRef.current.contains(event.target)
+  ) {
+    setIsRentOpen(false);
+  }
+};
+
+useEffect(() => {
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
+
  	return(
 		
 		 <div>
@@ -263,35 +370,118 @@ const handleSortChange = (e) => {
  				
 
 										{/* Catégorie */}
-										<select
-										value={category}
-										onChange={(e) => setCategory(e.target.value)}
-										className="select-style"
-										>
-										<option value="Résidentiel">Résidentiel</option>
-										<option value="Commercial">Commercial</option>
-										
-										</select>
-
+                    {/* Dropdown Résidentiel */}
+<div ref={residentialDropdownRef} style={{ position: "relative", display: "inline-block" }}>
+  <button
+    onClick={handleResidentialClick}
+    style={{
+      padding: "10px 20px",
+      backgroundColor: "white",
+      color: "black",
+      border: "none",
+      borderRadius: "30px", // Ajout d'une bordure arrondie
+      cursor: "pointer",
+      display: "flex",
+      border: "1px solid #ddd",
+      alignItems: "center",
+      gap: "10px", // Espace entre le texte et l'icône
+    }}
+  >
+    Résidentiel
+    <span
+  style={{
+    transform: isResidentialOpen ? "rotate(180deg)" : "rotate(0deg)",
+    fontWeight: "300", // Plus léger
+    fontSize: "12px", // Plus petit
+    lineHeight: "1", // Ajuster la hauteur de ligne
+  }}
+>
+  ▼
+</span>
+    </button>
+  {isResidentialOpen && (
+    <ul
+      style={{
+        position: "absolute",
+        top: "100%",
+        left: 0,
+        backgroundColor: "white",
+        padding: "10px",
+        border: "1px solid #ddd",
+        zIndex: 1000,
+        listStyleType: "none", // Supprime les points
+      }}
+    >
+      <li onClick={() => handleOptionClick("/residential")}>Résidentiel</li>
+      <li onClick={() => handleOptionClick("/commercial")}>Commercial</li>
+    </ul>
+  )}
+</div>
 										{/* Type de transaction */}
-										<select  onChange={handleTransactionChange} className="select-style">
-                    <option value="sale" style={{ color: "black" }}>
-        À vendre
-      </option>
-      <option value="rent" style={{ color: "black" }}>
-        À louer
-      </option>
-      
-										</select>
+                    <div ref={rentDropdownRef} style={{ position: "relative", display: "inline-block" }}>
+  <button
+    onClick={handleRentClick}
+    style={{
+      padding: "10px 20px",
+      backgroundColor: "white",
+      color: "black",
+      border: "none",
+      borderRadius: "30px", // Ajout d'une bordure arrondie
+      cursor: "pointer",
+      display: "flex",
+      border: "1px solid #ddd",
+      alignItems: "center",
+      gap: "10px", // Espace entre le texte et l'icône
+    }}
+  >
+    Louer
+    <span
+  style={{
+    transform: isResidentialOpen ? "rotate(180deg)" : "rotate(0deg)",
+    fontWeight: "300", // Plus léger
+    fontSize: "12px", // Plus petit
+    lineHeight: "1", // Ajuster la hauteur de ligne
+  }}
+>
+  ▼
+</span>
+  </button>
+  {isRentOpen && (
+    <ul
+      style={{
+        position: "absolute",
+        top: "100%",
+        left: 0,
+        backgroundColor: "white",
+        padding: "10px",
+        border: "1px solid #ddd",
+        zIndex: 1000,
+        listStyleType: "none", // Supprime les points
+      }}
+    >
+      <li onClick={() => handleOptionClick("/louer")}>À louer</li>
+      <li onClick={() => handleOptionClick("/vendre")}>À vendre</li>
+    </ul>
+  )}
+</div>
+
 																			{/* Prix */}
 										{/* Prix */}
-										<button
-              className="filter" style={{ borderRadius: '20px', width: '120px', height: '43px' }}
-              onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
-            >
-              Prix 
-              {/* : {priceRange[0]} $ - {priceRange[1]} $ */}
-            </button>
+                    <button
+  className="filter"
+  style={{
+    borderRadius: '20px',
+    width: '120px',
+    height: '43px',
+    border: '1px solid gray', // Bordure grise ajoutée
+  }}
+  onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
+>
+  Prix
+  {/* : {priceRange[0]} $ - {priceRange[1]} $ */}
+</button>
+
+
 
             {isPriceFilterOpen && (
               <div className="price-filter-card" style={{ marginTop: "15px", marginRight: "-10px" }} >
@@ -306,10 +496,10 @@ const handleSortChange = (e) => {
                 />
                 <div className="price-inputs">
                   <div className="price-input">
-                    <span>{priceRange[0].toLocaleString()} $</span>
+                    <span>{priceRange[0].toLocaleString()} FCFA</span>
                   </div>
                   <div className="price-input">
-                    <span>{priceRange[1].toLocaleString()} $+</span>
+                    <span>{priceRange[1].toLocaleString()} FCFA+</span>
                   </div>
                 </div>
                 <div className="filter-buttons">
@@ -334,7 +524,9 @@ const handleSortChange = (e) => {
 
 										{/* Filtres */}
 										<button
-										className="button-style"
+										className="button-style" style={{
+                      color: 'black', // Texte en noir
+                    }}
 										onClick={() => alert("Ouvrir les filtres avancés")}
 										>
 										Filtres

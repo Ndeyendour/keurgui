@@ -13,7 +13,7 @@ import Modal from 'react-modal';
 import Slider from "rc-slider";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import '../section-components/filterprix.css';
-
+import { useLocation } from "react-router-dom";
 const  ShopGridV1= () => {
 	const [products, setProducts] = useState([]);
   const [sortMethod, setSortMethod] = useState("relevance"); // Valeur par défaut
@@ -32,8 +32,10 @@ const  ShopGridV1= () => {
 	const [maxPrice, setMaxPrice] = useState("");
 	const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false); // État pour ouvrir/fermer la carte
 	const [loading, setLoading] = useState(false);
-  const [tempPriceRange, setTempPriceRange] = useState([0, 10000]); // Plage temporaire
-const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
+  
+const [priceRange, setPriceRange] = useState([]); // Plage de prix appliquée (vide au début)
+const [tempPriceRange, setTempPriceRange] = useState([0, 10000]); // Plage temporaire pour le slider
+
 
 
   useEffect(() => {
@@ -98,38 +100,20 @@ const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
 		
       
     const handleTransactionChange = (event) => {
-      const selectedType = event.target.value;
-    
-      if (selectedType === "sale") {
-        navigate("/vendre"); // Utilisation correcte de navigate
-      } else if (selectedType === "rent") {
-        navigate("/louer"); // Utilisation correcte de navigate
-      } else {
-        console.error("Type de transaction inconnu :", selectedType);
+      const selectedValue = event.target.value;
+  
+      // Naviguer vers la route correspondante
+      if (selectedValue === "sale") {
+        navigate("/vendre");
+      } else if (selectedValue === "rent") {
+        navigate("/louer");
       }
     };
     
 		//   ----------------------------------------
-		const handleSliderChange = (value) => {
-			setPriceRange(value); // Met à jour la plage sélectionnée
-		  };
-      const handleApplyFilter = async () => {
-        try {
-          setPriceRange(tempPriceRange); // Appliquer les valeurs temporaires
-          const response = await axios.get('http://localhost:5000/api/products', {
-            params: {
-              minPrice: tempPriceRange[0], // Utiliser la plage temporaire
-              maxPrice: tempPriceRange[1],
-            },
-          });
-          setProducts(response.data); // Mettre à jour les produits filtrés
-          console.log("Produits filtrés :", response.data); // Debug
-          setIsPriceFilterOpen(false); // Fermer le filtre
-        } catch (error) {
-          console.error('Erreur lors du filtrage par prix :', error);
-          alert('Une erreur est survenue lors du filtrage.');
-        }
-      };
+		
+    
+    
       
       
 		//   --------------favoris------------------------------
@@ -227,27 +211,50 @@ const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
   
     fetchAllProducts();
   }, []);
-  const filteredProducts = products.filter((product) => product.transactionType === "sale");
+
  
 
   // const filteredProducts = products.filter((product) => {
   //   return product.transactionType === "sale"; // Filtrer uniquement par type de transaction
   // });
   
+  // Slider et boutons de la carte de filtre par prix
+
+
+// Fonction pour appliquer le filtre
+const handleApplyFilter = async () => {
+  try {
+    setPriceRange(tempPriceRange); // Applique tempPriceRange à priceRange
+    const response = await axios.get('http://localhost:5000/api/products', {
+      params: {
+        minPrice: tempPriceRange[0], // Utilise tempPriceRange pour la requête
+        maxPrice: tempPriceRange[1],
+      },
+    });
+    setProducts(response.data); // Met à jour les produits avec ceux filtrés depuis l'API
+    setIsPriceFilterOpen(false); // Ferme la carte de filtre
+  } catch (error) {
+    console.error('Erreur lors du filtrage par prix :', error);
+    alert('Une erreur est survenue lors du filtrage.');
+  }
+};
+
+const filteredProduct = products.filter((product) => {
+  // Vérifie si le produit est à vendre
+  const isTransactionTypeValid = product.transactionType === "sale";
+
+  // Si priceRange est défini, appliquez le filtre de prix
+  const isPriceValid =
+    priceRange.length === 2 // Vérifie que priceRange contient deux valeurs
+      ? product.price >= priceRange[0] && product.price <= priceRange[1]
+      : true; // Si priceRange est vide, ne filtre pas par prix
+
+  return isTransactionTypeValid && isPriceValid;
+});
+
+
   
-  
-  const filteredAndSortedProducts = [...filteredProducts].sort((a, b) => {
-    switch (sortMethod) {
-      case "recent":
-        return new Date(b.createdAt) - new Date(a.createdAt); // Trier par date décroissante
-      case "price_asc":
-        return a.price - b.price; // Trier par prix croissant
-      case "price_desc":
-        return b.price - a.price; // Trier par prix décroissant
-      default:
-        return 0; // Pas de tri
-    }
-  });
+ 
   
 const handleSortChange = (e) => {
   setSortMethod(e.target.value); // Met à jour la méthode de tri
@@ -255,20 +262,20 @@ const handleSortChange = (e) => {
 
 
   // Produits affichés pour la page actuelle
-  const currentProducts = filteredProducts.slice(
+  const currentProducts = filteredProduct.slice(
     (currentPage - 1) * productsPerPage,
     currentPage * productsPerPage
   );
 
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const totalPages = Math.ceil(filteredProduct.length / productsPerPage);
 
   // Gestion du changement de page
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 useEffect(() => {
-  setTotalProperties(filteredProducts.length); // Met à jour le total des propriétés filtrées
-}, [filteredProducts]);
+  setTotalProperties(filteredProduct.length); // Met à jour le total des propriétés filtrées
+}, [filteredProduct]);
 
   // ------------------------------------------------------------
   useEffect(() => {
@@ -290,6 +297,30 @@ useEffect(() => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const location = useLocation();
+  const filters = location.state || {}; // Récupère les filtres transmis
+  useEffect(() => {
+    // Récupérer les données filtrées à partir du backend
+    const fetchFilteredProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/products", {
+          params: {
+            transactionType: "sale", // Fixe pour "À vendre"
+            address: filters.address || undefined,
+            minPrice: filters.priceRange ? filters.priceRange[0] : undefined,
+            maxPrice: filters.priceRange ? filters.priceRange[1] : undefined,
+          },
+        });
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des produits :", error);
+      }
+    };
+
+    fetchFilteredProducts();
+  }, [filters]); // Exécute cet effet à chaque mise à jour des filtres
+
+  
  	return(
 		
 		 <div>
@@ -342,48 +373,53 @@ useEffect(() => {
 										</select>
 																			{/* Prix */}
 										{/* Prix */}
-										<button
-              className="filter" style={{ borderRadius: '20px', width: '120px', height: '43px' }}
-              onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
-            >
-              Prix 
-              {/* : {priceRange[0]} $ - {priceRange[1]} $ */}
-            </button>
+                    <button
+  className="filter"
+  style={{
+    borderRadius: '20px',
+    width: '120px',
+    height: '43px',
+    border: '1px solid gray', // Bordure grise ajoutée
+  }}
+  onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
+>
+  Prix
+  {/* : {priceRange[0]} $ - {priceRange[1]} $ */}
+</button>
 
             {isPriceFilterOpen && (
               <div className="price-filter-card" style={{ marginTop: "15px", marginRight: "-10px" }} >
                 <h4>Prix</h4>
                 <Slider
-                  range
-                  value={priceRange}
-                  min={0}
-                  max={10000}
-                  step={100}
-                  onChange={(value) => setPriceRange(value)}
-                />
-                <div className="price-inputs">
-                  <div className="price-input">
-                    <span>{priceRange[0].toLocaleString()} $</span>
-                  </div>
-                  <div className="price-input">
-                    <span>{priceRange[1].toLocaleString()} $+</span>
-                  </div>
-                </div>
-                <div className="filter-buttons">
-                  <button
-                    className="close-button"
-                    onClick={() => setIsPriceFilterOpen(false)}
-                  >
-                    Fermer
-                  </button>
-                  <button
-  className="apply-button"
-  onClick={handleApplyFilter} // Assurez-vous que la fonction est correcte
->
-  Appliquer
-</button>
-
-                </div>
+  range
+  value={tempPriceRange} // Utiliser l'état temporaire
+  min={0}
+  max={10000}
+  step={100}
+  onChange={(value) => setTempPriceRange(value)} // Mettre à jour uniquement tempPriceRange
+/>
+<div className="price-inputs">
+  <div className="price-input">
+    <span>{tempPriceRange[0].toLocaleString()} FCFA</span> {/* Affiche la plage temporaire */}
+  </div>
+  <div className="price-input">
+    <span>{tempPriceRange[1].toLocaleString()} FCFA+</span>
+  </div>
+</div>
+<div className="filter-buttons">
+  <button
+    className="close-button"
+    onClick={() => setIsPriceFilterOpen(false)}
+  >
+    Fermer
+  </button>
+  <button
+    className="apply-button"
+    onClick={handleApplyFilter} // Appliquer les filtres
+  >
+    Appliquer
+  </button>
+</div>
               </div>
             )}
 
@@ -391,7 +427,9 @@ useEffect(() => {
 
 										{/* Filtres */}
 										<button
-										className="button-style"
+										className="button-style" style={{
+                      color: 'black', // Texte en noir
+                    }}
 										onClick={() => alert("Ouvrir les filtres avancés")}
 										>
 										Filtres

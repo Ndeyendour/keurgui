@@ -509,3 +509,101 @@
 .checkbox-group input[type="checkbox"] {
   margin-right: 10px;
 }
+
+
+
+
+
+/* Carte de filtre */
+.price-filter-card {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-left: 40px;
+}
+
+
+/* Entrées de prix */
+.price-inputs {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* Bouton appliquer */
+.apply-button {
+  display: block;
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #28a745; /* Couleur verte */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.apply-button:hover {
+  background-color: #218838; /* Couleur au survol */
+}
+
+/* Étiquette de prix appliqué */
+.selected-price-tag {
+  position: absolute; /* Position absolue dans le conteneur */
+  bottom: 10px; /* Espacement depuis le bas */
+  left: 410px; /* Espacement depuis la gauche */
+  display: inline-flex;
+  align-items: center;
+  background-color: #f4f4f4; /* Fond gris clair */
+  border: 1px solid #ddd; /* Bordure fine */
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.selected-price-tag span {
+  margin-right: 10px; /* Espacement entre le texte et le bouton */
+}
+
+.clear-price-button {
+  background: none;
+  border: none;
+  color: #888; /* Couleur du bouton */
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.clear-price-button:hover {
+  color: #000; /* Couleur au survol */
+}
+
+.selected-filters {
+  position: absolute; /* Position absolue dans le conteneur */
+  bottom: 10px; /* Espacement depuis le bas */
+  left: 180px; /* Espacement depuis la gauche */
+  display: inline-flex;
+  align-items: center;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.selected-filter {
+  background-color: #e92020;
+  border-radius: 4px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+}
+
+.remove-tag {
+  margin-left: 8px;
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+}

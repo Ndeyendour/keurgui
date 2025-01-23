@@ -80,7 +80,6 @@ font-family: 'Poppins', sans-serif;
 .filter {
   color: black; /* Texte noir pour les sélections */
   background-color: white; /* Fond blanc */
-  border: 1px solid #ccc;
 }
 
 .filter option {
@@ -95,7 +94,6 @@ font-family: 'Poppins', sans-serif;
 
 .filter {
   border-radius: 0; /* Enlève le rayon des bordures pour tous */
-  border: 1px solid #ccc; /* Exemple de bordure */
   padding: 8px;
 }
 
@@ -141,38 +139,45 @@ h1 {
   color: #fffdfd;
 }
 
-/* Tabs Styles */
+/* Conteneur des onglets */
 .tabs {
   display: flex;
-  
-  margin-top: 00px;
-  
+  margin-top: 0;
+  justify-content: flex-start; /* Aligne les onglets à gauche */
 }
 
 .tab {
   padding: 8px 12px;
   background: #e91919;
   color: #fff;
-  /* border-radius: 5px 5px 0 0; */
-  margin-right: 0px;
+  margin-right: 0; /* Pas d'espace supplémentaire entre les onglets */
   border: none;
   cursor: pointer;
-  border-radius: 0 10px 0 0;
+  border-radius: 10px 10px 0 0; /* Coins arrondis uniformes */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
 }
 
 .tab.active {
   background: #196603;
   color: #fff;
-  border-radius: 15px 0 0 0;
+  border-radius: 10px 10px 0 0; /* Coins arrondis uniformes */
 }
+
+
+/* Icône */
 .tab svg {
-  margin-right: 12px; /* Marge de 8px entre l'icône et son texte */
+  margin-right: 12px; /* Marge entre l'icône et le texte */
 }
+
 /* Search Fields */
 .search-container {
   display: flex;
   flex-direction: column;
   width: 100%;
+
 }
 
 .search-fields {
@@ -217,10 +222,8 @@ h1 {
 /* Bouton de recherche */
 .search-fields .search-button {
   width: 50px;
-  background: #512da8;
   color: white;
   border: none;
-  border: 0px solid #ccc;
   border-radius: 0 10px 10px 0;
   cursor: pointer;
   margin-top: -30px;

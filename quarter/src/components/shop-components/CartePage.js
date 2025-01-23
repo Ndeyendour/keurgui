@@ -24,6 +24,8 @@ import '../section-components/filterprix.css';
 import ClusterPopupContent from './ClusterPopupContent';
 // Icône personnalisée pour les clusters et marqueurs individuels
 const createCustomIcon = (text) => {
+  let publicUrl = process.env.PUBLIC_URL+'/'
+
   return new L.DivIcon({
     html: `
       <div style="
@@ -33,7 +35,8 @@ const createCustomIcon = (text) => {
         align-items: center;
         width: 25px;
         height: 41px;
-        background: url('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png') no-repeat center center;
+                background: url(${publicUrl}assets/img/gallery/marker-icon.png) no-repeat center center;
+
         background-size: contain;
         color: white;
         font-size: 14px;
@@ -53,6 +56,7 @@ const createCustomIcon = (text) => {
 // Icône personnalisée pour les clusters
 const createClusterCustomIcon = (cluster) => {
   const count = cluster.getChildCount();
+	let publicUrl = process.env.PUBLIC_URL+'/'
 
   return new L.DivIcon({
     html: `
@@ -63,7 +67,7 @@ const createClusterCustomIcon = (cluster) => {
         align-items: center;
         width: 40px;
         height: 40px;
-        background: url('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png') no-repeat center center;
+        background: url(${publicUrl}assets/img/gallery/marker-icon.png) no-repeat center center;
         background-size: contain;
         font-size: 14px;
         font-weight: bold;

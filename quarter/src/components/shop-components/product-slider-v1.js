@@ -31,7 +31,7 @@ const  ProductDetails= () => {
 	const [transactionType, setTransactionType] = useState("À vendre");
 	const [price, setPrice] = useState("");
 	const [lifestyleFilters, setLifestyleFilters] = useState(1);
-  const handleButtonClick = () => {
+  const handleButtonClicke = () => {
     navigate('/form'); // Redirige vers la route du formulaire
   };
 
@@ -140,6 +140,13 @@ const  ProductDetails= () => {
           navigate("/louer");
         }
       };
+      const handleButtonClick = () => {
+        const phoneNumber = "772977043"; // Remplacez par le numéro de téléphone du courtier, sans le symbole "+"
+        const message = "Bonjour, je suis intéressé(e) par votre propriété.";
+        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappURL, "_blank"); // Ouvre WhatsApp dans un nouvel onglet
+    };
+    
  	return(
 		
 		 <div>
@@ -191,7 +198,6 @@ const  ProductDetails= () => {
 										onClick={() => alert("Ouvrir les filtres de prix")}
 										>
 										<span className="prix-text">Prix</span>
-										<span className="prix-symbol"> $</span>
 										</button>
 
 
@@ -315,7 +321,7 @@ const  ProductDetails= () => {
             </h5>
           </div>
           <div className="product-info-center">
-            <span className="price">{product.price} $</span>
+            <span className="price">{product.price} FCFA</span>
           </div>
 
           <div className="product-info-right">

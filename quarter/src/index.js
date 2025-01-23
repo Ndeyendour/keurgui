@@ -66,6 +66,8 @@ import AgentsList from './components/section-components/AgentsList';
 import EditAgent from './components/section-components/EditAgent';
 import AddAgent from './components/section-components/AddAgent';
 import UserList from './components/section-components/UserList';
+import Commercial from './components/section-components/banner-v6';
+import TransactionSelector from './components/shop-components/TransactionSelector';
 
 class Root extends Component {
   render() {
@@ -134,6 +136,9 @@ class Root extends Component {
               <Route path="/edit-agent/:id" element={<EditAgent />} />
               <Route path="/add-agent" element={<AddAgent />} />
               <Route path="/users" element={<UserList />} />
+              <Route path="/commercial" element={<Commercial />} />
+              <Route path="/redirect" element={<TransactionSelector />} />
+
             </Routes>
           </div>
         </HashRouter>
