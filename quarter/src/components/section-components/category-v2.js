@@ -2,133 +2,170 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
 
-class CategoryV2 extends Component {
+class CategoryV3 extends Component {
 
     render() {
 
         let publicUrl = process.env.PUBLIC_URL+'/'
         let imagealt = 'image'
 
-    return <div className="ltn__category-area ltn__product-gutter section-bg-1--- pt-115 pb-70">
-			  <div className="container">
-			    <div className="row">
-			      <div className="col-lg-12">
-			        <div className="section-title-area ltn__section-title-2--- text-center">
-			          <h6 className="section-subtitle section-subtitle-2--- ltn__secondary-color">Our Aminities</h6>
-			          <h1 className="section-title">Building Aminities</h1>
-			        </div>
-			      </div>
-			    </div>
-			    <div className="row ltn__category-slider-active--- slick-arrow-1 justify-content-center go-top">
-			      <div className="col-lg-3 col-md-4 col-sm-6 col-6">
-			        <div className="ltn__category-item ltn__category-item-5 ltn__category-item-5-2 text-center---">
-			          <Link to="/shop">
-			            <span className="category-icon"><i className="flaticon-car" /></span>
-			            <span className="category-number">01</span>
-			            <span className="category-title">Parking Space</span>
-			            <span className="category-brief">
-			              Enimad minim veniam quis no exercitation ullamco lab
-			            </span>
-			            <span className="category-btn d-none"><i className="flaticon-right-arrow" /></span>
-			          </Link>
-			        </div>
-			      </div>
-			      <div className="col-lg-3 col-md-4 col-sm-6 col-6">
-			        <div className="ltn__category-item ltn__category-item-5 ltn__category-item-5-2 text-center---">
-			          <Link to="/shop">
-			            <span className="category-icon"><i className="flaticon-swimming" /></span>
-			            <span className="category-number">02</span>
-			            <span className="category-title">Swimming Pool</span>
-			            <span className="category-brief">
-			              Enimad minim veniam quis no exercitation ullamco lab
-			            </span>
-			            <span className="category-btn d-none"><i className="flaticon-right-arrow" /></span>
-			          </Link>
-			        </div>
-			      </div>
-			      <div className="col-lg-3 col-md-4 col-sm-6 col-6">
-			        <div className="ltn__category-item ltn__category-item-5 ltn__category-item-5-2 text-center---">
-			          <Link to="/shop">
-			            <span className="category-icon"><i className="flaticon-secure-shield" /></span>
-			            <span className="category-number">03</span>
-			            <span className="category-title">Private Security</span>
-			            <span className="category-brief">
-			              Enimad minim veniam quis no exercitation ullamco lab
-			            </span>
-			            <span className="category-btn d-none"><i className="flaticon-right-arrow" /></span>
-			          </Link>
-			        </div>
-			      </div>
-			      <div className="col-lg-3 col-md-4 col-sm-6 col-6">
-			        <div className="ltn__category-item ltn__category-item-5 ltn__category-item-5-2 text-center---">
-			          <Link to="/shop">
-			            <span className="category-icon"><i className="flaticon-stethoscope" /></span>
-			            <span className="category-number">04</span>
-			            <span className="category-title">Medical Center</span>
-			            <span className="category-brief">
-			              Enimad minim veniam quis no exercitation ullamco lab
-			            </span>
-			            <span className="category-btn d-none"><i className="flaticon-right-arrow" /></span>
-			          </Link>
-			        </div>
-			      </div>
-			      <div className="col-lg-3 col-md-4 col-sm-6 col-6">
-			        <div className="ltn__category-item ltn__category-item-5 ltn__category-item-5-2 text-center---">
-			          <Link to="/shop">
-			            <span className="category-icon"><i className="flaticon-book" /></span>
-			            <span className="category-number">05</span>
-			            <span className="category-title">Library Area</span>
-			            <span className="category-brief">
-			              Enimad minim veniam quis no exercitation ullamco lab
-			            </span>
-			            <span className="category-btn d-none"><i className="flaticon-right-arrow" /></span>
-			          </Link>
-			        </div>
-			      </div>
-			      <div className="col-lg-3 col-md-4 col-sm-6 col-6">
-			        <div className="ltn__category-item ltn__category-item-5 ltn__category-item-5-2 text-center---">
-			          <Link to="/shop">
-			            <span className="category-icon"><i className="flaticon-bed-1" /></span>
-			            <span className="category-number">06</span>
-			            <span className="category-title">King Size Beds</span>
-			            <span className="category-brief">
-			              Enimad minim veniam quis no exercitation ullamco lab
-			            </span>
-			            <span className="category-btn d-none"><i className="flaticon-right-arrow" /></span>
-			          </Link>
-			        </div>
-			      </div>
-			      <div className="col-lg-3 col-md-4 col-sm-6 col-6">
-			        <div className="ltn__category-item ltn__category-item-5 ltn__category-item-5-2 text-center---">
-			          <Link to="/shop">
-			            <span className="category-icon"><i className="flaticon-home-2" /></span>
-			            <span className="category-number">07</span>
-			            <span className="category-title">Smart Homes</span>
-			            <span className="category-brief">
-			              Enimad minim veniam quis no exercitation ullamco lab
-			            </span>
-			            <span className="category-btn d-none"><i className="flaticon-right-arrow" /></span>
-			          </Link>
-			        </div>
-			      </div>
-			      <div className="col-lg-3 col-md-4 col-sm-6 col-6">
-			        <div className="ltn__category-item ltn__category-item-5 ltn__category-item-5-2 text-center---">
-			          <Link to="/shop">
-			            <span className="category-icon"><i className="flaticon-slider" /></span>
-			            <span className="category-number">08</span>
-			            <span className="category-title">Kid’s Playland</span>
-			            <span className="category-brief">
-			              Enimad minim veniam quis no exercitation ullamco lab
-			            </span>
-			            <span className="category-btn d-none"><i className="flaticon-right-arrow" /></span>
-			          </Link>
-			        </div>
-			      </div>
-			    </div>
-			  </div>
-			</div>
+    return <div className="ltn__banner-area pt-120 go-top" style={{ marginTop: "-70px" }}>
+				<div className="container">
+				
+				<div className="row">
+				<h6 className="section-title">Proprietes a louer ou vendre</h6>
 
+				<div className="col-lg-3 col-md-6">
+				<div
+					className="ltn__banner-item ltn__banner-style-4 text-color-white bg-image"
+					data-bs-bg={publicUrl + "assets/img/gallery/ec.jpg"}
+					style={{
+					height: "200px", // Hauteur ajustée
+					backgroundSize: "cover", // Image ajustée
+					backgroundPosition: "center", // Image centrée
+					borderRadius: "15px", // Coins arrondis à 15px
+					position: "relative", // Nécessaire pour positionner les éléments à l'intérieur
+					overflow: "hidden", // Pour éviter que le texte dépasse
+					}}
+				>
+					{/* Contenu positionné en bas */}
+					
+				</div>
+				<div className=""
+				style={{
+					marginTop: "-20px",
+				}}
+
+					
+					>
+					<h6>
+						<Link to="" style={{ color: "black" }}>Local commercial</Link>
+					</h6>
+					<p style={{
+					marginTop: "-20px",
+				}}>Explorez une large gamme d'espaces commerciaux adaptés à vos besoins.</p>
+					</div>
+				</div>
+				<div className="col-lg-3 col-md-6">
+				<div
+					className="ltn__banner-item ltn__banner-style-4 text-color-white bg-image"
+					data-bs-bg={publicUrl + "assets/img/gallery/es.jpg"}
+					style={{
+					height: "200px", // Hauteur ajustée
+					backgroundSize: "cover", // Image ajustée
+					backgroundPosition: "center", // Image centrée
+					borderRadius: "15px", // Coins arrondis à 15px
+					position: "relative", // Nécessaire pour positionner les éléments à l'intérieur
+					overflow: "hidden", // Pour éviter que le texte dépasse
+					}}
+				>
+					{/* Contenu positionné en bas */}
+					
+				</div>
+				<div className=""
+				style={{
+					marginTop: "-20px",
+				}}
+
+					
+					>
+					<h6>
+						<Link to="" style={{ color: "black" }}>Immeuble</Link>
+					</h6>
+					<p style={{
+					marginTop: "-20px",
+				}}>Concrétisez votre projet d’investissement en profitant d’un large choix d’immeubles.</p>
+					</div>
+				</div>
+				<div className="col-lg-3 col-md-6">
+				<div
+					className="ltn__banner-item ltn__banner-style-4 text-color-white bg-image"
+					data-bs-bg={publicUrl + "assets/img/gallery/warehouse.jpg"}
+					style={{
+					height: "200px", // Hauteur ajustée
+					backgroundSize: "cover", // Image ajustée
+					backgroundPosition: "center", // Image centrée
+					borderRadius: "15px", // Coins arrondis à 15px
+					position: "relative", // Nécessaire pour positionner les éléments à l'intérieur
+					overflow: "hidden", // Pour éviter que le texte dépasse
+					}}
+				>
+					{/* Contenu positionné en bas */}
+					
+				</div>
+				<div className=""
+				style={{
+					marginTop: "-20px",
+				}}
+
+					
+					>
+					<h6>
+						<Link to="" style={{ color: "black" }}>Hangars/Dépôt</Link>
+					</h6>
+					<p style={{
+					marginTop: "-20px",
+				}}>Découvrez l'ensemble des propriétés disponibles.</p>
+					</div>
+				</div>
+				<div className="col-lg-3 col-md-6">
+				<div
+					className="ltn__banner-item ltn__banner-style-4 text-color-white bg-image"
+					data-bs-bg={publicUrl + "assets/img/gallery/enterprise.jpg"}
+					style={{
+					height: "200px", // Hauteur ajustée
+					backgroundSize: "cover", // Image ajustée
+					backgroundPosition: "center", // Image centrée
+					borderRadius: "15px", // Coins arrondis à 15px
+					position: "relative", // Nécessaire pour positionner les éléments à l'intérieur
+					overflow: "hidden", // Pour éviter que le texte dépasse
+					}}
+				>
+					{/* Contenu positionné en bas */}
+					
+				</div>
+				<div className=""
+				style={{
+					marginTop: "-20px",
+				}}
+
+					
+					>
+					<h6>
+						<Link to="" style={{ color: "black" }}>Entreprise</Link>
+					</h6>
+					<p style={{
+					marginTop: "-20px",
+				}}>Concrétisez votre projet de restaurant, commerce et bien plus encore.</p>
+					</div>
+				</div>
+				{/*  */}
+
+
+
+
+					
+				</div>
+				</div>
+				<div
+      style={{
+        position: "absolute",
+       
+        left: "50%",
+        transform: "translateX(-50%)",
+        backgroundColor: "black",
+        padding: "10px 20px",
+        borderRadius: "20px",
+      }}
+    >
+      <Link to="" style={{ color: "white", textDecoration: "none" }}>
+        Voir toutes les propriétés a louer
+      </Link>
+    </div>
+			</div>
+			
+			
         }
 }
 
-export default CategoryV2
+export default CategoryV3

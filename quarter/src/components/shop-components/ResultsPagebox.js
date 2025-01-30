@@ -18,15 +18,15 @@ import { useSearchParams } from "react-router-dom";
 import { useMemo } from "react";
 
 
-const ResultsPage = () => {
+const ResultsPagebox = () => {
 	const [products, setProducts] = useState([]);
 	const navigate = useNavigate(); // Hook pour naviguer
 	const handleProductClick = (productId) => navigate(`/product-details/${productId}`);
 	const handleImageClick = (productId) => navigate(`/property-images/${productId}`);
 
-	const propertiesPerPage = 250;
+	const propertiesPerPage = 12;
 	const [currentPage, setCurrentPage] = useState(1);
-	const [totalProperties, setTotalProperties] = useState(31);
+	const [totalProperties, setTotalProperties] = useState(60992);
 	const [activeTab, setActiveTab] = useState('galerie');
 	const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -131,7 +131,7 @@ const ResultsPage = () => {
       // }, [filters]);
       
   const [results, setResults] = useState([]);
-  console.log("🔍 Paramètre reçu dans ResultsPage :", searchTerm);
+  console.log("🔍 Paramètre reçu dans ResultsPagebox :", searchTerm);
   useEffect(() => {
     const fetchResults = async () => {
       try {
@@ -797,9 +797,9 @@ const searchFilters = useMemo(() => {
 				<Link to="/carte" className={`tab-button ${activeTab === 'carte' ? 'active' : ''}`} onClick={() => handleTabClick('carte')}>
 					<FontAwesomeIcon icon={faMapMarkedAlt} /> Carte
 				</Link>
-				<Link to="/louer" className={`tab-button ${activeTab === 'sommaire' ? 'active' : ''}`} onClick={() => handleTabClick('sommaire')}>
-                  <FontAwesomeIcon icon={faListAlt} /> Sommaire
-                </Link>
+				<Link to="/sommaire" className={`tab-button ${activeTab === 'sommaire' ? 'active' : ''}`} onClick={() => handleTabClick('sommaire')}>
+					<FontAwesomeIcon icon={faListAlt} /> Sommaire
+				</Link>
 				<div className="tab-indicator" style={{ left: `${getIndicatorPosition(activeTab)}%` }}></div>
 				</div>
 
@@ -859,8 +859,8 @@ const searchFilters = useMemo(() => {
         <div className="ltn__product-tab-content-inner ltn__product-grid-view">
           <div className="row">
             {/* Vérification et affichage des produits */}
-            {products.length > 0 ? (
-              products.map((product) => (
+            {results.length > 0 ? (
+              results.map((product) => (
                 <div key={product._id} className="col-lg-3 col-sm-6 col-12">
                   <div className="result-card">
                     {/* Image principale avec redirection */}
@@ -950,4 +950,4 @@ const searchFilters = useMemo(() => {
         
 }
 
-export default ResultsPage
+export default ResultsPagebox

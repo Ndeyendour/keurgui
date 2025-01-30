@@ -14,6 +14,10 @@ const Commercial = () => {
 		const navigate = useNavigate(); // Hook pour naviguer
     const [priceRange, setPriceRange] = useState([0, 10000]); // Plage initiale
 	const propertiesPerPage = 250;
+  const [minLotSize, setMinLotSize] = useState("");
+const [maxLotSize, setMaxLotSize] = useState("");
+const [minDate, setMinDate] = useState("");
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedPriceRange, setSelectedPriceRange] = useState(null); // Plage de prix appliquée
   const [selectedTags, setSelectedTags] = useState([]); // Liste des tags sélectionnés
@@ -27,6 +31,8 @@ const Commercial = () => {
   const [maxPrice, setMaxPrice] = useState("");
   const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false); // État pour ouvrir/fermer la carte
   const [loading, setLoading] = useState(false);
+  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState([]);
+
 
   useEffect(() => {
     if (query.trim().length < 2) {
@@ -179,13 +185,18 @@ const [isPropertyTypeOpen, setIsPropertyTypeOpen] = useState(false); // État po
       useEffect(() => {
         const fetchProperties = async () => {
           try {
+            const params = {
+              transactionType: transactionType,
+              minPrice: selectedPriceRange ? selectedPriceRange[0] : undefined,
+              maxPrice: selectedPriceRange ? selectedPriceRange[1] : undefined,
+            };
+      
+            if (selectedAddress && selectedAddress.trim() !== "") {
+              params.address = selectedAddress;
+            }
+      
             const response = await axios.get("http://localhost:5000/api/filtre", {
-              params: {
-                transactionType: transactionType,
-                address: selectedAddress || undefined, // Ajoutez l'adresse ici
-                minPrice: selectedPriceRange ? selectedPriceRange[0] : undefined,
-                maxPrice: selectedPriceRange ? selectedPriceRange[1] : undefined,
-              },
+              params: params,
             });
             setProperties(response.data);
           } catch (error) {
@@ -196,19 +207,23 @@ const [isPropertyTypeOpen, setIsPropertyTypeOpen] = useState(false); // État po
         fetchProperties();
       }, [transactionType, selectedAddress, selectedPriceRange]);
       
-      
   // Redirection avec les filtres appliqués
 
   
+  useEffect(() => {
+    console.log("Adresse sélectionnée pour le filtrage :", selectedAddress);
+  }, [selectedAddress]);
   
   
 
-  // Gestion de la sélection d'une suggestion
   const handleSuggestionClick = (suggestion) => {
+    console.log("Suggestion sélectionnée :", suggestion);
     setSelectedAddress(suggestion); // Met à jour l'adresse sélectionnée
-    setQuery(""); // Réinitialise le champ de recherche
-    setSuggestions([]); // Vider les suggestions
+    console.log("Adresse sélectionnée après mise à jour :", selectedAddress); // Ajoutez ce log
+    setQuery(""); // Réinitialise la barre de recherche
+    setSuggestions([]); // Vide les suggestions
   };
+  
   
 
   // Gestion de la suppression d'une adresse
@@ -260,6 +275,93 @@ const [isPropertyTypeOpen, setIsPropertyTypeOpen] = useState(false); // État po
     // Redirection avec les filtres
     navigate(targetPath, { state: filters });
   };
+  // ----------------------------------filtre------------------
+  const handleFilterChange = (type) => {
+    setSelectedPropertyTypes((prevTypes) =>
+      prevTypes.includes(type)
+        ? prevTypes.filter((t) => t !== type) // Retire le type si déjà sélectionné
+        : [...prevTypes, type] // Ajoute le type s'il n'est pas déjà sélectionné
+    );
+  };
+  
+
+ 
+  const [selectedCharacteristics, setSelectedCharacteristics] = useState([]);
+  
+  
+  const handleCharacteristicsChange = (event) => {
+    const value = event.target.value;
+    setSelectedCharacteristics((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
+    );
+  };
+  const [selectedStructureTypes, setSelectedStructureTypes] = useState([]); // 🔥 Déclaration ici
+
+  const handlePropertyTypeChange = (type) => {
+    setSelectedPropertyTypes((prevTypes) =>
+      prevTypes.includes(type)
+        ? prevTypes.filter((t) => t !== type)
+        : [...prevTypes, type]
+    );
+  };
+  const handleStructureTypeChange = (event) => {
+    const value = event.target.value;
+    setSelectedStructureTypes((prev) =>
+      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
+    );
+  };
+
+  const handleSearch = () => {
+    let searchTerms = [];
+  
+    if (selectedPropertyTypes.length > 0) {
+      searchTerms.push(`types=${selectedPropertyTypes.join(",")}`);
+    }
+  
+    if (selectedStructureTypes.length > 0) {
+      searchTerms.push(`structureTypes=${selectedStructureTypes.join(",")}`);
+    }
+  
+    // Si aucun filtre n'est appliqué, passer "all"
+    const searchQuery = searchTerms.length > 0 ? searchTerms.join("&") : "all";
+  
+    // Encoder pour éviter les erreurs d'URL
+    const targetUrl = `/resultss/${encodeURIComponent(searchQuery)}`;
+  
+    console.log("🔍 Naviguer vers :", targetUrl);
+    navigate(targetUrl);
+  };
+  
+  const handleSearch1 = () => {
+    let searchTerms = [];
+  
+    // 🔹 Superficie du terrain
+    if (minLotSize) {
+      searchTerms.push(`minLotSize=${minLotSize}`);
+    }
+    if (maxLotSize) {
+      searchTerms.push(`maxLotSize=${maxLotSize}`);
+    }
+  
+    // 🔹 Date d'ajout
+    if (minDate) {
+      searchTerms.push(`minDate=${minDate}`);
+    }
+  
+    // 🔥 Si aucun critère avancé n'est sélectionné, passer "all"
+    const searchQuery = searchTerms.length > 0 ? searchTerms.join("&") : "all";
+  
+    // 🔹 Encoder l'URL et naviguer vers `ResultsPage`
+    const targetUrl = `/results/${encodeURIComponent(searchQuery)}`;
+  
+    console.log("🔍 URL générée :", targetUrl);
+    navigate(targetUrl);
+  };
+  
+  
+  
   
   
   return (
@@ -404,7 +506,7 @@ const [isPropertyTypeOpen, setIsPropertyTypeOpen] = useState(false); // État po
                   >
                     Fermer
                   </button>
-                  <button className="apply-button" onClick={handleApplyFilter}>
+                  <button className="apply-button1" onClick={handleApplyFilter}>
                     Appliquer
                   </button>
                 </div>
@@ -453,40 +555,61 @@ const [isPropertyTypeOpen, setIsPropertyTypeOpen] = useState(false); // État po
             {isPropertyTypeOpen && (
               <div className="checkbox-group">
                 <div>
-                  <label>
-                    <input type="checkbox" />
-                    Maison unifamiliale
-                  </label>
-                  <label>
-                    <input type="checkbox" />
-                    Loft / Studio
-                  </label>
-                  <label>
-                    <input type="checkbox" />
-                    Maison mobile
-                  </label>
-                  <label>
-                    <input type="checkbox" />
-                    Chalet
-                  </label>
+                <label>
+    <input
+      type="checkbox"
+      value="appartement"
+      onChange={() => handlePropertyTypeChange("appartement")}
+      checked={selectedPropertyTypes.includes("appartement")}
+    />
+    Appartement
+  </label>
+                          <label>
+                            <input
+                              type="checkbox"
+                              onChange={() => handleFilterChange("bureau_commerce")}
+                              checked={selectedPropertyTypes.includes("bureau_commerce")}
+                            />
+                            Bureau / Commerce
+                          </label>
+
+                          <label>
+                            <input
+                              type="checkbox"
+                              onChange={() => handleFilterChange("hotel_restaurant")}
+                              checked={selectedPropertyTypes.includes("hotel_restaurant")}
+                            />
+                            Hotel / Restaurant
+                          </label>
+                  
                 </div>
                 <div>
+                <label>
+                            <input
+                              type="checkbox"
+                              onChange={() => handleFilterChange("studio_chambre")}
+                              checked={selectedPropertyTypes.includes("studio_chambre")}
+                            />
+                            Studio / Chambre
+                          </label>
+                          <label>
+                            <input
+                              type="checkbox"
+                              onChange={() => handleFilterChange("villa_maison")}
+                              checked={selectedPropertyTypes.includes("villa_maison")}
+                            />
+                            Villa / Maison
+                          </label>
                   <label>
-                    <input type="checkbox" />
-                    Condo / Appartement
-                  </label>
-                  <label>
-                    <input type="checkbox" />
-                    Intergénération
-                  </label>
-                  <label>
-                    <input type="checkbox" />
-                    Fermette
-                  </label>
-                  <label>
-                    <input type="checkbox" />
-                    Terrain
-                  </label>
+                            <input
+                              type="checkbox"
+                              onChange={() => handleFilterChange("terrain")}
+                              checked={selectedPropertyTypes.includes("terrain")}
+                            />
+                            Terrain
+                          </label>
+
+                  
                 </div>
               </div>
             )}
@@ -504,265 +627,111 @@ const [isPropertyTypeOpen, setIsPropertyTypeOpen] = useState(false); // État po
             {isCharacteristicsOpen && (
               <div className="characteristics-content">
                 {/* Menus déroulants */}
-                <div className="dropdowns">
-                  <select className="dropdown">
-                    <option>Nombre de chambres</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3+</option>
-                  </select>
-                  <select className="dropdown">
-                    <option>Nombre de salles de bain/d'eau</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3+</option>
-                  </select>
-                  <select className="dropdown">
-                    <option>Nombre de stationnements</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3+</option>
-                  </select>
-                  <select className="dropdown">
-                    <option>Nombre de garages</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3+</option>
-                  </select>
-                </div>
+               
 
                 {/* Cases à cocher */}
-                <div className="checkbox-group">
-                  <div>
-                    <label>
-                      <input type="checkbox" />
-                      Piscine
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Ascenseur
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Bord de l'eau
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Plan d'eau navigable
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Animaux acceptés
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Meublé
-                    </label>
-                  </div>
-                  <div>
-                    <label>
-                      <input type="checkbox" />
-                      Cour privée
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Adapté pour mobilité réduite
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Accès à l'eau
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Villégiature
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Fumeurs acceptés
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Semi-meublé
-                    </label>
-                  </div>
-                </div>
+                {isCharacteristicsOpen && (
+            <div className="checkbox-group">
+            <label>
+              <input
+                type="checkbox"
+                value="Bord de l'eau"
+                checked={selectedStructureTypes.includes("Bord de l'eau")}
+                onChange={handleStructureTypeChange}
+              />
+              Bord de l'eau
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="Accès à l'eau"
+                checked={selectedStructureTypes.includes("Accès à l'eau")}
+                onChange={handleStructureTypeChange}
+              />
+              Accès à l'eau
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="Plan d'eau navigable"
+                checked={selectedStructureTypes.includes("Plan d'eau navigable")}
+                onChange={handleStructureTypeChange}
+              />
+              Plan d'eau navigable
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                value="Villégiature"
+                checked={selectedStructureTypes.includes("Villégiature")}
+                onChange={handleStructureTypeChange}
+              />
+              Villégiature
+            </label>
+          </div>
+          
+          )}
+
               </div>
             )}
           </div>
+        
           <div className="filter-item">
-            <div className="filter-item-header">
-              <span className="filter-item-title">Bâtiment</span>
-              <button
-                className="expand-button"
-                onClick={handleToggleBuilding}
-              >
-                {isBuildingOpen ? "-" : "+"}
-              </button>
-            </div>
-            {isBuildingOpen && (
-              <div className="building-content">
-                {/* Superficie habitable */}
-                {/* <div className="building-inputs">
-                  <label>
-                    Superficie habitable
-                    <div className="input-group">
-                      <input
-                        type="number"
-                        placeholder="Min"
-                        className="input-box"
-                      />
-                      <span>à</span>
-                      <input
-                        type="number"
-                        placeholder="Max"
-                        className="input-box"
-                      />
-                      <select className="dropdown">
-                        <option value="pc">pc</option>
-                        <option value="m2">m²</option>
-                      </select>
-                    </div>
-                  </label>
-                </div> */}
+  <div className="filter-item-header">
+    <span className="filter-item-title">Autres Critères</span>
+    <button
+      className="expand-button"
+      onClick={handleToggleOtherCriteria}
+    >
+      {isOtherCriteriaOpen ? "-" : "+"}
+    </button>
+  </div>
 
-                {/* Année de construction */}
-                {/* <div className="building-inputs">
-                  <label>
-                    Année de construction
-                    <div className="input-group">
-                      <input
-                        type="number"
-                        placeholder="Min"
-                        className="input-box"
-                      />
-                      <span>à</span>
-                      <input
-                        type="number"
-                        placeholder="Max"
-                        className="input-box"
-                      />
-                    </div>
-                  </label>
-                </div> */}
-
-                {/* Cases à cocher */}
-                <div className="checkbox-group">
-                  <div>
-                    <label>
-                      <input type="checkbox" />
-                      Nouvelle construction
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Plain-pied
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Paliers multiples
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Jumelé
-                    </label>
-                  </div>
-                  <div>
-                    <label>
-                      <input type="checkbox" />
-                      Centenaire/Historique
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      À étages
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      Détaché
-                    </label>
-                    <label>
-                      <input type="checkbox" />
-                      En rangée
-                    </label>
-                  </div>
-                </div>
-              </div>
-            )}
+  {isOtherCriteriaOpen && (
+    <div className="other-criteria-content">
+      {/* Superficie du terrain */}
+      <div className="criteria-inputs">
+        <label>
+          Superficie du terrain (m²)
+          <div className="input-group">
+            <input
+              type="number"
+              placeholder="Min (m²)"
+              value={minLotSize}
+              onChange={(e) => setMinLotSize(e.target.value)}
+              className="input-box"
+            />
+            <span>à</span>
+            <input
+              type="number"
+              placeholder="Max (m²)"
+              value={maxLotSize}
+              onChange={(e) => setMaxLotSize(e.target.value)}
+              className="input-box"
+            />
           </div>
-          <div className="filter-item">
-            <div className="filter-item-header">
-              <span className="filter-item-title">Autres Critères</span>
-              <button
-                className="expand-button"
-                onClick={handleToggleOtherCriteria}
-              >
-                {isOtherCriteriaOpen ? "-" : "+"}
-              </button>
-            </div>
-            {isOtherCriteriaOpen && (
-              <div className="other-criteria-content">
-                {/* Superficie du terrain */}
-                <div className="criteria-inputs">
-                  <label>
-                    Superficie du terrain
-                    <div className="input-group">
-                      <input
-                        type="number"
-                        placeholder="Min"
-                        className="input-box"
-                      />
-                      <span>à</span>
-                      <input
-                        type="number"
-                        placeholder="Max"
-                        className="input-box"
-                      />
-                      <select className="dropdown">
-                        <option value="pc">pc</option>
-                        <option value="m2">m²</option>
-                      </select>
-                    </div>
-                  </label>
-                </div>
+        </label>
+      </div>
 
-                {/* Dates */}
-                <div className="criteria-dates">
-                  <label>
-                    Nouveau depuis
-                    <div className="input-group">
-                      <input
-                        type="date"
-                        placeholder="Choisir une date"
-                        className="input-box"
-                      />
-                      <span className="calendar-icon">📅</span>
-                    </div>
-                  </label>
-                  <label>
-                    Date d’emménagement
-                    <div className="input-group">
-                      <input
-                        type="date"
-                        placeholder="Choisir une date"
-                        className="input-box"
-                      />
-                      <span className="calendar-icon">📅</span>
-                    </div>
-                  </label>
-                </div>
-
-                {/* Cases à cocher */}
-                <div className="checkbox-group">
-                  <label>
-                    <input type="checkbox" />
-                    Visites libres
-                  </label>
-                  <label>
-                    <input type="checkbox" />
-                    Avec option d’achat
-                  </label>
-                </div>
-              </div>
-            )}
+      {/* Date d'ajout */}
+      <div className="criteria-dates">
+        <label>
+          Nouveau depuis
+          <div className="input-group">
+            <input
+              type="date"
+              value={minDate}
+              onChange={(e) => setMinDate(e.target.value)}
+              className="input-box"
+            />
+            <span className="calendar-icon">📅</span>
           </div>
+        </label>
+      </div>
+    </div>
+  )}
+</div>
+
           </div>
           <div className="filter-actions">
           <button className="filter-button-common reset-button">Réinitialiser</button>
@@ -771,9 +740,31 @@ const [isPropertyTypeOpen, setIsPropertyTypeOpen] = useState(false); // État po
             </button>
           </div>
           <br/>
-          <div className="searchcontainer">
-            <button className="search-btton">Rechercher (6 273 propriétés)</button>
-          </div>
+          <button
+  className="search-btton"
+  onClick={() => {
+    if (selectedPropertyTypes.length > 0 || selectedStructureTypes.length > 0) {
+      handleSearch(); // 🔹 Exécuter seulement si des types d'habitat ou caractéristiques sont sélectionnés
+    }
+
+    if (minLotSize || maxLotSize || minDate) {
+      handleSearch1(); // 🔹 Exécuter seulement si des critères avancés sont sélectionnés
+    }
+  }}
+  style={{
+    backgroundColor: "blue",
+    color: "white",
+    padding: "10px 20px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+  }}
+>
+  Rechercher
+</button>
+
+
+
         </div>
       )}
 

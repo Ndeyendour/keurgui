@@ -66,22 +66,27 @@ import AgentsList from './components/section-components/AgentsList';
 import EditAgent from './components/section-components/EditAgent';
 import AddAgent from './components/section-components/AddAgent';
 import UserList from './components/section-components/UserList';
-import Commercial from './components/section-components/banner-v6';
 import TransactionSelector from './components/shop-components/TransactionSelector';
-
+import ResultsPagebox from './components/shop-components/ResultsPagebox';
+import ShopGridCommercial from './components/section-components/commerciale';
+import { Navigate } from "react-router-dom";
+const isAuthenticated = !!localStorage.getItem("token");
 class Root extends Component {
+  
   render() {
     return (
       <FavoritesProvider>
         <HashRouter basename="/">
           <div>
             <Routes>
+            <Route path="/resultss/:searchTerm" element={<ResultsPagebox />} />
+
               <Route path="/results/:searchTerm" element={<ResultsPage />} />
               <Route path="/" element={<HomeV4 />} />
-              <Route path="/home-v2" element={<HomeV2 />} />
+              {/* <Route path="/home-v2" element={<HomeV2 />} />
               <Route path="/home-v3" element={<HomeV3 />} />
-              <Route path="/home-v4" element={<HomeV4 />} />
-              <Route path="/home-v5" element={<HomeV5 />} />
+              <Route path="/home-v4" element={<HomeV4 />} /> */}
+              {/* <Route path="/home-v5" element={<HomeV5 />} />
               <Route path="/home-v6" element={<HomeV6 />} />
               <Route path="/home-v7" element={<HomeV7 />} />
               <Route path="/home-v8" element={<HomeV8 />} />
@@ -99,7 +104,8 @@ class Root extends Component {
               <Route path="/faq" element={<Faq />} />
               <Route path="/coming-soon" element={<ComingSoon />} />
               <Route path="/404" element={<Error />} />
-              <Route path="/location" element={<Location />} />
+              <Route path="/location" element={<Location />} /> */}
+              <Route path="/about" element={<About />} />
               <Route path="/louer" element={<Shop />} />
               <Route path="/vendre" element={<ShopGrid />} />
               <Route path="/shop-left-sidebar" element={<ShopLeftSidebar />} />
@@ -110,14 +116,13 @@ class Root extends Component {
               <Route path="/blog" element={<Blog />} />
               <Route path="/galerie" element={<GaleriePage />} />
               <Route path="/carte" element={<CartePage />} />
-              <Route path="/sommaire" element={<SommairePage />} />
-              <Route path="/property-images/:id" element={<PropertyImagesPage />} />
+              <Route path="/property-images/:id" element={<SommairePage />} />
               <Route path="/blog-details" element={<BlogDetails />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/my-account" element={<MyAccount />} />
-              <Route path="/admin" element={<Admin />} />
+              <Route path="/admin" element={isAuthenticated ? <Admin /> : <Navigate to="/loginadmin" />} />
               <Route path="/adminpv" element={<Adminprop />} />
               <Route path="/adminpa" element={<Adminpropalouer />} />
               <Route path="/login" element={<Login />} />
@@ -136,7 +141,7 @@ class Root extends Component {
               <Route path="/edit-agent/:id" element={<EditAgent />} />
               <Route path="/add-agent" element={<AddAgent />} />
               <Route path="/users" element={<UserList />} />
-              <Route path="/commercial" element={<Commercial />} />
+              <Route path="/commercial" element={<ShopGridCommercial />} />
               <Route path="/redirect" element={<TransactionSelector />} />
 
             </Routes>

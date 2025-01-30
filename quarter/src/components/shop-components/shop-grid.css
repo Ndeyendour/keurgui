@@ -108,11 +108,11 @@ input.input-style {
   position: relative;
 }
 
-.sort-dropdown::after {
+/* .sort-dropdown::after {
   content: "▼";
   font-size: 10px;
   margin-left: 5px;
-}
+} */
 
 /* Pagination */
 .pagination-container {

@@ -144,7 +144,7 @@ const CartePage = () => {
   const [sortMethod, setSortMethod] = useState("relevance"); // Valeur par défaut
 
 	const navigate = useNavigate(); // Hook pour naviguer
-	const propertiesPerPage = 250;
+	const propertiesPerPage = 1;
 	const [currentPage, setCurrentPage] = useState(1);
   const [totalProperties, setTotalProperties] = useState(0);
 
@@ -454,7 +454,12 @@ useEffect(() => {
                                     {/* Prix */}
                   {/* Prix */}
                   <button
-            className="filter" style={{ borderRadius: '20px', width: '120px', height: '43px' }}
+            className="filter" style={{
+              borderRadius: '20px',
+              width: '120px',
+              height: '43px',
+              border: '1px solid gray', // Bordure grise ajoutée
+            }}
             onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
           >
             Prix 
@@ -502,7 +507,10 @@ Appliquer
 
                   {/* Filtres */}
                   <button
-                  className="button-style"
+                   className="button-style" style={{
+                    color: 'black', // Texte en noir
+                  }}
+                  
                   onClick={() => alert("Ouvrir les filtres avancés")}
                   >
                   Filtres

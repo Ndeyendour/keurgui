@@ -228,7 +228,12 @@ const [isPropertyTypeOpen, setIsPropertyTypeOpen] = useState(false); // État po
 
 
 <button
-              className="filter"
+              className="filter" style={{
+                borderRadius: '20px',
+                width: '120px',
+                height: '43px',
+                border: '1px solid gray', // Bordure grise ajoutée
+              }}
               onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
             >
               Prix 

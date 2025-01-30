@@ -1,0 +1,52 @@
+.service-section {
+    background: #ffffff;
+    padding: 50px 0;
+    text-align: center;
+  }
+  
+  .service-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .service-box:hover {
+    transform: translateY(-5px);
+  }
+  
+  .service-icon {
+    font-size: 40px;
+    color: #9c27b0; /* Couleur violette pour une belle harmonie */
+    margin-bottom: 15px;
+  }
+  
+  h4 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2a2a2a;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    color: #555;
+    font-size: 16px;
+  }
+  
+  .service-button {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 2px solid #5a189a; /* Violet foncé */
+    color: #5a189a;
+    border-radius: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .service-button:hover {
+    background: #5a189a;
+    color: #fff;
+  }
+  

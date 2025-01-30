@@ -20,6 +20,10 @@ const Home_V1 = () => {
       
         
         <BlogSlider sectionClass="pt-90"  customClass="section-subtitle-2"/>
+        <br />
+        <br />
+        <br />
+        <br />
         <Footer />
     </div>
 }

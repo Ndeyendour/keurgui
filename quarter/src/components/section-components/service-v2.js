@@ -1,63 +1,54 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import parse from 'html-react-parser';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faUsers, faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import './service.css';
 
-class ServiceV2 extends Component {
 
-    render() {
-
-        let publicUrl = process.env.PUBLIC_URL+'/'
-
-	return <div className="ltn__feature-area pt-90 pb-90 go-top">
-			<div className="container">
-			<div className="row">
-				<div className="col-lg-12">
-				<div className="section-title-area ltn__section-title-2--- text-center">
-					{/* <h6 className="section-subtitle section-subtitle-2 ltn__secondary-color">features</h6>
-					<h1 className="section-title">Core Features</h1> */}
-				</div>
-				</div>
-			</div>
-			<div className="row ltn__custom-gutter">
-				
-				<div className="col-lg-4 col-sm-6 col-12">
-				<div className="ltn__feature-item ltn__feature-item-6 active">
-					<div className="ltn__feature-icon">
-					<span><i className="flaticon-park" /></span>
-					</div>
-					<div className="ltn__feature-info">
-					<h4><Link to="/service-details">ECO Construction</Link></h4>
-					<p>Lorem ipsum dolor sit ame it, consectetur adipisicing elit, sed do eiusmod te mp or incididunt ut labore.</p>
-					</div>
-				</div>
-				</div>
-				<div className="col-lg-4 col-sm-6 col-12">
-				<div className="ltn__feature-item ltn__feature-item-6">
-					<div className="ltn__feature-icon">
-					<span><i className="flaticon-maps-and-location" /></span>
-					</div>
-					<div className="ltn__feature-info">
-					<h4><Link to="/service-details">Atractive Location</Link></h4>
-					<p>Lorem ipsum dolor sit ame it, consectetur adipisicing elit, sed do eiusmod te mp or incididunt ut labore.</p>
-					</div>
-				</div>
-				</div>
-				<div className="col-lg-4 col-sm-6 col-12">
-				<div className="ltn__feature-item ltn__feature-item-6">
-					<div className="ltn__feature-icon">
-					<span><i className="flaticon-excavator" /></span>
-					</div>
-					<div className="ltn__feature-info">
-					<h4><Link to="/service-details">Modern Technology</Link></h4>
-					<p>Lorem ipsum dolor sit ame it, consectetur adipisicing elit, sed do eiusmod te mp or incididunt ut labore.</p>
-					</div>
-				</div>
-				</div>
-			</div>
-			</div>
+const ServiceV2 = () => {
+  return (
+	<div className="service-section" style={{ padding: '60px 0', textAlign: 'center' }}>
+	<div className="container">
+	  <div className="row">
+		{/* Premier Bloc */}
+		<div className="col-lg-4 col-md-6">
+		  <div className="service-box">
+			<FontAwesomeIcon icon={faHome} className="service-icon" />
+			<h4>🏡 Trouvez votre futur logement</h4>
+			<p>
+			  Que vous cherchiez une maison, un appartement ou un terrain, explorez un vaste choix de biens 
+			  à acheter ou à louer.
+			</p>
+		  </div>
 		</div>
-  
-        }
-}
 
-export default ServiceV2
+		{/* Deuxième Bloc */}
+		<div className="col-lg-4 col-md-6">
+		  <div className="service-box">
+			<FontAwesomeIcon icon={faUsers} className="service-icon" />
+			<h4>👥 Faites-vous accompagner par un expert</h4>
+			<p>
+			  Besoin de conseils ? Nos courtiers immobiliers sont là pour vous guider et vous aider à 
+			  concrétiser votre projet en toute sérénité.
+			</p>
+		  </div>
+		</div>
+
+		{/* Troisième Bloc */}
+		<div className="col-lg-4 col-md-6">
+		  <div className="service-box">
+			<FontAwesomeIcon icon={faLightbulb} className="service-icon" />
+			<h4>💡 Tout savoir sur l’immobilier</h4>
+			<p>
+			  Restez informé des tendances du marché, des conseils pratiques et des actualités pour faire 
+			  les meilleurs choix immobiliers.
+			</p>
+		  </div>
+		</div>
+	  </div>
+	</div>
+  </div>
+  );
+};
+
+export default ServiceV2;

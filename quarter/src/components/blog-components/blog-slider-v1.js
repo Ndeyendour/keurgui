@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import parse from 'html-react-parser';
 
 class CategoryV3 extends Component {
 
@@ -8,7 +9,7 @@ class CategoryV3 extends Component {
         let publicUrl = process.env.PUBLIC_URL+'/'
         let imagealt = 'image'
 
-    return <div className="ltn__banner-area pt-120 go-top" style={{ marginTop: "-200px" }}>
+    return <div className="ltn__banner-area pt-120 go-top" style={{ marginTop: "-70px" }}>
 				<div className="container">
 				
 				<div className="row">
@@ -17,12 +18,11 @@ class CategoryV3 extends Component {
 				<div className="col-lg-3 col-md-6">
 				<div
 					className="ltn__banner-item ltn__banner-style-4 text-color-white bg-image"
-					data-bs-bg={publicUrl + "assets/img/gallery/9.jpg"}
+					data-bs-bg={publicUrl + "assets/img/gallery/studio.jpg"}
 					style={{
 					height: "200px", // Hauteur ajustée
 					backgroundSize: "cover", // Image ajustée
 					backgroundPosition: "center", // Image centrée
-					 
 					borderRadius: "15px", // Coins arrondis à 15px
 					position: "relative", // Nécessaire pour positionner les éléments à l'intérieur
 					overflow: "hidden", // Pour éviter que le texte dépasse
@@ -39,17 +39,17 @@ class CategoryV3 extends Component {
 					
 					>
 					<h6>
-						<Link to="/shop" style={{ color: "black" }}>Apartments</Link>
+						<Link to="" style={{ color: "black" }}>Chambre/studio</Link>
 					</h6>
 					<p style={{
 					marginTop: "-20px",
-				}}>Great Deals Available</p>
+				}}>Un logement adapté pour vous.</p>
 					</div>
 				</div>
 				<div className="col-lg-3 col-md-6">
 				<div
 					className="ltn__banner-item ltn__banner-style-4 text-color-white bg-image"
-					data-bs-bg={publicUrl + "assets/img/gallery/7.jpg"}
+					data-bs-bg={publicUrl + "assets/img/gallery/maison.jpg"}
 					style={{
 					height: "200px", // Hauteur ajustée
 					backgroundSize: "cover", // Image ajustée
@@ -70,17 +70,17 @@ class CategoryV3 extends Component {
 					
 					>
 					<h6>
-						<Link to="/shop" style={{ color: "black" }}>Apartments</Link>
+						<Link to="" style={{ color: "black" }}>Maison</Link>
 					</h6>
 					<p style={{
 					marginTop: "-20px",
-				}}>Great Deals Available</p>
+				}}>Découvrez la propriété idéale pour vous.</p>
 					</div>
 				</div>
 				<div className="col-lg-3 col-md-6">
 				<div
 					className="ltn__banner-item ltn__banner-style-4 text-color-white bg-image"
-					data-bs-bg={publicUrl + "assets/img/gallery/3.jpg"}
+					data-bs-bg={publicUrl + "assets/img/gallery/appart.jpg"}
 					style={{
 					height: "200px", // Hauteur ajustée
 					backgroundSize: "cover", // Image ajustée
@@ -101,17 +101,17 @@ class CategoryV3 extends Component {
 					
 					>
 					<h6>
-						<Link to="/shop" style={{ color: "black" }}>Apartments</Link>
+						<Link to="" style={{ color: "black" }}>Appartement</Link>
 					</h6>
 					<p style={{
 					marginTop: "-20px",
-				}}>Great Deals Available</p>
+				}}>Explorez des appartements dans le quartier prisé.</p>
 					</div>
 				</div>
 				<div className="col-lg-3 col-md-6">
 				<div
 					className="ltn__banner-item ltn__banner-style-4 text-color-white bg-image"
-					data-bs-bg={publicUrl + "assets/img/gallery/2.jpg"}
+					data-bs-bg={publicUrl + "assets/img/gallery/land.jpg"}
 					style={{
 					height: "200px", // Hauteur ajustée
 					backgroundSize: "cover", // Image ajustée
@@ -132,11 +132,11 @@ class CategoryV3 extends Component {
 					
 					>
 					<h6>
-						<Link to="/shop" style={{ color: "black" }}>Apartments</Link>
+						<Link to="" style={{ color: "black" }}>Terrain</Link>
 					</h6>
 					<p style={{
 					marginTop: "-20px",
-				}}>Great Deals Available</p>
+				}}>Trouvez votre terrain pour construire.</p>
 					</div>
 				</div>
 				{/*  */}
@@ -158,15 +158,11 @@ class CategoryV3 extends Component {
         borderRadius: "20px",
       }}
     >
-      <Link to="/shop" style={{ color: "white", textDecoration: "none" }}>
+      <Link to="/vendre" style={{ color: "white", textDecoration: "none" ,height: "100px"}}>
         Voir toutes les propriétés a vendre
       </Link>
     </div>
-	<br/>
-	<br/>
-	
-	<br/>
-	<br/>			</div>
+			</div>
 			
 			
         }

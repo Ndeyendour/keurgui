@@ -1,123 +1,187 @@
-import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvent } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import MarkerClusterGroup from 'react-leaflet-cluster';
-import axios from 'axios';
-import L from 'leaflet';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import Slider from "rc-slider";
+import "./shop-grid.css";
+import "./PropertyList.css";
 
-// Icône personnalisée pour les marqueurs individuels et les clusters
-const customIcon = new L.Icon({
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-});
-
-// Icône personnalisée pour les clusters
-const createClusterCustomIcon = (cluster) => {
-  const count = cluster.getChildCount();
-
-  return new L.DivIcon({
-    html: `
-      <div style="
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 41px;
-        height: 41px;
-        background: url('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png') no-repeat center center;
-        background-size: contain;
-        font-size: 14px;
-        font-weight: bold;
-        color: white;
-        text-shadow: 1px 1px 2px black;
-      ">
-        ${count}
-      </div>
-    `,
-    className: 'custom-cluster-icon',
-    iconSize: [41, 41],
-  });
-};
-
-// Composant pour fermer tous les popups lorsqu'on clique sur la carte
-const ClosePopupsOnClick = () => {
-  const map = useMapEvent('click', () => {
-    map.closePopup(); // Fermer tous les popups ouverts sur la carte
-  });
-  return null;
-};
-
-const CartePage = () => {
+const ShopGridV2 = () => {
+  const [sortMethod, setSortMethod] = useState("recent");
+  const [selectedPriceRange, setSelectedPriceRange] = useState([0, 10000]);
   const [products, setProducts] = useState([]);
+  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalProperties, setTotalProperties] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/products');
-        const validProducts = response.data.filter(
-          (product) =>
-            product.coordinates &&
-            typeof product.coordinates.latitude === 'number' &&
-            typeof product.coordinates.longitude === 'number'
-        );
-        setProducts(validProducts);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des produits :', error);
-      }
-    };
-    fetchProducts();
+    // Charger les produits à louer par défaut au montage
+    fetchProducts("recent");
   }, []);
 
+  useEffect(() => {
+    // Recharger les produits lorsque le tri change
+    fetchProducts(sortMethod);
+  }, [sortMethod]);
+
+  const fetchProductsBySort = async (sortMethod) => {
+    setLoading(true);
+    try {
+      const response = await axios.get("http://localhost:5000/api/products", {
+        params: {
+          sort: sortMethod,
+          transactionType: "rent", // Par défaut, uniquement les propriétés à louer
+          minPrice: priceRange[0],
+          maxPrice: priceRange[1],
+        },
+      });
+      setProducts(response.data.products || []);
+      setTotalProperties(response.data.total || 0);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des produits :", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSortChange = (e) => {
+    setSortMethod(e.target.value); // Met à jour le tri
+  };
+
+  const handleApplyFilter = () => {
+    setPriceRange(selectedPriceRange);
+    fetchProducts(sortMethod); // Recharge les produits avec le filtre de prix
+    setIsPriceFilterOpen(false);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchProducts(sortMethod); // Recharge les produits pour la nouvelle page
+  };
+
   return (
-    <MapContainer
-      center={[14.7167, -17.4677]} // Centre sur Dakar
-      zoom={12}
-      style={{ height: '100vh', width: '100%' }}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="&copy; OpenStreetMap contributors"
-      />
-      <ClosePopupsOnClick />
-      <MarkerClusterGroup
-        chunkedLoading
-        iconCreateFunction={createClusterCustomIcon} // Utiliser l'icône personnalisée pour les clusters
-      >
-        {products.map((product, index) => (
-          <Marker
-            key={index}
-            position={[
-              product.coordinates.latitude,
-              product.coordinates.longitude,
-            ]}
-            icon={customIcon}
-            eventHandlers={{
-              mouseover: (e) => {
-                e.target.openPopup(); // Ouvrir le popup lors du survol
-              },
-            }}
-          >
-            <Popup>
-              <div>
-                <strong>{product.title}</strong>
-                <br />
-                Prix: {product.price?.toLocaleString()} FCFA
-                <br />
-                Commune: {product.commune}
-                <br />
-                Quartier: {product.quartier}
-                <br />
-                <strong>1 propriété disponible</strong>
+    <div>
+      <div className="ltn__product-area ltn__product-gutter mb-100">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              {/* Barre de recherche et filtres */}
+              <div className="filters-container">
+                <input
+                  type="text"
+                  placeholder="Rechercher..."
+                  className="search-input"
+                />
+                <button
+                  className="filter"
+                  onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
+                >
+                  Prix
+                </button>
+                {isPriceFilterOpen && (
+                  <div className="price-filter-card">
+                    <h4>Prix</h4>
+                    <Slider
+                      range
+                      min={0}
+                      max={10000}
+                      step={100}
+                      value={selectedPriceRange}
+                      onChange={setSelectedPriceRange}
+                    />
+                    <div className="price-inputs">
+                      <span>{selectedPriceRange[0]} FCFA</span> -
+                      <span>{selectedPriceRange[1]} FCFA+</span>
+                    </div>
+                    <button className="apply-button" onClick={handleApplyFilter}>
+                      Appliquer
+                    </button>
+                  </div>
+                )}
+                <select
+                  className="sort-dropdown"
+                  value={sortMethod}
+                  onChange={handleSortChange}
+                >
+                  <option value="recent">Publication récente</option>
+                  <option value="price_asc">Prix croissant</option>
+                  <option value="price_desc">Prix décroissant</option>
+                </select>
               </div>
-            </Popup>
-          </Marker>
-        ))}
-      </MarkerClusterGroup>
-    </MapContainer>
+
+              {/* Produits */}
+              {loading ? (
+                <p>Chargement des produits...</p>
+              ) : (
+                <div className="row">
+                  {products && products.length > 0 ? (
+                    products.map((product) => (
+                      <div key={product._id} className="col-lg-3 col-sm-6 col-12">
+                        <img
+                          src={product.images[0] || "/path/to/default-image.jpg"}
+                          alt={product.title}
+                          className="property-image"
+                        />
+                        <div className="property-details">
+                          <h6>{product.price?.toLocaleString()} FCFA</h6>
+                          <h6>{product.title}</h6>
+                          <p>
+                            {product.address}, {product.city}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p>Aucun produit trouvé.</p>
+                  )}
+                </div>
+              )}
+
+              {/* Pagination */}
+              <div className="pagination-container">
+                <button
+                  className="pagination-button"
+                  onClick={() => handlePageChange(1)}
+                  disabled={currentPage === 1}
+                >
+                  «
+                </button>
+                <button
+                  className="pagination-button"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  ‹
+                </button>
+                <span className="pagination-info">
+                  {currentPage} / {Math.ceil(totalProperties / 20)}
+                </span>
+                <button
+                  className="pagination-button"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === Math.ceil(totalProperties / 20)}
+                >
+                  ›
+                </button>
+                <button
+                  className="pagination-button"
+                  onClick={() =>
+                    handlePageChange(Math.ceil(totalProperties / 20))
+                  }
+                  disabled={currentPage === Math.ceil(totalProperties / 20)}
+                >
+                  »
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default CartePage;
+export default ShopGridV2;

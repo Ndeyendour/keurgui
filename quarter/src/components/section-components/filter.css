@@ -60,7 +60,7 @@
 }
 
 .close-button,
-.apply-button {
+.apply-button1 {
   padding: 10px 20px;
   border-radius: 30px;
   cursor: pointer;
@@ -312,22 +312,23 @@
   margin-top: 10px; /* Espace entre le titre et les cases */
 }
 
-.checkbox-group div {
-  display: flex;
-  flex-direction: column; /* Organise les cases à cocher verticalement */
-  gap: 5px; /* Espace entre les cases */
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Deux colonnes */
+  grid-template-rows: repeat(3, auto); /* Trois lignes */
+  gap: 10px 20px; /* Espacement entre les éléments */
 }
 
 .checkbox-group label {
-  font-size: 14px;
-  color: #333;
-  display: flex;
-  align-items: center;
+  display: flex; /* Flexbox pour aligner la checkbox et le texte */
+  align-items: center; /* Aligne verticalement */
+  text-align: left; /* Assure que le texte est à gauche */
 }
 
 .checkbox-group input[type="checkbox"] {
-  margin-right: 10px;
+  margin-right: 10px; /* Espacement entre la checkbox et le texte */
 }
+
 /* Caractéristiques */
 .characteristics-content {
   margin-top: 10px;

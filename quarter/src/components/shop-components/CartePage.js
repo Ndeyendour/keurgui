@@ -210,14 +210,13 @@ const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
     };
         let publicUrl = process.env.PUBLIC_URL+'/'
 
-		const handleCardClick = async (item) => {
-			try {
-			//   navigate(`/results/${encodeURIComponent(item)}`); 
-			  navigate(`/results?location=${encodeURIComponent(item)}`);
-			} catch (error) {
-			  console.error("Erreur lors de la redirection :", error);
-			}
-		  };
+        const handleCardClick = async (item) => {
+          try {
+            navigate(`/results/${encodeURIComponent(item)}`);
+          } catch (error) {
+            console.error("Erreur lors de la redirection :", error);
+          }
+        };
 
 		//   ---------------------------nouv--------------
 		const handleNavigation = (type) => {
@@ -328,6 +327,10 @@ const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
 const handleSortChange = (e) => {
   setSortMethod(e.target.value); // Met à jour la méthode de tri
 };
+const handleSuggestionClick = (suggestion) => {
+  console.log(`➡️ Redirection vers : /results/${suggestion}`);
+  navigate(`/results/${encodeURIComponent(suggestion)}`);
+};
 
 useEffect(() => {
   const fetchProducts = async () => {
@@ -424,7 +427,12 @@ const onClusterMouseOver = (cluster) => {
                                     {/* Prix */}
                   {/* Prix */}
                   <button
-            className="filter" style={{ borderRadius: '20px', width: '120px', height: '43px' }}
+            className="filter" style={{
+              borderRadius: '20px',
+              width: '120px',
+              height: '43px',
+              border: '1px solid gray', // Bordure grise ajoutée
+            }}
             onClick={() => setIsPriceFilterOpen(!isPriceFilterOpen)}
           >
             Prix 
@@ -472,7 +480,10 @@ Appliquer
 
                   {/* Filtres */}
                   <button
-                  className="button-style"
+                  className="button-style" style={{
+                    color: 'black', // Texte en noir
+                  }}
+                  
                   onClick={() => alert("Ouvrir les filtres avancés")}
                   >
                   Filtres
@@ -525,9 +536,9 @@ Appliquer
       <Link to="/carte" className={`tab-button ${activeTab === 'carte' ? 'active' : ''}`} onClick={() => handleTabClick('carte')}>
         <FontAwesomeIcon icon={faMapMarkedAlt} /> Carte
       </Link>
-      <Link to="/sommaire" className={`tab-button ${activeTab === 'sommaire' ? 'active' : ''}`} onClick={() => handleTabClick('sommaire')}>
-        <FontAwesomeIcon icon={faListAlt} /> Sommaire
-      </Link>
+      <Link to="/louer" className={`tab-button ${activeTab === 'sommaire' ? 'active' : ''}`} onClick={() => handleTabClick('sommaire')}>
+                <FontAwesomeIcon icon={faListAlt} /> Sommaire
+              </Link>
       <div className="tab-indicator" style={{ left: `${getIndicatorPosition(activeTab)}%` }}></div>
       </div>
 

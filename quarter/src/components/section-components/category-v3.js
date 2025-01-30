@@ -18,7 +18,7 @@ class CategoryV3 extends Component {
 				<div className="col-lg-3 col-md-6">
 				<div
 					className="ltn__banner-item ltn__banner-style-4 text-color-white bg-image"
-					data-bs-bg={publicUrl + "assets/img/gallery/9.jpg"}
+					data-bs-bg={publicUrl + "assets/img/gallery/studio.jpg"}
 					style={{
 					height: "200px", // Hauteur ajustée
 					backgroundSize: "cover", // Image ajustée
@@ -39,17 +39,17 @@ class CategoryV3 extends Component {
 					
 					>
 					<h6>
-						<Link to="/shop" style={{ color: "black" }}>Chalets</Link>
+						<Link to="" style={{ color: "black" }}>Chambre/studio</Link>
 					</h6>
 					<p style={{
 					marginTop: "-20px",
-				}}>Réalisez votre rêve d'évasion en nature.</p>
+				}}>Un logement adapté pour vous.</p>
 					</div>
 				</div>
 				<div className="col-lg-3 col-md-6">
 				<div
 					className="ltn__banner-item ltn__banner-style-4 text-color-white bg-image"
-					data-bs-bg={publicUrl + "assets/img/gallery/7.jpg"}
+					data-bs-bg={publicUrl + "assets/img/gallery/maison.jpg"}
 					style={{
 					height: "200px", // Hauteur ajustée
 					backgroundSize: "cover", // Image ajustée
@@ -70,17 +70,17 @@ class CategoryV3 extends Component {
 					
 					>
 					<h6>
-						<Link to="/shop" style={{ color: "black" }}>Maison</Link>
+						<Link to="" style={{ color: "black" }}>Maison</Link>
 					</h6>
 					<p style={{
 					marginTop: "-20px",
-				}}>Trouvez la propriété qui répond à vos besoins.</p>
+				}}>Découvrez la propriété idéale pour vous.</p>
 					</div>
 				</div>
 				<div className="col-lg-3 col-md-6">
 				<div
 					className="ltn__banner-item ltn__banner-style-4 text-color-white bg-image"
-					data-bs-bg={publicUrl + "assets/img/gallery/3.jpg"}
+					data-bs-bg={publicUrl + "assets/img/gallery/appart.jpg"}
 					style={{
 					height: "200px", // Hauteur ajustée
 					backgroundSize: "cover", // Image ajustée
@@ -101,17 +101,17 @@ class CategoryV3 extends Component {
 					
 					>
 					<h6>
-						<Link to="/shop" style={{ color: "black" }}>Condos</Link>
+						<Link to="" style={{ color: "black" }}>Appartement</Link>
 					</h6>
 					<p style={{
 					marginTop: "-20px",
-				}}>Découvrez des condos dans le<br/> secteur convoité.</p>
+				}}>Explorez des appartements dans le quartier prisé.</p>
 					</div>
 				</div>
 				<div className="col-lg-3 col-md-6">
 				<div
 					className="ltn__banner-item ltn__banner-style-4 text-color-white bg-image"
-					data-bs-bg={publicUrl + "assets/img/gallery/2.jpg"}
+					data-bs-bg={publicUrl + "assets/img/gallery/land.jpg"}
 					style={{
 					height: "200px", // Hauteur ajustée
 					backgroundSize: "cover", // Image ajustée
@@ -132,11 +132,11 @@ class CategoryV3 extends Component {
 					
 					>
 					<h6>
-						<Link to="/shop" style={{ color: "black" }}>Plex</Link>
+						<Link to="" style={{ color: "black" }}>Terrain</Link>
 					</h6>
 					<p style={{
 					marginTop: "-20px",
-				}}>Démarrez votre projet d'investissement.</p>
+				}}>Trouvez votre terrain pour construire.</p>
 					</div>
 				</div>
 				{/*  */}
@@ -158,7 +158,7 @@ class CategoryV3 extends Component {
         borderRadius: "20px",
       }}
     >
-      <Link to="/shop" style={{ color: "white", textDecoration: "none" }}>
+      <Link to="/louer" style={{ color: "white", textDecoration: "none" }}>
         Voir toutes les propriétés a louer
       </Link>
     </div>

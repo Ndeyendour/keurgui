@@ -86,14 +86,13 @@ const  ProductDetails= () => {
     };
         let publicUrl = process.env.PUBLIC_URL+'/'
 
-		const handleCardClick = async (item) => {
-			try {
-			//   navigate(`/results/${encodeURIComponent(item)}`); 
-			  navigate(`/results?location=${encodeURIComponent(item)}`);
-			} catch (error) {
-			  console.error("Erreur lors de la redirection :", error);
-			}
-		  };
+        const handleCardClick = async (item) => {
+          try {
+            navigate(`/results/${encodeURIComponent(item)}`);
+          } catch (error) {
+            console.error("Erreur lors de la redirection :", error);
+          }
+        };
 
 		//   ---------------------------nouv--------------
 		const handleNavigation = (type) => {
@@ -193,8 +192,11 @@ const  ProductDetails= () => {
       </select>
 										{/* Prix */}
 										{/* Prix */}
-										<button
-										className="button-style"
+										<button className="button-style" style={{
+    color: 'black', // Texte en noir
+  }}
+  
+										
 										onClick={() => alert("Ouvrir les filtres de prix")}
 										>
 										<span className="prix-text">Prix</span>
@@ -256,9 +258,9 @@ const  ProductDetails= () => {
                     <Link to="/carte" className={`tab-button ${activeTab === 'carte' ? 'active' : ''}`} onClick={() => handleTabClick('carte')}>
                       <FontAwesomeIcon icon={faMapMarkedAlt} /> Carte
                     </Link>
-                    <Link to="/sommaire" className={`tab-button ${activeTab === 'sommaire' ? 'active' : ''}`} onClick={() => handleTabClick('sommaire')}>
-                      <FontAwesomeIcon icon={faListAlt} /> Sommaire
-                    </Link>
+                   <Link to="/louer" className={`tab-button ${activeTab === 'sommaire' ? 'active' : ''}`} onClick={() => handleTabClick('sommaire')}>
+                            <FontAwesomeIcon icon={faListAlt} /> Sommaire
+                          </Link>
                     <div className="tab-indicator" style={{ left: `${getIndicatorPosition(activeTab)}%` }}></div>
                     </div>
 
