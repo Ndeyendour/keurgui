@@ -371,27 +371,33 @@ app.get('/api/products/count', async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de la récupération du total des produits' });
   }
 });
-app.get("/api/products", async (req, res) => {
+app.get("/api/sorts", async (req, res) => {
   const { sort } = req.query;
   let sortCriteria = {};
 
   switch (sort) {
     case "recent":
-      sortCriteria = { createdAt: -1 };
+      sortCriteria = { createdAt: -1 }; // Tri par date de création décroissante
       break;
     case "price_asc":
-      sortCriteria = { price: 1 };
+      sortCriteria = { price: 1 }; // Tri par prix croissant
       break;
     case "price_desc":
-      sortCriteria = { price: -1 };
+      sortCriteria = { price: -1 }; // Tri par prix décroissant
       break;
     default:
       break;
   }
 
-  const products = await Product.find().sort(sortCriteria);
-  res.json(products);
+  try {
+    const products = await Product.find().sort(sortCriteria); // Tri basé sur `sortCriteria`
+    res.json(products); // Retourne les produits triés
+  } catch (error) {
+    console.error("Erreur lors de la récupération des produits :", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
 });
+
 
 
 app.get('/api/product', async (req, res) => {
@@ -703,45 +709,199 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-app.get('/api/products', async (req, res) => {
-  const { page = 1, limit = 10, city, minPrice, maxPrice } = req.query;
+app.get('/api/fil', async (req, res) => {
+  const { page = 1, limit = 10, address, minPrice, maxPrice } = req.query;
   const skip = (page - 1) * limit;
 
+  // Définition des filtres
   const filters = { status: 'available' };
-  if (city) filters.city = city;
-  if (minPrice) filters.price = { ...filters.price, $gte: minPrice };
-  if (maxPrice) filters.price = { ...filters.price, $lte: maxPrice };
+  if (address) filters.address = { $regex: address, $options: "i" }; // 🔹 Recherche insensible à la casse
+  if (minPrice) filters.price = { ...filters.price, $gte: Number(minPrice) };
+  if (maxPrice) filters.price = { ...filters.price, $lte: Number(maxPrice) };
 
   try {
-    const properties = await Product.find(filters)
-      .select('title price coordinates images')
+    // Récupération des produits filtrés
+    const products = await Product.find(filters)
+      .select('title price coordinates images address') // 🔹 Sélection des champs utiles
       .skip(skip)
       .limit(parseInt(limit, 10));
+
+    // Nombre total de produits correspondant aux filtres
     const total = await Product.countDocuments(filters);
 
-    res.json({ properties, total, page, totalPages: Math.ceil(total / limit) });
+    // Envoi des résultats
+    res.json({ products, total, page, totalPages: Math.ceil(total / limit) });
   } catch (error) {
     res.status(500).json({ error: 'Erreur lors de la récupération des propriétés' });
   }
 });
 
-app.get('/api/filtre', async (req, res) => {
-  const { address, transactionType, minPrice, maxPrice } = req.query;
+
+app.get("/api/filtre", async (req, res) => {
+  const { transactionType, address, minPrice, maxPrice } = req.query;
+  
+  let query = {};
+  if (transactionType) query.transactionType = transactionType;
+  if (address) query.address = { $regex: address, $options: "i" }; // Filtrage insensible à la casse
+  if (minPrice) query.price = { $gte: Number(minPrice) };
+  if (maxPrice) query.price = { ...query.price, $lte: Number(maxPrice) };
+
+  try {
+    const products = await Product.find(query);
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.get("/api/apprt", async (req, res) => {
+  const { productType } = req.query;
 
   const filter = {};
-  if (transactionType) filter.transactionType = transactionType;
-  if (address) filter.address = { $regex: address, $options: 'i' };
-  if (minPrice) filter.price = { $gte: parseInt(minPrice) };
-  if (maxPrice) filter.price = { ...filter.price, $lte: parseInt(maxPrice) };
+  if (productType) {
+    filter.productType = { $in: Array.isArray(productType) ? productType : productType.split(",") };
+  }
+
+  console.log("Filtre appliqué :", filter);
 
   try {
     const products = await Product.find(filter);
     res.json(products);
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Erreur serveur');
+    console.error("Erreur lors de la récupération des produits :", error);
+    res.status(500).send("Erreur serveur");
   }
 });
+
+app.get("/api/checkbok", async (req, res) => {
+  try {
+    const { productType } = req.query;
+
+    console.log("🔍 Requête API reçue !");
+    console.log("👉 Paramètre productType :", productType);
+
+    const filters = {};
+    if (productType) {
+      filters.productType = productType;
+    }
+
+    const results = await Product.find(filters);
+    console.log("✅ Nombre de résultats trouvés :", results.length);
+    console.log("📋 Résultats :", results); // Affiche les résultats dans la console
+
+    res.status(200).json(results);
+  } catch (error) {
+    console.error("❌ Erreur backend :", error);
+    res.status(500).json({ error: "Une erreur est survenue." });
+  }
+});
+
+app.get("/propertyCount", async (req, res) => {
+  try {
+    const { types } = req.query;
+    if (!types) {
+      return res.json({ count: 0 });
+    }
+
+    const filters = { productType: { $in: types.split(",") } };
+    const count = await Product.countDocuments(filters);
+
+    res.json({ count });
+  } catch (error) {
+    console.error("Erreur API propertyCount :", error);
+    res.status(500).json({ error: "Erreur serveur." });
+  }
+});
+
+app.get("/api/results", async (req, res) => {
+  try {
+    const { types, structureTypes } = req.query;
+    let filters = {};
+
+    // Validation et formatage des filtres
+    if (types && typeof types === "string") {
+      const validProductTypes = [
+        "appartement", "bureau_commerce", "hotel_restaurant",
+        "immeuble", "residence", "studio_chambre", "villa_maison", "terrain"
+      ];
+      const requestedTypes = types.split(",").filter(type => validProductTypes.includes(type));
+      if (requestedTypes.length > 0) {
+        filters.productType = { $in: requestedTypes };
+      }
+    }
+
+    if (structureTypes && typeof structureTypes === "string") {
+      const validStructureTypes = [
+        "Bord de l'eau", "Accès à l'eau", "Plan d'eau navigable", "Villégiature"
+      ];
+      const requestedStructureTypes = structureTypes.split(",").filter(type => validStructureTypes.includes(type));
+      if (requestedStructureTypes.length > 0) {
+        filters["buildingDetails.structureType"] = { $in: requestedStructureTypes };
+      }
+    }
+
+    console.log("🟢 Filtres appliqués :", JSON.stringify(filters, null, 2));
+
+    // Recherche des produits
+    const results = await Product.find(filters);
+
+    if (results.length === 0) {
+      console.log("🔍 Aucun résultat trouvé.");
+    } else {
+      console.log(`🔍 ${results.length} résultat(s) trouvé(s).`);
+    }
+
+    res.json(results);
+  } catch (error) {
+    console.error("❌ Erreur API results :", error);
+    res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des résultats." });
+  }
+});
+
+app.get("/api/ters", async (req, res) => {
+  try {
+    console.log("📥 Filtres API reçus :", req.query);
+
+    const { minLotSize, maxLotSize, minDate } = req.query;
+    let filters = {};
+
+    // 🔹 Vérification : Si aucun filtre n'est appliqué, renvoyer une erreur
+    if (!minLotSize && !maxLotSize && !minDate) {
+      console.log("🟢 Filtres appliqués : {}", filters);
+      return res.json([]); // 🔥 Retourne un tableau vide si aucun filtre
+    }
+
+    // 🔹 Superficie du terrain
+    if (minLotSize || maxLotSize) {
+      filters.lotSize = {};
+      if (minLotSize) filters.lotSize.$gte = parseFloat(minLotSize);
+      if (maxLotSize) filters.lotSize.$lte = parseFloat(maxLotSize);
+    }
+
+    // 🔹 Date d'ajout
+    if (minDate) {
+      const parsedDate = new Date(minDate);
+      if (!isNaN(parsedDate)) {
+        filters.createdAt = { $gte: parsedDate };
+      } else {
+        console.error("❌ Date invalide reçue :", minDate);
+      }
+    }
+
+    console.log("🔍 Filtres appliqués :", JSON.stringify(filters, null, 2));
+
+    const results = await Product.find(filters);
+    console.log("✅ Nombre de résultats trouvés :", results.length);
+
+    res.json(results);
+  } catch (error) {
+    console.error("❌ Erreur API filters :", error);
+    res.status(500).json({ error: "Erreur serveur." });
+  }
+});
+
+
 
 
 // Démarrer le serveur

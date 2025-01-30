@@ -8,9 +8,10 @@ const productSchema = new mongoose.Schema(
     transactionType: { type: String, enum: ['sale', 'rent', 'buy'], required: true },
     productType: { 
       type: String, 
-      enum: ['Maison unifamiliale', 'Condo', 'Plex', 'Loft / Studio', 'Maison mobile', 'Intergénération', 'Fermette', 'Terrain', 'Chalet', 'Villa','appartement'], 
+      enum: ['appartement', 'bureau_commerce', 'hotel_restaurant', 'immeuble', 'residence', 'studio_chambre', 'villa_maison', 'terrain'], 
       required: true 
     },
+    
     propertyCategory: {
       type: String,
       enum: ['residential', 'commercial'],
@@ -48,7 +49,10 @@ const productSchema = new mongoose.Schema(
       yearBuilt: { type: Number },
       isNewConstruction: { type: Boolean, default: false },
       isHistorical: { type: Boolean, default: false },
-      structureType: { type: String, enum: ['Plain-pied', 'À étages', 'Paliers multiples', 'Jumelé', 'Détaché', 'En rangée', 'Maison contemporaine'], default: 'Plain-pied' },
+      structureType: { 
+        type: [String], 
+        enum: ['Bord de l\'eau', 'Accès à l\'eau', 'Plan d\'eau navigable', 'Villégiature'],
+      },
     },
     isVirtualTourAvailable: { type: Boolean, default: false },
     isOpenHouse: { type: Boolean, default: false },
