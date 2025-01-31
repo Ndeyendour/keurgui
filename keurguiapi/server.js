@@ -18,9 +18,18 @@ app.use(cors());  // Permet de gérer les problèmes de CORS (Cross-Origin Resou
 app.use('/assets', express.static('assets'));
 
 // Connexion à la base de données MongoDB
-mongoose.connect('mongodb://localhost:27017/keurgui', { })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.log('Failed to connect to MongoDB', err));
+const mongoURI = process.env.MONGODB_URL || "mongodb://localhost:27017/keurgui"; // Fallback en local
+
+mongoose
+  .connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ Connexion réussie à MongoDB"))
+  .catch((err) => {
+    console.error("❌ Erreur de connexion MongoDB :", err.message);
+    process.exit(1); // Arrête l'application si la connexion échoue
+  });
 
 // Validation des données de l'utilisateur
 const validateUser = (user) => {
@@ -905,7 +914,4 @@ app.get("/api/ters", async (req, res) => {
 
 
 // Démarrer le serveur
-const port = 5000;
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+module.exports = app;
