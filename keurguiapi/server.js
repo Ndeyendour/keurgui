@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');  // Importer le modèle User
 const Agent = require('./models/Agent');
-const Product = require('./models/product');
 
 const Admin = require('./models/Admin');
 const bcrypt = require('bcryptjs');  // Pour hacher les mots de passe
@@ -30,7 +29,62 @@ mongoose
     console.error("❌ Erreur de connexion MongoDB :", err.message);
     process.exit(1); // Arrête l'application si la connexion échoue
   });
-
+  const productSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    price: { type: Number, required: true },
+    transactionType: { type: String, enum: ['sale', 'rent', 'buy'], required: true },
+    productType: { 
+      type: String, 
+      enum: ['appartement', 'bureau_commerce', 'hotel_restaurant', 'immeuble', 'residence', 'studio_chambre', 'villa_maison', 'terrain'], 
+      required: true 
+    },
+    propertyCategory: { type: String, enum: ['residential', 'commercial'], required: true },
+    coordinates: {
+      latitude: { type: Number, required: true },
+      longitude: { type: Number, required: true },
+    },
+    status: { type: String, enum: ['available', 'sold', 'rented'], default: 'available' },
+    address: { type: String, required: true },
+    city: { type: String, required: true },
+    features: {
+      bedrooms: { type: Number, default: 0 },
+      bathrooms: { type: Number, default: 0 }, 
+      parkingSpaces: { type: Number, default: 0 },
+      garages: { type: Number, default: 0 },
+      area: { type: Number },
+      hasPool: { type: Boolean, default: false },
+      isWheelchairAccessible: { type: Boolean, default: false },
+      isWaterfront: { type: Boolean, default: false },
+      hasNavigableWater: { type: Boolean, default: false },
+      allowsPets: { type: Boolean, default: false },
+      allowsSmoking: { type: Boolean, default: false },
+    },
+    images: { type: [String], required: true },
+    buildingDetails: {
+      yearBuilt: { type: Number },
+      isNewConstruction: { type: Boolean, default: false },
+      isHistorical: { type: Boolean, default: false },
+      structureType: { 
+        type: [String], 
+        enum: ['Bord de l\'eau', 'Accès à l\'eau', 'Plan d\'eau navigable', 'Villégiature'],
+      },
+    },
+    isVirtualTourAvailable: { type: Boolean, default: false },
+    isOpenHouse: { type: Boolean, default: false },
+    lotSize: { type: Number },
+    description: { type: String },
+    agentName: { type: String, required: true },
+    moveInDate: { type: Date },
+    isForeclosure: { type: Boolean, default: false },
+  }, { timestamps: true });
+  
+  // 📌 Ajout d'indexation pour améliorer la recherche
+  productSchema.index({ coordinates: "2dsphere" });
+  productSchema.index({ city: 1, price: 1, transactionType: 1 });
+  
+  // 📌 Création du modèle `Product` directement dans `server.js`
+  const Product = mongoose.model('Product', productSchema);
+  
 // Validation des données de l'utilisateur
 const validateUser = (user) => {
   const schema = Joi.object({
