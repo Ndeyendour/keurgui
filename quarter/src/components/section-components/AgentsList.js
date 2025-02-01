@@ -13,7 +13,7 @@ const AgentsList = () => {
   useEffect(() => {
     const fetchAgents = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/agents");
+        const response = await axios.get("https://keurgui.onrender.com/agents");
         setAgents(response.data);
         setLoading(false);
       } catch (error) {
@@ -29,7 +29,7 @@ const AgentsList = () => {
    const handleDelete = async (id) => {
     if (window.confirm("Voulez-vous vraiment supprimer cet agent ?")) {
       try {
-        await axios.delete(`http://localhost:5000/agents/${id}`);
+        await axios.delete(`https://keurgui.onrender.com/agents/${id}`);
         setAgents((prevAgents) => prevAgents.filter((agent) => agent._id !== id));
         alert("Agent supprimé avec succès.");
       } catch (error) {

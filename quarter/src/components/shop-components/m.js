@@ -30,7 +30,7 @@ const ShopGridV2 = () => {
   const fetchProductsBySort = async (sortMethod) => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:5000/api/products", {
+      const response = await axios.get("https://keurgui.onrender.com/api/products", {
         params: {
           sort: sortMethod,
           transactionType: "rent", // Par défaut, uniquement les propriétés à louer

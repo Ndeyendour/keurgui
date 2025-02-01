@@ -14,7 +14,7 @@ const PropertyImagesPage = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/products/${id}/images`);
+        const response = await axios.get(`https://keurgui.onrender.com/api/products/${id}/images`);
         setImages(response.data);
         setSelectedImage(response.data[0]); // La première image est affichée par défaut
         setLoading(false);

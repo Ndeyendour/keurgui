@@ -11,7 +11,7 @@ const UserList = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/users"); // Appel à l'API
+        const response = await axios.get("https://keurgui.onrender.com/users"); // Appel à l'API
         setUsers(response.data); // Mise à jour de l'état avec les utilisateurs
         setLoading(false);
       } catch (err) {

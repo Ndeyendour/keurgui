@@ -43,7 +43,7 @@ const ResultsPage = () => {
 
     const fetchSuggestions = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/search-predictive', {
+        const response = await axios.get('https://keurgui.onrender.com/api/search-predictive', {
           params: { query },
         });
         setSuggestions(response.data);
@@ -64,7 +64,7 @@ const ResultsPage = () => {
 	  // Fonction pour récupérer les produits
 	  const fetchProducts = async () => {
 		try {
-		  const response = await axios.get('http://localhost:5000/api/products');  // URL de votre backend
+		  const response = await axios.get('https://keurgui.onrender.com/api/products');  // URL de votre backend
 		  setProducts(response.data);  // Met à jour l'état avec les produits récupérés
 		} catch (error) {
 		  console.error('Erreur lors de la récupération des produits:', error);
@@ -83,7 +83,7 @@ const ResultsPage = () => {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products', {
+        const response = await axios.get('https://keurgui.onrender.com/api/products', {
           params: { search: searchTerm },
         });
         setProducts(response.data);
@@ -117,7 +117,7 @@ const ResultsPage = () => {
       //   const fetchFilteredProducts = async () => {
       //     try {
       //       console.log("Filtres envoyés :", filters);
-      //       const response = await axios.get("http://localhost:5000/api/apprt", {
+      //       const response = await axios.get("https://keurgui.onrender.com/api/apprt", {
       //         params: { productType: filters.productType || "" },
       //       });
       
@@ -135,7 +135,7 @@ const ResultsPage = () => {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/checkbox?productType=${searchTerm}`); // Filtre par productType
+        const response = await fetch(`https://keurgui.onrender.com/api/checkbox?productType=${searchTerm}`); // Filtre par productType
         const data = await response.json();
         setResults(data);
       } catch (error) {
@@ -176,7 +176,7 @@ const [isPropertyTypeOpen, setIsPropertyTypeOpen] = useState(false); // État po
       useEffect(() => {
         const fetchProperties = async () => {
           try {
-            const response = await axios.get("http://localhost:5000/api/products", {
+            const response = await axios.get("https://keurgui.onrender.com/api/products", {
               params: { transactionType: "À vendre" },
             });
             setProperties(response.data);
@@ -232,9 +232,9 @@ const decodedSearchTerm = searchTerm ? decodeURIComponent(searchTerm) : ""; // �
           queryParams.append("structureTypes", filters.structureTypes.join(","));
         }
 
-        console.log("📡 Envoi requête API :", `http://localhost:5000/api/results?${queryParams.toString()}`);
+        console.log("📡 Envoi requête API :", `https://keurgui.onrender.com/api/results?${queryParams.toString()}`);
 
-        const response = await fetch(`http://localhost:5000/api/results?${queryParams.toString()}`);
+        const response = await fetch(`https://keurgui.onrender.com/api/results?${queryParams.toString()}`);
         const data = await response.json();
 
         console.log("✅ Résultats reçus :", data); // Voir si les résultats sont bien reçus
@@ -286,7 +286,7 @@ const searchFilters = useMemo(() => {
           queryParams.append("minDate", searchFilters.minDate);
         }
   
-        const apiUrl = `http://localhost:5000/api/ters?${queryParams.toString()}`;
+        const apiUrl = `https://keurgui.onrender.com/api/ters?${queryParams.toString()}`;
         console.log("📡 Envoi requête API :", apiUrl);
   
         const response = await fetch(apiUrl);

@@ -43,7 +43,7 @@ const EditProperty = () => {
   useEffect(() => {
     const fetchProperty = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const response = await axios.get(`https://keurgui.onrender.com/api/products/${id}`);
         setFormData(response.data); // Charger les données dans le formulaire
       } catch (error) {
         console.error("Erreur lors de la récupération du produit :", error);
@@ -105,7 +105,7 @@ const EditProperty = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/products/${id}`, formData);
+      await axios.put(`https://keurgui.onrender.com/api/products/${id}`, formData);
       alert("Produit modifié avec succès");
       navigate("/adminpa"); // Rediriger vers la liste des produits
     } catch (error) {

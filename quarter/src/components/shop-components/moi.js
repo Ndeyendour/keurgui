@@ -11,7 +11,7 @@ const ResultsPage = () => {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products', {
+        const response = await axios.get('https://keurgui.onrender.com/api/products', {
           params: { search: searchTerm },
         });
         setProducts(response.data);

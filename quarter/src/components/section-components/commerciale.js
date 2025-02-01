@@ -59,7 +59,7 @@ const ShopGridCommercial = () => {
   
       const fetchSuggestions = async () => {
         try {
-          const response = await axios.get('http://localhost:5000/api/search-predictive', {
+          const response = await axios.get('https://keurgui.onrender.com/api/search-predictive', {
             params: { query },
           });
           setSuggestions(response.data);
@@ -79,7 +79,7 @@ const ShopGridCommercial = () => {
       useEffect(() => {
         const fetchProducts = async () => {
           try {
-            const response = await axios.get("http://localhost:5000/api/products", {
+            const response = await axios.get("https://keurgui.onrender.com/api/products", {
               params: { propertyCategory: "commercial" }, // ❌ Pas de transactionType
             });
             setProducts(response.data);
@@ -168,7 +168,7 @@ const ShopGridCommercial = () => {
       // Fonction pour récupérer le total des produits
       const fetchTotalProducts = async () => {
         try {
-          const response = await axios.get('http://localhost:5000/api/products/count'); // Utilisez le bon chemin
+          const response = await axios.get('https://keurgui.onrender.com/api/products/count'); // Utilisez le bon chemin
           setTotalProperties(response.data.total); // Met à jour l'état avec le total récupéré
         } catch (error) {
           console.error('Erreur lors de la récupération du total des produits :', error);
@@ -181,7 +181,7 @@ const ShopGridCommercial = () => {
     useEffect(() => {
       const fetchProducts = async () => {
         try {
-          const response = await axios.get("http://localhost:5000/api/products", {
+          const response = await axios.get("https://keurgui.onrender.com/api/products", {
             params: {
               transactionType: "sale", // Filtre par type de transaction
               minPrice: priceRange[0], // Filtre par prix minimum
@@ -205,7 +205,7 @@ const ShopGridCommercial = () => {
           let hasMore = true;
     
           while (hasMore) {
-            const response = await axios.get("http://localhost:5000/api/products", {
+            const response = await axios.get("https://keurgui.onrender.com/api/products", {
               params: {
                 page,
                 limit: 10, // Limite par page définie dans le backend
@@ -240,7 +240,7 @@ const ShopGridCommercial = () => {
   const handleApplyFilter = async () => {
     try {
       setPriceRange(tempPriceRange); // Applique tempPriceRange à priceRange
-      const response = await axios.get('http://localhost:5000/api/products', {
+      const response = await axios.get('https://keurgui.onrender.com/api/products', {
         params: {
           minPrice: tempPriceRange[0], // Utilise tempPriceRange pour la requête
           maxPrice: tempPriceRange[1],
@@ -296,7 +296,7 @@ const ShopGridCommercial = () => {
     useEffect(() => {
       const fetchProducts = async () => {
         try {
-          const response = await axios.get("http://localhost:5000/api/products");
+          const response = await axios.get("https://keurgui.onrender.com/api/products");
           setProducts(response.data);
         } catch (error) {
           console.error("Erreur lors de la récupération des produits :", error);
@@ -319,7 +319,7 @@ const ShopGridCommercial = () => {
         console.log("Filtres envoyés :", filters); // ✅ Vérifier les filtres avant la requête
     
         try {
-          const response = await axios.get("http://localhost:5000/api/filtre", {
+          const response = await axios.get("https://keurgui.onrender.com/api/filtre", {
             params: {
               address: filters.address && filters.address.trim() !== "" ? filters.address : undefined, // ✅ Vérifie que l'adresse n'est pas vide
               minPrice: filters.priceRange ? filters.priceRange[0] : undefined,
