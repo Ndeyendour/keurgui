@@ -15,20 +15,18 @@ const app = express();
 app.use(express.json());  // Permet de traiter les requêtes avec un corps JSON
 app.use(cors());  // Permet de gérer les problèmes de CORS (Cross-Origin Resource Sharing)
 app.use('/assets', express.static('assets'));
+require('dotenv').config();
+console.log("MongoDB URL:", process.env.MONGODB_URL);
 
 // Connexion à la base de données MongoDB
-const mongoURI = process.env.MONGODB_URL || "mongodb://localhost:27017/keurgui"; // Fallback en local
-
-mongoose
-  .connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ Connexion réussie à MongoDB"))
-  .catch((err) => {
-    console.error("❌ Erreur de connexion MongoDB :", err.message);
-    process.exit(1); // Arrête l'application si la connexion échoue
-  });
+mongoose.connect(process.env.MONGODB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => {
+  console.log('MongoDB connected to database:', process.env.MONGODB_URL);
+}).catch((err) => {
+  console.error('MongoDB connection error:', err);
+});
   const productSchema = new mongoose.Schema({
     title: { type: String, required: true },
     price: { type: Number, required: true },
