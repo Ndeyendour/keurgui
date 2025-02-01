@@ -101,11 +101,7 @@ const NavbarV2 = (props) => {
 									
 								</li>
 								<li className=""><Link to="/vendre">Vendre</Link>
-									<ul>
 									
-										<li><Link to="/service">Guide du vendeur</Link></li>
-										<li><Link to="/service-details">Vendre avec un courtier</Link></li>
-									</ul>
 								</li>
 								<li className=""><Link to="/about">Qui sommes nous ?</Link></li>
 								<li className=""><Link to="">Nous rejoindre</Link></li>
