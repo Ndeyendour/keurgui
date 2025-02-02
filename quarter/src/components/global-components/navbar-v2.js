@@ -105,7 +105,6 @@ const NavbarV2 = (props) => {
 								</li>
 								<li className=""><Link to="/about">Qui sommes nous ?</Link></li>
 								<li className=""><Link to="">Nous rejoindre</Link></li>
-
 								{/* <li className="special-link" style={{ borderRadius: '8px' }}>
 								<Link to="/contact">
 									Nous rejoindre

@@ -1,7 +1,7 @@
 {
   "name": "keurgui",
   "version": "0.1.0",
-  "homepage": "https://tunatheme.com/keurgui",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.13.5",
