@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());  // Permet de traiter les requêtes avec un corps JSON
 app.use(cors());  // Permet de gérer les problèmes de CORS (Cross-Origin Resource Sharing)
 app.use('/assets', express.static('assets'));
-
+app.use(express.static(path.join(__filename,"quarter/build")))
 // Connexion à la base de données MongoDB
 const mongoURI = process.env.MONGODB_URL || "mongodb://localhost:27017/keurgui"; // Fallback en local
 
