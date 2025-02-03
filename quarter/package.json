@@ -17,7 +17,7 @@
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^1.7.7",
-    "html-react-parser": "^0.10.1",
+    "html-react-parser": "^5.2.2",
     "leaflet": "^1.9.4",
     "owl.carousel": "^2.3.4",
     "rc-slider": "^11.1.7",
