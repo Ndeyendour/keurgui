@@ -107,6 +107,7 @@ class Root extends Component {
               <Route path="/location" element={<Location />} /> */}
               <Route path="/about" element={<About />} />
               <Route path="/louer" element={<Shop />} />
+              
               <Route path="/vendre" element={<ShopGrid />} />
               <Route path="/shop-left-sidebar" element={<ShopLeftSidebar />} />
               <Route path="/product/:id" element={<ProdductDetails />} />
@@ -120,6 +121,7 @@ class Root extends Component {
               <Route path="/blog-details" element={<BlogDetails />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/home-v5" element={<HomeV5 />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/my-account" element={<MyAccount />} />
               <Route path="/admin" element={isAuthenticated ? <Admin /> : <Navigate to="/loginadmin" />} />
