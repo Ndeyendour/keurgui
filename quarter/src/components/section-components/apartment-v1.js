@@ -142,7 +142,7 @@ const AddProperty = () => {
 
     try {
       await axios.post(
-        "https://keurgui.onrender.com/api/products",
+        "http://localhost:5000/api/products",
         formData,
         { headers: { "Content-Type": "application/json" } }
       );

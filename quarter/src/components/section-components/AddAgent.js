@@ -30,7 +30,7 @@ const AddAgent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("https://keurgui.onrender.com/agents", formData);
+      const response = await axios.post("http://localhost:5000/agents", formData);
       alert("Agent ajouté avec succès !");
       navigate("/agnts"); // Redirection après ajout
     } catch (error) {

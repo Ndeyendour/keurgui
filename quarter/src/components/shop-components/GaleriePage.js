@@ -114,7 +114,7 @@ const CartePage = () => {
       setProducts(JSON.parse(storedProducts));
     } else {
       fetch(
-        `https://keurgui.onrender.com/api/products?city=${filters.city}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`
+        `http://localhost:5000/api/products?city=${filters.city}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`
       )
         .then((response) => {
           if (!response.ok) {
@@ -168,7 +168,7 @@ const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
 
     const fetchSuggestions = async () => {
       try {
-        const response = await axios.get('https://keurgui.onrender.com/api/search-predictive', {
+        const response = await axios.get('http://localhost:5000/api/search-predictive', {
           params: { query },
         });
         setSuggestions(response.data);
@@ -189,7 +189,7 @@ const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
 	  // Fonction pour récupérer les produits
 	  const fetchProducts = async () => {
 		try {
-		  const response = await axios.get('https://keurgui.onrender.com/api/products');  // URL de votre backend
+		  const response = await axios.get('http://localhost:5000/api/products');  // URL de votre backend
 		  setProducts(response.data);  // Met à jour l'état avec les produits récupérés
 		} catch (error) {
 		  console.error('Erreur lors de la récupération des produits:', error);
@@ -255,7 +255,7 @@ const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
       const handleApplyFilter = async () => {
         try {
           setPriceRange(tempPriceRange); // Appliquer les valeurs temporaires
-          const response = await axios.get('https://keurgui.onrender.com/api/products', {
+          const response = await axios.get('http://localhost:5000/api/products', {
             params: {
               minPrice: tempPriceRange[0], // Utiliser la plage temporaire
               maxPrice: tempPriceRange[1],
@@ -281,7 +281,7 @@ const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
     // Fonction pour récupérer le total des produits
     const fetchTotalProducts = async () => {
       try {
-        const response = await axios.get('https://keurgui.onrender.com/api/products/count'); // Utilisez le bon chemin
+        const response = await axios.get('http://localhost:5000/api/products/count'); // Utilisez le bon chemin
         setTotalProperties(response.data.total); // Met à jour l'état avec le total récupéré
       } catch (error) {
         console.error('Erreur lors de la récupération du total des produits :', error);
@@ -295,7 +295,7 @@ const [priceRange, setPriceRange] = useState([0, 10000]); // Plage appliquée
     // Fetch products
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("https://keurgui.onrender.com/api/products", {
+        const response = await axios.get("http://localhost:5000/api/products", {
           params: {
             sort: sortMethod, // Tri basé sur la méthode sélectionnée
           },
@@ -339,7 +339,7 @@ const handleSortChange = (e) => {
 useEffect(() => {
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('https://keurgui.onrender.com/api/products');
+      const response = await axios.get('http://localhost:5000/api/products');
       const validProducts = response.data.filter(
         (product) =>
           product.coordinates &&
@@ -385,7 +385,7 @@ const handleTransactionChange = (event) => {
 useEffect(() => {
   const fetchFilteredProducts = async () => {
     try {
-      const response = await axios.get("https://keurgui.onrender.com/api/products", {
+      const response = await axios.get("http://localhost:5000/api/products", {
         params: {
           transactionType: transactionType, // Filtrer par type de transaction
           minPrice: priceRange[0], // Minimum de la plage de prix

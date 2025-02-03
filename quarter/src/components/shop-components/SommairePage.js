@@ -14,7 +14,7 @@ const PropertyImages = () => {
 
     const fetchImages = async () => {
       try {
-        const response = await axios.get(`https://keurgui.onrender.com/api/products/${id}/images`);
+        const response = await axios.get(`http://localhost:5000/api/products/${id}/images`);
         setImages(response.data);
       } catch (err) {
         console.error("Erreur lors du chargement des images :", err);

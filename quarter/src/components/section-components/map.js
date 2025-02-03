@@ -21,7 +21,7 @@ const Commercial = () => {
 
     const fetchSuggestions = async () => {
       try {
-        const response = await axios.get("https://keurgui.onrender.com/api/search-predictive", {
+        const response = await axios.get("http://localhost:5000/api/search-predictive", {
           params: { query },
         });
         setSuggestions(response.data); // Mise à jour des suggestions

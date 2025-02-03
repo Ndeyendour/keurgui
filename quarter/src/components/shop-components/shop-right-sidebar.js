@@ -58,7 +58,7 @@ const  ShopGridV2= () => {
 
     const fetchSuggestions = async () => {
       try {
-        const response = await axios.get('https://keurgui.onrender.com/api/search-predictive', {
+        const response = await axios.get('http://localhost:5000/api/search-predictive', {
           params: { query },
         });
         setSuggestions(response.data);
@@ -79,7 +79,7 @@ const  ShopGridV2= () => {
 	  // Fonction pour récupérer les produits
 	  const fetchProducts = async () => {
 		try {
-		  const response = await axios.get('https://keurgui.onrender.com/api/products');  // URL de votre backend
+		  const response = await axios.get('http://localhost:5000/api/products');  // URL de votre backend
 		  setProducts(response.data);  // Met à jour l'état avec les produits récupérés
 		} catch (error) {
 		  console.error('Erreur lors de la récupération des produits:', error);
@@ -114,7 +114,7 @@ const  ShopGridV2= () => {
     const handleApplyFilter = async () => {
       try {
         setPriceRange(tempPriceRange); // Applique tempPriceRange à priceRange
-        const response = await axios.get('https://keurgui.onrender.com/api/products', {
+        const response = await axios.get('http://localhost:5000/api/products', {
           params: {
             minPrice: tempPriceRange[0], // Utilise tempPriceRange pour la requête
             maxPrice: tempPriceRange[1],
@@ -163,7 +163,7 @@ const  ShopGridV2= () => {
     // Fonction pour récupérer le total des produits
     const fetchTotalProducts = async () => {
       try {
-        const response = await axios.get('https://keurgui.onrender.com/api/products/count'); // Utilisez le bon chemin
+        const response = await axios.get('http://localhost:5000/api/products/count'); // Utilisez le bon chemin
         setTotalProperties(response.data.total); // Met à jour l'état avec le total récupéré
       } catch (error) {
         console.error('Erreur lors de la récupération du total des produits :', error);
@@ -191,7 +191,7 @@ const  ShopGridV2= () => {
           maxPrice: filters.priceRange ? filters.priceRange[1] : undefined,
         };
   
-        const response = await axios.get("https://keurgui.onrender.com/api/filtre", { params });
+        const response = await axios.get("http://localhost:5000/api/filtre", { params });
         console.log("Réponse reçue :", response.data); // DEBUG
         setProperties(response.data);
       } catch (error) {
@@ -217,7 +217,7 @@ const  ShopGridV2= () => {
   useEffect(() => {
     const fetchFilteredProducts = async () => {
       try {
-        const response = await axios.get("https://keurgui.onrender.com/api/products/prix", {
+        const response = await axios.get("http://localhost:5000/api/products/prix", {
           params: {
             minPrice: priceRange ? priceRange[0] : 0,
             maxPrice: priceRange ? priceRange[1] : 10000,
@@ -320,7 +320,7 @@ useEffect(() => {
 const fetchSortedProducts = async () => {
   setLoading(true);
   try {
-    const response = await axios.get('https://keurgui.onrender.com/api/sorts', {
+    const response = await axios.get('http://localhost:5000/api/sorts', {
       params: { sort: sortMethod },
     });
     setProducts(response.data);

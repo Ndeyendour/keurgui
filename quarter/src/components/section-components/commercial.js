@@ -34,7 +34,7 @@ const HeroSection = () => {
 
     const fetchSuggestions = async () => {
       try {
-        const response = await axios.get('https://keurgui.onrender.com/api/search-predictive', {
+        const response = await axios.get('http://localhost:5000/api/search-predictive', {
           params: { query },
         });
         setSuggestions(response.data);
@@ -57,7 +57,7 @@ const HeroSection = () => {
 	  // Fonction pour récupérer les produits
 	  const fetchProducts = async () => {
 		try {
-		  const response = await axios.get('https://keurgui.onrender.com/api/products');  // URL de votre backend
+		  const response = await axios.get('http://localhost:5000/api/products');  // URL de votre backend
 		  setProducts(response.data);  // Met à jour l'état avec les produits récupérés
 		} catch (error) {
 		  console.error('Erreur lors de la récupération des produits:', error);
@@ -117,7 +117,7 @@ useEffect(() => {
  
   const handleApplyFilter = async () => {
     try {
-      const response = await axios.get('https://keurgui.onrender.com/api/products/prix', {
+      const response = await axios.get('http://localhost:5000/api/products/prix', {
         params: {
           minPrice: priceRange[0],
           maxPrice: priceRange[1],
@@ -168,7 +168,7 @@ const [isPropertyTypeOpen, setIsPropertyTypeOpen] = useState(false); // État po
       useEffect(() => {
         const fetchProperties = async () => {
           try {
-            const response = await axios.get("https://keurgui.onrender.com/api/products", {
+            const response = await axios.get("http://localhost:5000/api/products", {
               params: { transactionType: "À vendre" },
             });
             setProperties(response.data);

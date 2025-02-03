@@ -81,7 +81,7 @@ const Chalets = () => {
     // Fonction pour récupérer les produits
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('https://keurgui.onrender.com/api/products');  // URL de votre backend
+        const response = await axios.get('http://localhost:5000/api/products');  // URL de votre backend
         setProducts(response.data);  // Met à jour l'état avec les produits récupérés
       } catch (error) {
         console.error('Erreur lors de la récupération des produits:', error);
@@ -100,7 +100,7 @@ const handleDelete = async (id) => {
   if (window.confirm("Voulez-vous vraiment supprimer cette propriété ?")) {
     try {
       // Envoi de la requête DELETE à l'API
-      const response = await axios.delete(`https://keurgui.onrender.com/api/products/${id}`);
+      const response = await axios.delete(`http://localhost:5000/api/products/${id}`);
       if (response.status === 200) {
         // Mise à jour de l'état des produits après suppression
         setProducts((prevProducts) => prevProducts.filter((product) => product._id !== id));

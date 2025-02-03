@@ -80,7 +80,7 @@ const Dashboard = () => {
     // Fonction pour récupérer les nouveaux utilisateurs
     const fetchNewUsers = async () => {
       try {
-        const response = await axios.get("https://keurgui.onrender.com/api/register");
+        const response = await axios.get("http://localhost:5000/api/register");
         setNewUsers(response.data.count); // Met à jour l'état avec le nombre
       } catch (error) {
         console.error("Erreur lors de la récupération des nouveaux utilisateurs :", error);

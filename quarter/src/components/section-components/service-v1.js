@@ -16,7 +16,7 @@ const AgentList = () => {
     // Appel au backend pour récupérer les données des agents
     const fetchAgents = async () => {
       try {
-        const response = await axios.get('https://keurgui.onrender.com/agents');
+        const response = await axios.get('http://localhost:5000/agents');
         setAgents(response.data); // Mettre à jour la liste complète
         setFilteredAgents(response.data); // Initialiser la liste filtrée
         setIsLoading(false);

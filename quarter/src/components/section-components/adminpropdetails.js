@@ -69,7 +69,7 @@ const Adminprop = () => {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`https://keurgui.onrender.com/api/products/${id}`);
+        const response = await axios.get(`http://localhost:5000/api/products/${id}`);
         console.log("Produit récupéré:", response.data); // Vérifie les données dans la console
         setProduct(response.data);
         setLoading(false);

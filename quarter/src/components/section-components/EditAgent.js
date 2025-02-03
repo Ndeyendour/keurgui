@@ -20,7 +20,7 @@ const EditAgent = () => {
   useEffect(() => {
     const fetchAgent = async () => {
       try {
-        const response = await axios.get(`https://keurgui.onrender.com/agents/${id}`);
+        const response = await axios.get(`http://localhost:5000/agents/${id}`);
         setFormData(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération de l'agent :", error);
@@ -44,7 +44,7 @@ const EditAgent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://keurgui.onrender.com/agents/${id}`, formData);
+      await axios.put(`http://localhost:5000/agents/${id}`, formData);
       alert("Agent modifié avec succès !");
       navigate("/agnts"); // Redirection vers la liste des agents
     } catch (error) {
